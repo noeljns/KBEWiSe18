@@ -1,4 +1,4 @@
-package de.htwBerlin.runMeRunner;
+package de.htw.ai.kbe.runmerunner;
 
 /**
  * Hello world!

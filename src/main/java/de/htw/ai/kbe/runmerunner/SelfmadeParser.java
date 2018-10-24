@@ -1,4 +1,4 @@
-package de.htwBerlin.runMeRunner;
+package de.htw.ai.kbe.runmerunner;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -30,6 +30,10 @@ public class SelfmadeParser {
 		// true means that the argument is required after this option
 		// class name is the self-documenting description
 		options.addRequiredOption("c", "class", true, "class name");
+		
+		// test: that is not working as false means argument for -o is not ignored
+		// options.addOption("o", "output", false, "output of report");
+		
 		// build own option as the specification (optional option and optional argument) is not offered by the Option class
 		options.addOption(Option.builder("o").longOpt("output").hasArg().optionalArg(true).desc("output of report").build());
 	}
@@ -54,7 +58,7 @@ public class SelfmadeParser {
 	        System.out.println( "");
 	        // create usage message
 	        final HelpFormatter formatter = new HelpFormatter();
-	        formatter.printHelp("java -jar .... -c CLASS NAME [-o REPORT]", options);
+	        formatter.printHelp("java -jar .... -c CLASSNAME [-o REPORT]", options);
 		}
 	}
 

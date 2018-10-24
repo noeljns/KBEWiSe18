@@ -2,12 +2,12 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>de.htwBerlin</groupId>
-  <artifactId>runMeRunner</artifactId>
+  <groupId>de.htw.ai.kbe</groupId>
+  <artifactId>runmerunner</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>runMeRunner</name>
+  <name>runmerunner</name>
   <url>http://maven.apache.org</url>
 
   <properties>
@@ -46,7 +46,7 @@
 					<!-- MainClass in mainfest make a executable jar -->
 					<archive>
 					  <manifest>
-						<mainClass>de.htwBerlin.runMeRunner.MethodRunner</mainClass>
+						<mainClass>de.htw.ai.kbe.runmerunner.MethodRunner</mainClass>
 					  </manifest>
 					</archive>
 
