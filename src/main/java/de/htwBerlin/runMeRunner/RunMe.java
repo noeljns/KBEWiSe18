@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.htw.ai.kbe.runmerunner;
+package de.htwBerlin.runMeRunner;
 
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
