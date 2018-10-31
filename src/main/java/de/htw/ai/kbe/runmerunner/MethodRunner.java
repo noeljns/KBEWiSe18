@@ -16,7 +16,6 @@ public class MethodRunner {
 	public static void main(String[] args) {	
 		// nun nicht mehr notwendig, da className im SelfmadeParser ohne .java geholt wird mit getOptionValue()
 		// String className= args[1].replaceAll(".java", "");
-
 		// get arguments from command line via SelfmadeParser
 		final String[] parsedArguments = new SelfmadeParser().parse(args);
 		
