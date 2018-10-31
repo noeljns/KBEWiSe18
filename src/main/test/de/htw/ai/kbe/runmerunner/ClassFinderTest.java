@@ -22,15 +22,15 @@ public class ClassFinderTest {
 	}
 
 	@Test
-	public void testWrongClassName() {
+	public void testNotExistingClassName() {
 		ClassFinder classFinder = new ClassFinder();
 		
-		boolean success = classFinder.findClassAndRunMethods(new String[] { "GibtEsNicht", "report.txt" });
+		boolean success = classFinder.findClassAndRunMethods(new String[] { "KlasseGibtEsNicht", "report.txt" });
 		Assert.assertFalse(success);
 	}
 	
 	@Test
-	public void testCorrectClassName() {
+	public void testExistingClassName() {
 		ClassFinder classFinder = new ClassFinder();
 		
 		boolean success = classFinder.findClassAndRunMethods(new String[] { "TestClass", "report.txt" });
