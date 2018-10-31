@@ -69,11 +69,11 @@ public class TestClass {
 	}
 
 	
-	@RunMe
-	public void publicMethodWithRunMeWithException() {	
-		System.out.println("I'm the public method publicMethodWithRunMeWithException and I'm annotated. \n");
-		throw new RuntimeException();
-	}
+	// @RunMe
+	// public void publicMethodWithRunMeWithException() {	
+	//	System.out.println("I'm the public method publicMethodWithRunMeWithException and I'm annotated. \n");
+	//	throw new RuntimeException();
+	// }
 	
 }
 

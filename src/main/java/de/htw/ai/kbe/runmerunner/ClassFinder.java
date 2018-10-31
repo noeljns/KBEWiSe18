@@ -19,7 +19,6 @@ public class ClassFinder {
 	private List<String> annotated = new ArrayList<String>();
 	private List<String> notAnnotated = new ArrayList<String>();
 	private List<String> privateMethods = new ArrayList<String>();
-	private List<String> protectedMethods = new ArrayList<String>();
 	private List<String> methodsWithParams = new ArrayList<String>();
 
 	/**
@@ -56,15 +55,11 @@ public class ClassFinder {
 			return false;
 		}
 
-		if(findAndRunMethods(reflectClass, reflectObject)) {
-			return true;
-		}
+		findAndRunMethods(reflectClass, reflectObject);
+	
+		writeReport(output);
 
-		if(writeReport(output)) {
-			return true;
-		}
-
-		return false;
+		return true;
 	}
 
 	
@@ -111,9 +106,6 @@ public class ClassFinder {
 				int modifiers = method.getModifiers();
 				if (Modifier.isPrivate(modifiers)) {
 					privateMethods.add(method.getName());
-				} else if (Modifier.isProtected(modifiers)) {
-					// !!! weitere Filterung notwendig: nur rausfiltern, wenn sie in anderem package liegen!
-					protectedMethods.add(method.getName());
 				} else if (method.getParameterCount() != 0) {
 					methodsWithParams.add(method.getName());
 				} else {
@@ -155,7 +147,6 @@ public class ClassFinder {
 			for (String str : annotated) {
 				writer.write(System.lineSeparator());
 				writer.write(str);
-
 			}
 			writer.write(System.lineSeparator());
 			writer.write(System.lineSeparator());
@@ -176,12 +167,6 @@ public class ClassFinder {
 				writer.write(str +": Private Methode");
 			}
 			
-			// sollen hier stehen, wenn die Klasse nicht im selben package liegt
-			for (String str : protectedMethods) {
-				writer.write(System.lineSeparator());
-				writer.write(str +": Protected Methode");
-			}
-			
 			for (String str : methodsWithParams) {
 				writer.write(System.lineSeparator());
 				writer.write(str +": Methode mit Parametern");
@@ -194,8 +179,7 @@ public class ClassFinder {
 			ex.printStackTrace();
 			return false;
 		}
-		
+		System.out.println("hier hier");
 		return true;
 	}
-
 }
