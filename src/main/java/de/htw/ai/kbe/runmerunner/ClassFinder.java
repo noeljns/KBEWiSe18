@@ -52,6 +52,7 @@ public class ClassFinder {
 
 		Object reflectObject = getObjectOfClass(reflectClass);
 		if (reflectObject == null) {
+			// !! wird Methode findClassAndRunMethods weiter durchlaufen?? oder nur diese if Abfrage
 			return false;
 		}
 
@@ -111,6 +112,7 @@ public class ClassFinder {
 				if (Modifier.isPrivate(modifiers)) {
 					privateMethods.add(method.getName());
 				} else if (Modifier.isProtected(modifiers)) {
+					// !!! weitere Filterung notwendig: nur rausfiltern, wenn sie in anderem package liegen!
 					protectedMethods.add(method.getName());
 				} else if (method.getParameterCount() != 0) {
 					methodsWithParams.add(method.getName());
@@ -174,6 +176,7 @@ public class ClassFinder {
 				writer.write(str +": Private Methode");
 			}
 			
+			// sollen hier stehen, wenn die Klasse nicht im selben package liegt
 			for (String str : protectedMethods) {
 				writer.write(System.lineSeparator());
 				writer.write(str +": Protected Methode");
