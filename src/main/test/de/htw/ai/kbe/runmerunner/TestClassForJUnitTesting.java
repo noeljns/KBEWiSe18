@@ -7,7 +7,7 @@ package de.htw.ai.kbe.runmerunner;
  * @author camiloocampo
  *
  */
-public class TestClass {
+public class TestClassForJUnitTesting {
 	
 	@RunMe
 	public void publicMethodWithRunMe() {	

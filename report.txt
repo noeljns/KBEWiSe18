@@ -1,0 +1,21 @@
+Methoden mit @RunMe: 
+publicMethodWithRunMe
+publicMethodWithRunMeWithParam
+privateMethodWithRunMe
+privateMethodWithRunMeWithParam
+protectedMethodWithRunMe
+protectedMethodWithRunMeWithParam
+
+Methoden ohne @RunMe: 
+publicMethodWithoutRunMe1
+publicMethodWithoutRunMe2
+privateMethodWithoutRunMe1
+privateMethodWithoutRunMe2
+protectedMethodWithoutRunMe1
+protectedMethodWithoutRunMe2
+
+Nicht-invokierbare Methoden mit @RunMe:
+privateMethodWithRunMe: Private Methode
+privateMethodWithRunMeWithParam: Private Methode
+publicMethodWithRunMeWithParam: Methode mit Parametern
+protectedMethodWithRunMeWithParam: Methode mit Parametern

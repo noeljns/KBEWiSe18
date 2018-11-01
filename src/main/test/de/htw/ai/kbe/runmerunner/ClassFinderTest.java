@@ -8,15 +8,15 @@ public class ClassFinderTest {
 
 	private ClassFinder classFinder;
 	private Class<?> testClass;
-	private TestClass testObject;
+	private TestClassForJUnitTesting testObject;
 	private ClassFinderResult result;
 
 	// only works if there is corresponding fields in ClassFinderTest
 	@Before
 	public void initResult() {
 		classFinder = new ClassFinder();
-		testClass = TestClass.class;
-		testObject = new TestClass();
+		testClass = TestClassForJUnitTesting.class;
+		testObject = new TestClassForJUnitTesting();
 		result = classFinder.findAndRunMethods(testClass, testObject);
 	}
 	
@@ -80,7 +80,7 @@ public class ClassFinderTest {
 	public void testExistingClassName() {
 		ClassFinder classFinder = new ClassFinder();
 		
-		boolean success = classFinder.findClassAndRunMethods(new String[] { "TestClass", "report.txt" });
+		boolean success = classFinder.findClassAndRunMethods(new String[] { "TestClassForJUnitTesting", "report.txt" });
 		Assert.assertTrue(success);
 	}
 	

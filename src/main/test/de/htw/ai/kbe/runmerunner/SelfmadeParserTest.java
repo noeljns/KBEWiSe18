@@ -25,10 +25,10 @@ public class SelfmadeParserTest {
 	// Testcase: -c className -o filename.txt			OK
 	@Test
 	public void testGivenRequiredOptionCAndOptionalOptionO() {
-		String[] input= {"-c", "TestClass", "-o", "alternativerName.txt" };
+		String[] input= {"-c", "TestClassForJUnitTesting", "-o", "alternativerName.txt" };
 		String[] parsedOutput= (parser.parse(input));
 		Assert.assertNotNull(parsedOutput);	
-		Assert.assertEquals("TestClass", parsedOutput[0]);
+		Assert.assertEquals("TestClassForJUnitTesting", parsedOutput[0]);
 		Assert.assertEquals("alternativerName.txt", parsedOutput[1]);
 	}
 
@@ -36,14 +36,14 @@ public class SelfmadeParserTest {
 	// Testcase: c- class							OK
 	@Test
 	public void testGivenRequiredOptionCAndWithoutOptionalOptionO() {
-		String[] input= {"-c", "TestClass" };
+		String[] input= {"-c", "TestClassForJUnitTesting" };
 		String[] parsedOutput= (parser.parse(input));
 		
 		Assert.assertNotNull(parsedOutput);	
 		// same assertion but with hamcrest
 		Assert.assertThat(parsedOutput, is(notNullValue()));
 		
-		Assert.assertEquals("TestClass", parsedOutput[0]);
+		Assert.assertEquals("TestClassForJUnitTesting", parsedOutput[0]);
 		Assert.assertEquals("report.txt", parsedOutput[1]);
 	}
 	
@@ -51,7 +51,7 @@ public class SelfmadeParserTest {
 	// Testcase: -c className xyz  					OK (xyz soll ignoriert werden)
 	@Test
 	public void testWithoutOptionalOptionO() {
-		String[] input= {"-c", "TestClass", "xyz"};
+		String[] input= {"-c", "TestClassForJUnitTesting", "xyz"};
 		String[] parsedOutput= (parser.parse(input));
 		Assert.assertNotNull(parsedOutput);
 		Assert.assertEquals("report.txt", parsedOutput[1]);
@@ -70,7 +70,7 @@ public class SelfmadeParserTest {
 	// Testcase: _____ xyz        					NICHT OK
 	@Test
 	public void testMissingRequiredOptionC() {
-		String[] input= {"TestClass"};
+		String[] input= {"TestClassForJUnitTesting"};
 		String[] parsedOutput= (parser.parse(input));
 		Assert.assertNull(parsedOutput);
 	}
