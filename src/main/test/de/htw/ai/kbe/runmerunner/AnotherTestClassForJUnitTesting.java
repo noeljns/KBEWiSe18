@@ -7,7 +7,7 @@ package de.htw.ai.kbe.runmerunner;
  * @author camiloocampo
  *
  */
-public class TestClass extends SuperTestClass implements InterfaceTestClass{
+public class AnotherTestClassForJUnitTesting extends SuperTestClass implements InterfaceTestClass{
 	
 	@RunMe
 	public void publicMethodWithRunMe() {	

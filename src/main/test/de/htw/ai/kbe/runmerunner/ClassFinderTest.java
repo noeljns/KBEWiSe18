@@ -1,5 +1,7 @@
 package de.htw.ai.kbe.runmerunner;
 
+import java.lang.reflect.Method;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,15 +10,17 @@ public class ClassFinderTest {
 
 	private ClassFinder classFinder;
 	private Class<?> testClass;
-	private TestClassForJUnitTesting testObject;
+	// private TestClassForJUnitTesting testObject;
+	private AnotherTestClassForJUnitTesting testObject;
+
 	private ClassFinderResult result;
 
 	// only works if there is corresponding fields in ClassFinderTest
 	@Before
 	public void initResult() {
 		classFinder = new ClassFinder();
-		testClass = TestClassForJUnitTesting.class;
-		testObject = new TestClassForJUnitTesting();
+		testClass = AnotherTestClassForJUnitTesting.class;
+		testObject = new AnotherTestClassForJUnitTesting();
 		result = classFinder.findAndRunMethods(testClass, testObject);
 	}
 	
@@ -24,28 +28,38 @@ public class ClassFinderTest {
 	// Testcase: Finde alle ohne @RunMe-Methoden
 	@Test
 	public void testFindAllMethodsWithoutAnnotationRunMe() {
-		Assert.assertEquals(6, result.getNotAnnotated().size());
+		Assert.assertEquals(12, result.getNotAnnotated().size());
 		// Assert.assertTrue(result.getAnnotated().contains("MyMethodName"));
 	}
 	
 	// Testcase: Finde alle @RunMe-Methoden
 	@Test
 	public void testFindAllMethodsWithAnnotationRunMe() {
-		Assert.assertEquals(6, result.getAnnotated().size());
+		Assert.assertEquals(14, result.getAnnotated().size());
 	}
 	
 	
 	// Testcase: Finde alle @RunMe-Methoden die nicht invokierbar sind, da privat
 	@Test
 	public void testFindAllMethodsWithAnnotationRunMeAndPrivate() {
-		Assert.assertEquals(2, result.getPrivateMethods().size());
+		Assert.assertEquals(4, result.getPrivateMethods().size());
 	}
 	
 	
 	// Testcase: Finde alle @RunMe-Methoden die nicht invokierbar sind, da Parameter
 	@Test
-	public void testFindAllMethodsWithAnnotationRunMeAndWithParams() {
+	public void testFindAllMethodsWithAnnotationRunMeAndWithParamsAndNotPrivate() {
 		Assert.assertEquals(2, result.getMethodsWithParams().size());
+	}
+	
+	
+	// check whether all Methods are found
+	@Test
+	public void testFindAllMethods() {
+		Method declaredMethods[] = testClass.getDeclaredMethods();
+		int amountOfAllMethods = result.getAnnotated().size() + result.getNotAnnotated().size();
+		
+		Assert.assertEquals(declaredMethods.length, amountOfAllMethods);
 	}
 	
 	
