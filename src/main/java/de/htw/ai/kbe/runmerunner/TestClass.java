@@ -4,6 +4,7 @@
 package de.htw.ai.kbe.runmerunner;
 
 /**
+ * our framework offers to load this class
  * @author camiloocampo
  *
  */
@@ -70,84 +71,70 @@ public class TestClass extends SuperTestClass implements InterfaceTestClass{
 	
 
 	public final void publicFinalMethodWithoutRunMe() {
-		
 		System.out.println("I'm the publicFinalMethodWithoutRunme() and I'm not annotated. \n");
 	}	
 		
 	protected final void protectedFinalMethodWithoutRunMe() {
-		
 		System.out.println("I'm the protectedFinalMethodWithoutRunme and I'm not annotated. \n");
 	}
 	
 	@RunMe
 	public final void publicFinalMethodWithRunMe() {
-		
 		System.out.println("I'm the publicFinalMethodWithRunme() and I'm annotated. \n");
 	}
 	
 	
 	@RunMe
 	protected final void protectedFinalMethodWithRunMe() {
-		
 		System.out.println("I'm the protectedFinalMethodWithRunme() and I'm annotated. \n");
 	}
 	
 	
 	public static void publicStaticMethodWithoutRunMe() {
-		
 		System.out.println("I'm the publicStaticMethodWithoutRunme() and I'm not annotated. \n");
 	}
 	
 	private static void privateStaticMethodWithoutRunMe() {
-		
 		System.out.println("I'm the privateStaticMethodWithoutRunme() and I'm not annotated. \n");
 	}
 	
 	protected static void protectedStaticMethodWithoutRunMe() {
-		
 		System.out.println("I'm the protectedStaticMethodWithoutRunme() and I'm not annotated. \n");
 	}
 
 	@RunMe
 	public static void publicStaticMethodWithRunMe() {
-		
 		System.out.println("I'm the publicStaticMethodWithRunme() and I'm annotated. \n");
 	}
 	
 	@RunMe
 	private static void privateStaticMethodWithRunMe() {
-		
 		System.out.println("I'm the privateStaticMethodWithRunme() and I'm annotated. \n");
 	}
 	
 	@RunMe
-	private static void privateStaticMethodWithParamsWithRunme(int param) {
-		
+	private static void privateStaticMethodWithParamsWithRunMe(int param) {
 		System.out.println("I'm the privateStaticMethodWithParamsWithRunme() and I'm annotated. \n");
 	}
 	
 	@RunMe
 	protected static void protectedStaticMethodWithRunMe() {
-		
 		System.out.println("I'm the protectedStaticMethodWithRunme() and I'm annotated. \n");
 	}
 	
 	@Override @RunMe
 	public void superTestClassMethodFirstWithRunMe() {
-		
 		System.out.println("I overwrite the first superTestClassMethod of SuperTestClass and I'm annotated. \n");
 	}
 	
 	@Override
 	public void superTestClassMethodSecondWithoutRunMe() {
-		
 		System.out.println("I overwrite the second superTestClassMethod of SuperTestClass and I'm not annotated. \n");
 	}
 
 	@Override @RunMe
 	public void interfaceMethodWithRunMe() {
 		System.out.println("I overwrite the interfaceMethod of InterFaceTestClass and I'm annotated. \n");
-		
 	}
 
 }

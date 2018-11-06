@@ -121,7 +121,7 @@ public class AnotherTestClassForJUnitTesting extends SuperTestClass implements I
 	}
 	
 	@RunMe
-	private static void privateStaticMethodWithParamsWithRunme(int param) {
+	private static void privateStaticMethodWithParamsWithRunMe(int param) {
 		
 		System.out.println("I'm the privateStaticMethodWithParamsWithRunme() and I'm annotated. \n");
 	}

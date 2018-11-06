@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * class to find class with specific name and run annotated methods
- * 
+ * class to find a class of a specific name and run methods which are annotaded with RunMe annotation
  * @author jns, camiloocampo
  *
  */

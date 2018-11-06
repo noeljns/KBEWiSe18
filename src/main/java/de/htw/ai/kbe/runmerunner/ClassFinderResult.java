@@ -3,6 +3,11 @@ package de.htw.ai.kbe.runmerunner;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * class represents the sorted methods of an inspected class
+ * @author jns
+ *
+ */
 public class ClassFinderResult {
 
 	private List<String> annotated = new ArrayList<String>();
