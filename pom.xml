@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>de.htw.ai.kbe</groupId>
-	<artifactId>runmerunner</artifactId>
+	<artifactId>songsServlet</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>runmerunner</name>
+	<name>songsServlet</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -29,8 +29,23 @@
 			<artifactId>commons-cli</artifactId>
 			<version>1.4</version>
 		</dependency>
+		<dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.2</version>
+        </dependency>
 	</dependencies>
-
+	
 	<build>
 		<plugins>
 			<!-- Maven Assembly Plugin -->
@@ -46,7 +61,7 @@
 					<!-- MainClass in mainfest make a executable jar -->
 					<archive>
 						<manifest>
-							<mainClass>de.htw.ai.kbe.runmerunner.MethodRunner</mainClass>
+							<mainClass>de.htw.ai.kbe.songsServlet.Webserver</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
