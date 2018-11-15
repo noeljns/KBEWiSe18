@@ -4,20 +4,22 @@
          http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">    
    <servlet>
-        <servlet-name>Songs Servlet</servlet-name>
-        <servlet-class>de.htw.ai.kbe.songsServlet</servlet-class>
+        <servlet-name>SongsServlet</servlet-name>
+        <!-- de.htw.ai.kbe.songsServlet ist package, SongsServlet ist die zu laufende Klasse -->
+        <servlet-class>de.htw.ai.kbe.songsServlet.SongsServlet</servlet-class>
         <init-param>
-            <param-name>uriToDBComponent</param-name>
-            <param-value>db-uri:some.server/dbId</param-value>
+            <param-name>uriToDatabaseFile</param-name>
+            <!-- jeweils an Jonas PC, Camilos PC oder am Laborrechner an dieser Stelle Pfad anpassen -->
+            <param-value>/Users/jns/KBE/database/songs.json</param-value>
         </init-param>
     </servlet>
 
 <!--  DIE URL AN DAS SERVLET, WELCHES IN EINEM TOMCAT_SERVER LAEUFT IST:
-      http://localhost:8080/echoServlet/echo
-      echoServlet ist die Bezeichnung der App, /echo ist Pfad zum Servlet 
+      http://localhost:8080/songsServlet/song
+      songsServlet ist die Bezeichnung der App, /song ist Pfad zum Servlet, SongsServlet Name des Servlets
  -->
     <servlet-mapping>
-        <servlet-name>Songs Servlet</servlet-name>
-        <url-pattern>/songId</url-pattern>
+        <servlet-name>SongsServlet</servlet-name>
+        <url-pattern>/song</url-pattern>
     </servlet-mapping>
 </web-app>
