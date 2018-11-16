@@ -1,4 +1,3 @@
-
 package de.htw.ai.kbe.songsServlet;
 
 import java.io.BufferedInputStream;
@@ -40,31 +39,37 @@ public class SongsServlet extends HttpServlet {
 	@Override
 	public void init(ServletConfig servletConfig) throws ServletException {
 		this.databaseFileName = servletConfig.getInitParameter("uriToDatabaseFile");
-		this.database = new DatabaseSongs(databaseFileName);
+		this.setDatabase(new DatabaseSongs(databaseFileName));
 	}
 
 	@Override
 	public void destroy() {
 		System.out.print("Methode destroy() wurde aufgerufen, Servlet wird vom Container entsorgt.");
 		
-		if(database != null) {
-			this.database.save();		
+		if(getDatabase() != null) {
+			this.getDatabase().save();		
 		}
 	}
 
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		if (database == null) {
+		if (getDatabase() == null) {
 			response.sendError(500);
 			// response.setStatus(500);
 			return;
 		}
 		// Test, wird in $TOM_HOME/logs/catalina.out geprintet
 		System.out.println("GET request: " + request.getPathInfo() + " / " + request.getQueryString());
+	
+		//Test get request headers:
+		Enumeration headers= request.getHeaderNames();
+		
+		System.out.println("GET request headers: " + request.getHeaderNames());
+		
 		
 		// Test: drucke die IDs, Artists und Title aller songs in log file
-		database.getSongs().forEach(
-				s -> {System.out.println(s.getId() + ". Aartist: " + s.getArtist() + ", Title: " + s.getTitle() + "\n");});
+		getDatabase().getSongs().forEach(
+				s -> {System.out.println(s.getId() + ". Artist: " + s.getArtist() + ", Title: " + s.getTitle() + "\n");});
 		
 		
 		// Test: drucke alle Parameter (keys) der Request in log file 
@@ -85,6 +90,18 @@ public class SongsServlet extends HttpServlet {
 		try (PrintWriter out = response.getWriter()) {
 			out.println(new String(inBytes));
 		}
+	}
+	
+	protected String getDatabaseFileName () {
+		return this.databaseFileName;
+	}
+
+	public DatabaseSongs getDatabase() {
+		return database;
+	}
+
+	public void setDatabase(DatabaseSongs database) {
+		this.database = database;
 	}
 
 }
