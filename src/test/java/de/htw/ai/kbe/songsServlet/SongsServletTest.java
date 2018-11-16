@@ -110,81 +110,82 @@ public class SongsServletTest {
 	// assertEquals(200, response.getStatus());
 	// }
 
-	// @Test
-	// public void doGetShouldReturnFourHundredWithXmlAcceptHeader() {
-	// request.addHeader("Accept", "application/xml");
-	// try {
-	// servlet.doGet(request, response);
-	// } catch (IOException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	//
-	// assertEquals(response.getStatus(), 406);
-	//
-	// }
-	//
-	// @Test
-	// public void doGetShouldReturnFourHundredWithHtmlAcceptHeader() {
-	// request.addHeader("Accept", "text/html");
-	// try {
-	// servlet.doGet(request, response);
-	// } catch (IOException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	//
-	// assertEquals(response.getStatus(), 406);
-	//
-	// }
+	 @Test
+	 public void doGetShouldReturnFourHundredWithXmlAcceptHeader() {
+	 request.addHeader("Accept", "application/xml");
+	 try {
+	 servlet.doGet(request, response);
+	 } catch (IOException e) {
+	 // TODO Auto-generated catch block
+	 e.printStackTrace();
+	 }
+	
+	 assertEquals(response.getStatus(), 406);
+	
+	 }
+	
+	 @Test
+	 public void doGetShouldReturnFourHundredWithHtmlAcceptHeader() {
+	 request.addHeader("Accept", "text/html");
+	 try {
+	 servlet.doGet(request, response);
+	 } catch (IOException e) {
+	 // TODO Auto-generated catch block
+	 e.printStackTrace();
+	 }
+	
+	 assertEquals(response.getStatus(), 406);
+	
+	 }
 
-	// @Test
-	// public void doGetShouldAcceptAllParam() {
-	//
-	// request.addParameter("all", "");
-	// try {
-	// servlet.doGet(request, response);
-	// } catch (IOException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// assertEquals(response.getStatus(), 200);
-	// }
+	 @Test
+	 public void doGetShouldAcceptAllParam() {
+	
+	 request.addParameter("all", "");
+	 try {
+	 servlet.doGet(request, response);
+	 } catch (IOException e) {
+	 // TODO Auto-generated catch block
+	 e.printStackTrace();
+	 }
+	 assertEquals(response.getStatus(), 200);
+	 }
 
-	// @Test
-	// public void doGetShouldAcceptsSongIdParam() {
-	//
-	// request.addParameter("songId", "");
-	// try {
-	// servlet.doGet(request, response);
-	// } catch (IOException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	//
-	// assertEquals(response.getStatus(), 200);
-	//
-	// }
+	 @Test
+	 public void doGetShouldAcceptsSongIdParam() throws ServletException, IOException  {
+	
+	 request.addParameter("songId", "3");
+	 try {
+	 servlet.doGet(request, response);
+	 } catch (IOException e) {
+	 // TODO Auto-generated catch block
+	 e.printStackTrace();
+	 }
+	
+	 assertEquals(response.getStatus(), 200);
+	 assertTrue(response.getContentAsString().contains("Iggy"));
+	
+	 }
 
-	// @Test
-	// public void doGetShouldEchoParameters() throws ServletException, IOException
-	// {
-	// request.addParameter("username", "scott");
-	// request.addParameter("password", "tiger");
-	//
-	// servlet.doGet(request, response);
-	//
-	// assertEquals("text/plain", response.getContentType());
-	// assertTrue(response.getContentAsString().contains("username=scott"));
-	// assertTrue(response.getContentAsString().contains("password=tiger"));
-	// assertTrue(response.getContentAsString().contains(URITODB_STRING));
-	// }
-	//
-	// @Test
-	// public void doPostShouldEchoBody() throws ServletException, IOException {
-	// request.setContent("blablablabla".getBytes());
-	// servlet.doPost(request, response);
-	// assertEquals("text/plain", response.getContentType());
-	// assertTrue(response.getContentAsString().contains("blablablabla"));
-	// }
+//	 @Test
+//	 public void doGetShouldEchoParameters() throws ServletException, IOException
+//	 {
+//	 request.addParameter("username", "scott");
+//	 request.addParameter("password", "tiger");
+//	
+//	 servlet.doGet(request, response);
+//	
+//	 assertEquals("text/plain", response.getContentType());
+//	 assertTrue(response.getContentAsString().contains("username=scott"));
+//	 assertTrue(response.getContentAsString().contains("password=tiger"));
+//	 assertTrue(response.getContentAsString().contains(URITODB_STRING));
+//	 }
+//	
+//	 @Test
+//	 public void doPostShouldEchoBody() throws ServletException, IOException {
+//	 request.setContent("blablablabla".getBytes());
+//	 servlet.doPost(request, response);
+//	 assertEquals("text/plain", response.getContentType());
+//	 assertTrue(response.getContentAsString().contains("blablablabla"));
+//	 }
 }

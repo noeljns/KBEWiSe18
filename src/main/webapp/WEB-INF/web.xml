@@ -11,7 +11,7 @@
 			<param-name>uriToDatabaseFile</param-name>
 			<!-- jeweils an Jonas PC, Camilos PC oder am Laborrechner an dieser Stelle 
 				Pfad anpassen -->
-			<param-value>/Users/camiloocampo/Desktop/database/songs.json</param-value> -->
+			<param-value>/Users/camiloocampo/Desktop/database/songs.json</param-value> 
 			<!-- <param-value>/Users/jns/KBE/database/songs.json</param-value> -->
 		</init-param>
 	</servlet>
