@@ -45,7 +45,7 @@ public class DatabaseSongs {
 	}
 
 	/**
-	 * loads a list of songs from a JSON-file into List<Song>
+	 * laded eine Liste von Song Objekten aus einer json Datei in eine List<Song>
 	 * 
 	 * @param databaseFileName
 	 */
@@ -66,7 +66,7 @@ public class DatabaseSongs {
 	}
 
 	/**
-	 * saves a List<Song> to a JSON-file
+	 * ladet eine List<Song> in eine json Datei
 	 */
 	public void save() {
 		this.dbAccessLock.lock();
@@ -86,7 +86,7 @@ public class DatabaseSongs {
 	}
 
 	/**
-	 * return all songs in database list
+	 * Methode, die alle Song Objekte in der Datenbank als Liste zurückgibt
 	 * @return
 	 */
 	public List<Song> getSongs() {
@@ -97,7 +97,27 @@ public class DatabaseSongs {
 			this.dbAccessLock.unlock();
 		}
 	}
-
+	
+	/**
+	 * Methode, die ein Song Objekt mit einer bestimmten ID aus der Datenbank zurückgibt
+	 * @return Song Objekt mit bestimmter ID, falls es exisitiert, ansonsten null
+	 */
+    public Song getSongById(int id) {
+    		System.out.println("in database getSongById");
+    	
+    		this.dbAccessLock.lock();
+        try {
+            int counter = 0;
+            while (counter < this.songs.size()) {
+                if (this.songs.get(counter).getId() == id)
+                    return this.songs.get(counter);
+                counter++;
+            }
+            return null;
+        } finally {
+            this.dbAccessLock.unlock();
+        }
+    }
 
 	
 }

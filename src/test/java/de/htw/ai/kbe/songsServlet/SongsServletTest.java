@@ -66,9 +66,10 @@ public class SongsServletTest {
 
 	@Test
 	public void doGetShouldReturnTwoHundredWithWildCardAcceptHeader() {
-		
-		
+
 		request.addHeader("Accept", "*/*");
+		request.addParameter("all", "");
+
 		try {
 			servlet.doGet(request, response);
 		} catch (IOException e) {
@@ -76,105 +77,114 @@ public class SongsServletTest {
 			e.printStackTrace();
 		}
 
-		assertEquals(response.getStatus(), 200);
+		assertEquals(200, response.getStatus());
 
 	}
 
-	
 	@Test
 	public void doGetShouldReturnTwoHundredWithApplicationJSONAcceptHeader() {
-		
-		
+
 		request.addHeader("Accept", "application/json");
-		try {
-			servlet.doGet(request, response);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		assertEquals(response.getStatus(), 200);
-
-	}
-	
-	@Test
-	public void doGetShouldReturnTwoHundredWithNoAcceptHeader() {	
-		try {
-			servlet.doGet(request, response);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		assertEquals(response.getStatus(), 200);
-	}
-	
-	@Test
-	public void doGetShouldReturnFourHundredWithXmlAcceptHeader() {
-		request.addHeader("Accept", "application/xml");
-		try {
-			servlet.doGet(request, response);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		assertEquals(response.getStatus(), 406);
-
-	}
-	
-	
-	@Test
-	public void doGetShouldReturnFourHundredWithHtmlAcceptHeader() {
-		request.addHeader("Accept", "text/html");
-		try {
-			servlet.doGet(request, response);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		assertEquals(response.getStatus(), 406);
-
-	}
-	
-	
-	@Test
-	public void doGetShouldAcceptAllParam() {
-		
-		
 		request.addParameter("all", "");
+
 		try {
 			servlet.doGet(request, response);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
+
+		assertEquals(200, response.getStatus());
+
 	}
-	
-	
-	
-//	@Test
-//	public void doGetShouldEchoParameters() throws ServletException, IOException {
-//		request.addParameter("username", "scott");
-//		request.addParameter("password", "tiger");
-//
-//		servlet.doGet(request, response);
-//
-//		assertEquals("text/plain", response.getContentType());
-//		assertTrue(response.getContentAsString().contains("username=scott"));
-//		assertTrue(response.getContentAsString().contains("password=tiger"));
-//		assertTrue(response.getContentAsString().contains(URITODB_STRING));
-//	}
-//
-//	@Test
-//	public void doPostShouldEchoBody() throws ServletException, IOException {
-//		request.setContent("blablablabla".getBytes());
-//		servlet.doPost(request, response);
-//		assertEquals("text/plain", response.getContentType());
-//		assertTrue(response.getContentAsString().contains("blablablabla"));
-//	}
+
+	// @Test
+	// public void doGetShouldReturnTwoHundredWithNoAcceptHeader() {
+	// try {
+	// servlet.doGet(request, response);
+	// } catch (IOException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	//
+	// assertEquals(200, response.getStatus());
+	// }
+
+	// @Test
+	// public void doGetShouldReturnFourHundredWithXmlAcceptHeader() {
+	// request.addHeader("Accept", "application/xml");
+	// try {
+	// servlet.doGet(request, response);
+	// } catch (IOException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	//
+	// assertEquals(response.getStatus(), 406);
+	//
+	// }
+	//
+	// @Test
+	// public void doGetShouldReturnFourHundredWithHtmlAcceptHeader() {
+	// request.addHeader("Accept", "text/html");
+	// try {
+	// servlet.doGet(request, response);
+	// } catch (IOException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	//
+	// assertEquals(response.getStatus(), 406);
+	//
+	// }
+
+	// @Test
+	// public void doGetShouldAcceptAllParam() {
+	//
+	// request.addParameter("all", "");
+	// try {
+	// servlet.doGet(request, response);
+	// } catch (IOException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	// assertEquals(response.getStatus(), 200);
+	// }
+
+	// @Test
+	// public void doGetShouldAcceptsSongIdParam() {
+	//
+	// request.addParameter("songId", "");
+	// try {
+	// servlet.doGet(request, response);
+	// } catch (IOException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	//
+	// assertEquals(response.getStatus(), 200);
+	//
+	// }
+
+	// @Test
+	// public void doGetShouldEchoParameters() throws ServletException, IOException
+	// {
+	// request.addParameter("username", "scott");
+	// request.addParameter("password", "tiger");
+	//
+	// servlet.doGet(request, response);
+	//
+	// assertEquals("text/plain", response.getContentType());
+	// assertTrue(response.getContentAsString().contains("username=scott"));
+	// assertTrue(response.getContentAsString().contains("password=tiger"));
+	// assertTrue(response.getContentAsString().contains(URITODB_STRING));
+	// }
+	//
+	// @Test
+	// public void doPostShouldEchoBody() throws ServletException, IOException {
+	// request.setContent("blablablabla".getBytes());
+	// servlet.doPost(request, response);
+	// assertEquals("text/plain", response.getContentType());
+	// assertTrue(response.getContentAsString().contains("blablablabla"));
+	// }
 }

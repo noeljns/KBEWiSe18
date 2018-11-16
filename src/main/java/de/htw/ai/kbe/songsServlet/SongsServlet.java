@@ -69,16 +69,19 @@ public class SongsServlet extends HttpServlet {
 		// CHECK DATABASE
 		if (getDatabase() == null) {
 			System.out.println("Interne Datenbank ist leer.");
-			// response.sendError(500);
-			response.setStatus(500);
+			response.sendError(500);
+			// response.setStatus(500);
 			return;
 		}
 
 		// GET AND CHECK ACCEPT HEADER
 		// get accept header
+		System.out.println("");
+		System.out.println("");
+		System.out.println("");
 		System.out.println("vor GET print und direkt über acceptValues des getRequests.");
 		String acceptValues = request.getHeader("accept");
-		System.out.println("acceptValues des getRequests wurden geholt, siehe: " + acceptValues + "\n");
+		System.out.println("acceptValues des getRequests wurden geholt, siehe: " + acceptValues);
 
 		// request hat accept header
 		// aber eigentlich sollte es prüfen, ob accept header überhaupt nicht gesendet wird
@@ -87,8 +90,8 @@ public class SongsServlet extends HttpServlet {
 			if (!(acceptValues.contains("*/*") || acceptValues.contains("application/json"))) {
 				System.out.println(
 						"Servlet kann doGet Anfrage nicht bearbeiten, da inkorrekter Accept Header des Clients.");
-				// response.sendError(406);
-				response.setStatus(406);
+				response.sendError(406);
+				// response.setStatus(406);
 				return;
 			}
 		}
@@ -98,6 +101,8 @@ public class SongsServlet extends HttpServlet {
 
 		// GET AND CHECK ACCEPT parameter
 		// get parameter
+		
+		
 		HashMap<String, String> parameters = getParameters(request);
 		System.out.println("Folgende Paramternamen wurden übergeben: " + parameters.keySet().toString());
 		System.out.println("Folgende Parameterwerte wurden übergeben: " + parameters.values().toString());
@@ -105,19 +110,35 @@ public class SongsServlet extends HttpServlet {
 		// check parameter
 		if (!areParametersValid(parameters)) {
 			System.out.println("Parameter der Anfrage sind nicht valide. Erlaubt sind: all oder songId.");
-			// response.sendError(404);
-			response.setStatus(404);
+			response.sendError(404);
+			// response.setStatus(404);
 			return;
 		}
 
-		// paramter sind nun entweder all oder songsId
+		// parameter sind nun entweder all oder songsId
 		System.out.println("Parameter sind valide.");
 
-		// get all songs in json
+		// get all songs as json
+		boolean test1 = parameters.containsKey("all");
+		System.out.println("Enthalten Parameter all?: " + test1);
+		
 		if (parameters.containsKey("all")) {
-			responseAllSongs(response);
+			System.out.println("in if Abfrage für Parameter all");
+			respondAllSongs(response);
 		}
 
+		// get one specified song as json
+		boolean test2 = parameters.containsKey("songsId");
+		System.out.println("Enthalten Parameter all?: " + test2);
+		
+		if (parameters.containsKey("songId")) {
+			int id = Integer.parseInt(parameters.get("songId"));
+			System.out.println("in if Abfrage für Parameter songId");
+			respondOneSong(response, id);
+		}
+		
+		
+		
 		// Test, wird in $TOM_HOME/logs/catalina.out geprintet
 		// System.out.println("GET request: " + request.getPathInfo() + " / " +
 		// request.getQueryString());
@@ -126,9 +147,9 @@ public class SongsServlet extends HttpServlet {
 		// System.out.println("GET request headers: " + request.getHeaderNames());
 
 		// Test: drucke die IDs, Artists und Title aller songs in log file
-		getDatabase().getSongs().forEach(s -> {
-			System.out.println(s.getId() + ". Artist: " + s.getArtist() + ", Title: " + s.getTitle() + "\n");
-		});
+//		getDatabase().getSongs().forEach(s -> {
+//			System.out.println(s.getId() + ". Artist: " + s.getArtist() + ", Title: " + s.getTitle() + "\n");
+//		});
 
 		// Test: drucke alle Parameter (keys) der Request in log file
 		Enumeration<String> paramNames = request.getParameterNames();
@@ -178,8 +199,20 @@ public class SongsServlet extends HttpServlet {
 		}
 		return parameters;
 	}
-
-	private void responseAllSongs(HttpServletResponse response) {
+	
+	/**
+	 * Methode prüft ob die Anfrage den validen Parameternamen all oder songIg enthält
+	 */
+	boolean areParametersValid(HashMap<String, String> parameters) {
+		System.out.println("in areParametersValid");
+		return parameters.containsKey("songId") || parameters.containsKey("all");
+	}
+	
+	/**
+	 * Methode erstellt Response an Client mit allen Songs in der Datenbank in json
+	 * @param response
+	 */
+	private void respondAllSongs(HttpServletResponse response) {
 		String responseStr = getAllSongsAsJson();
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.setContentType("application/json");
@@ -191,6 +224,10 @@ public class SongsServlet extends HttpServlet {
 		}
 	}
 	
+	/**
+	 * Methode holt alle Songs in der Datenbank in json
+	 * @return
+	 */
 	private String getAllSongsAsJson() {
 		List<Song> songsAsList = database.getSongs();
 		Song[] songArr = new Song[songsAsList.size()];
@@ -207,13 +244,45 @@ public class SongsServlet extends HttpServlet {
 		}
 	}
 		
-
 	/**
-	 * prüft ob die Anfrage den validen Parameternamen all oder songIg enthält
+	 * Methode erstellt Response an Client mit Song mit bestimmter ID in json
 	 */
-	boolean areParametersValid(HashMap<String, String> parameters) {
-		return parameters.containsKey("songId") || parameters.containsKey("all");
+	private void respondOneSong(HttpServletResponse response, int id) {
+		System.out.println("in respondOneSong");
+		
+		String responseStr = getOneSongAsJson(id);
+		response.setStatus(HttpServletResponse.SC_OK);
+		response.setContentType("application/json");
+		
+		try (PrintWriter out = response.getWriter()) {
+		    out.println(responseStr);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
+	
+	/**
+	 * Methode um Song mit bestimmter id aus Datenbank in json zu holen
+	 */
+	private String getOneSongAsJson(int id) {
+		System.out.println("in getOneSongAsJson");
+
+		Song song = this.database.getSongById(id);
+        ObjectMapper om = new ObjectMapper();
+        om.enable(SerializationFeature.INDENT_OUTPUT);
+        
+        try {
+			return om.writeValueAsString(song);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+
+	  
 
 
 
