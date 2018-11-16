@@ -22,8 +22,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -162,12 +164,65 @@ public class SongsServlet extends HttpServlet {
 	}
 
 	@Override
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		response.setContentType("text/plain");
-		ServletInputStream inputStream = request.getInputStream();
-		byte[] inBytes = IOUtils.toByteArray(inputStream);
-		try (PrintWriter out = response.getWriter()) {
-			out.println(new String(inBytes));
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {		
+		System.out.println("in doPos Methode");
+		String responseStr = null;
+		int responseCode = -1;
+		String responseType = null;
+		
+		String contentType = request.getContentType();
+		ServletInputStream inputstream = request.getInputStream();
+		String content = new String(IOUtils.toByteArray(inputstream));
+		Song song = null;
+		
+		if( contentType != "application/json") {
+			responseStr = "Der übergebene Song ist nicht in validem json Format und kann nicht eingelesen werden.";
+			responseCode = HttpServletResponse.SC_BAD_REQUEST;
+		}
+		
+		song = parseSongFromJsonToSong(content);
+		System.out.println("Song wurde von json zu Objekt geparst");
+		System.out.println("Titel des Songs: " + song.getTitle());
+		System.out.println("ID des Songs: " + song.getId());
+
+
+		// checken, ob das parsen zu Song Objekt erfolgreich war
+		if (song != null) { 
+            database.addSong(song);
+    			System.out.println("Der Song wurde erfolgreich eingespeist. Die ID des Songs lautet: "+ song.getId());
+            responseStr = "Der Song wurde erfolgreich eingespeist. Die ID des Songs lautet: "+ song.getId();
+            responseCode = HttpServletResponse.SC_CREATED;
+            responseType = "application/json";
+        }
+		
+        response.setStatus(responseCode);
+        response.setContentType(responseType);
+        // neue ID soll an Client als Wert des Location Heders der Response zurückgeschickt werden
+        // http://localhost:8080/songsServlet?songIde=newIde
+        // TODO
+        response.addHeader("Location", song.getId().toString());
+        
+        try (PrintWriter out = response.getWriter()) {
+            out.println(responseStr);
+        }
+	}
+	
+	
+	private Song parseSongFromJsonToSong(String content) {
+        try {
+			return new ObjectMapper().readValue(content, Song.class);
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
 		}
 	}
 

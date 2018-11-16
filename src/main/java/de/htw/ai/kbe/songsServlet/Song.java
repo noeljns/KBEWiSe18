@@ -28,6 +28,14 @@ public class Song {
         this.released = released;
     }
 	
+	public Song(String title, String artist, String album, Integer released) {
+        this.id = -1;
+        this.title = title;
+        this.artist = artist;
+        this.album = album;
+        this.released = released;
+    }
+	
 	public Integer getId() {
 		return id;
 	}

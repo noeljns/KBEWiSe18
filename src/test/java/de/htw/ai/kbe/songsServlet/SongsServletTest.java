@@ -21,9 +21,8 @@ public class SongsServletTest {
 	private MockHttpServletRequest request;
 	private MockHttpServletResponse response;
 
-	private final static String URITODB_STRING = "/Users/camiloocampo/Desktop/database/songs.json";
-	// private final static String URITODB_STRING =
-	// "/Users/jns/KBE/database/songs.json";
+	// private final static String URITODB_STRING = "/Users/camiloocampo/Desktop/database/songs.json";
+	private final static String URITODB_STRING = "/Users/jns/KBE/database/songs.json";
 
 	@Before
 	public void setUp() throws ServletException {

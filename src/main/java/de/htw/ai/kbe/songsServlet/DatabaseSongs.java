@@ -87,6 +87,7 @@ public class DatabaseSongs {
 
 	/**
 	 * Methode, die alle Song Objekte in der Datenbank als Liste zurückgibt
+	 * 
 	 * @return
 	 */
 	public List<Song> getSongs() {
@@ -97,27 +98,61 @@ public class DatabaseSongs {
 			this.dbAccessLock.unlock();
 		}
 	}
-	
+
 	/**
-	 * Methode, die ein Song Objekt mit einer bestimmten ID aus der Datenbank zurückgibt
+	 * Methode, die ein Song Objekt mit einer bestimmten ID aus der Datenbank
+	 * zurückgibt
+	 * 
 	 * @return Song Objekt mit bestimmter ID, falls es exisitiert, ansonsten null
 	 */
-    public Song getSongById(int id) {
-    		System.out.println("in database getSongById");
-    	
-    		this.dbAccessLock.lock();
-        try {
-            int counter = 0;
-            while (counter < this.songs.size()) {
-                if (this.songs.get(counter).getId() == id)
-                    return this.songs.get(counter);
-                counter++;
-            }
-            return null;
-        } finally {
-            this.dbAccessLock.unlock();
+	public Song getSongById(int id) {
+		System.out.println("in database getSongById");
+
+		this.dbAccessLock.lock();
+		try {
+			int counter = 0;
+			while (counter < this.songs.size()) {
+				if (this.songs.get(counter).getId() == id)
+					return this.songs.get(counter);
+				counter++;
+			}
+			return null;
+		} finally {
+			this.dbAccessLock.unlock();
+		}
+	}
+
+	/**
+	 * Methode um der Datenbank einen Song hinzuzufügen
+	 */
+	public void addSong(Song song) {
+		this.dbAccessLock.lock();
+		try {
+			if (song.getId() == null) {
+				song.setId(getNextSongId());
+			}
+			this.songs.add(song);
+		} finally {
+			this.dbAccessLock.unlock();
+		}
+	}
+	
+	private int getNextSongId(){
+        int maxID = 0;
+        for (Song song : songs) {
+            if(song.getId() > maxID)
+                maxID = song.getId();
         }
+        return maxID+1;
+    }
+	
+	private boolean hasSongById(int id){
+        for (Song s : this.songs){
+            if (s.getId() == id){
+                return true;
+            }
+        }
+        return false;
     }
 
-	
 }
