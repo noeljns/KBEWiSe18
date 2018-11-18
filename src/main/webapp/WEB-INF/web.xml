@@ -1,4 +1,5 @@
-<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
          http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	version="3.1">
@@ -11,8 +12,8 @@
 			<param-name>uriToDatabaseFile</param-name>
 			<!-- jeweils an Jonas PC, Camilos PC oder am Laborrechner an dieser Stelle 
 				Pfad anpassen -->
-			<!-- <param-value>/Users/camiloocampo/Desktop/database/songs.json</param-value> -->
-			<param-value>/Users/jns/KBE/database/songs.json</param-value>
+			<param-value>/Users/camiloocampo/Desktop/database/songs.json</param-value>
+			<!-- <param-value>/Users/jns/KBE/database/songs.json</param-value> -->
 		</init-param>
 	</servlet>
 

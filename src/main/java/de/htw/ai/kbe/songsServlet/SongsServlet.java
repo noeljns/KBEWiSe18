@@ -1,6 +1,7 @@
 package de.htw.ai.kbe.songsServlet;
 
 import java.io.IOException;
+
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+
 /**
  * Klasse eines Webservices, der get und post Anfragen von Song Objekten
  * bearbeitet
@@ -29,7 +31,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 public class SongsServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private static final String APPLICATION = "application/*";
 	private static final String APPLICATION_JSON = "application/json";
 	private static final String PARAMETER_ALL = "all";
@@ -61,7 +63,8 @@ public class SongsServlet extends HttpServlet {
 	}
 
 	/**
-	 * Methode zur Bearbeitung einer http Request eines Clients zur Abfrage eines oder aller Songs
+	 * Methode zur Bearbeitung einer http Request eines Clients zur Abfrage eines
+	 * oder aller Songs
 	 */
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -73,11 +76,8 @@ public class SongsServlet extends HttpServlet {
 
 		// check header
 		String acceptValues = request.getHeader("Accept");
-		if (acceptValues != null
-				&& !(acceptValues.contains("*")
-						|| acceptValues.contains("*/*")
-						|| acceptValues.contains(APPLICATION)
-						|| acceptValues.contains(APPLICATION_JSON))) {
+		if (acceptValues != null && !(acceptValues.contains("*") || acceptValues.contains("*/*")
+				|| acceptValues.contains(APPLICATION) || acceptValues.contains(APPLICATION_JSON))) {
 
 			response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
 			return;
@@ -94,8 +94,7 @@ public class SongsServlet extends HttpServlet {
 		if (parameters.containsKey(PARAMETER_ALL)) {
 			String json = getAllSongsAsJson();
 			sendContent(response, json);
-		}
-		else if (parameters.containsKey(PARAMETER_SONG)) {
+		} else if (parameters.containsKey(PARAMETER_SONG)) {
 			try {
 				int id = Integer.parseInt(parameters.get(PARAMETER_SONG)[0]);
 				String json = getSingleSongAsJson(id);
@@ -108,10 +107,11 @@ public class SongsServlet extends HttpServlet {
 	}
 
 	/**
-	 * Methode zur Bearbeitung einer http Request eines Clients zum Hinzufügen eines Songs
+	 * Methode zur Bearbeitung einer http Request eines Clients zum Hinzufügen eines
+	 * Songs
 	 */
 	@Override
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {		
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		if (!APPLICATION_JSON.equals(request.getContentType())) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
@@ -128,13 +128,19 @@ public class SongsServlet extends HttpServlet {
 		if (song == null) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
-        }
+		}
+
+		if (song.getTitle() == null) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}
 
 		database.addSong(song);
-		StringBuffer createdSongLocation = request.getRequestURL().append("?").append(PARAMETER_SONG).append("=").append(song.getId());
+		StringBuffer createdSongLocation = request.getRequestURL().append("?").append(PARAMETER_SONG).append("=")
+				.append(song.getId());
 
 		response.setStatus(HttpServletResponse.SC_CREATED);
-        response.addHeader("Location", createdSongLocation.toString());
+		response.addHeader("Location", createdSongLocation.toString());
 	}
 
 	String getDatabaseFileName() {
@@ -146,14 +152,16 @@ public class SongsServlet extends HttpServlet {
 	}
 
 	/**
-	 * Methode prüft ob die Anfrage den validen Parameternamen all oder songIg enthält
+	 * Methode prüft ob die Anfrage den validen Parameternamen all oder songIg
+	 * enthält
 	 */
 	private boolean areParametersValid(Map<String, String[]> parameters) {
 		return parameters.containsKey("songId") || parameters.containsKey("all");
 	}
-	
+
 	/**
 	 * Methode zum Erstellen einer Antwort an den Clients
+	 * 
 	 * @param response
 	 * @param content
 	 * @throws IOException
@@ -169,21 +177,22 @@ public class SongsServlet extends HttpServlet {
 		response.setStatus(HttpServletResponse.SC_OK);
 
 		try (PrintWriter out = response.getWriter()) {
-		    out.println(content);
+			out.println(content);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Methode holt alle Songs in der Datenbank in json
+	 * 
 	 * @return
 	 */
 	private String getAllSongsAsJson() {
 		List<Song> songsAsList = database.getAllSongs();
 		Song[] songsAsArray = songsAsList.toArray(new Song[songsAsList.size()]);
-		
-        try {
+
+		try {
 			return mapper.writeValueAsString(songsAsArray);
 		} catch (JsonProcessingException e) {
 			return null;
@@ -198,8 +207,8 @@ public class SongsServlet extends HttpServlet {
 		if (song == null) {
 			return null;
 		}
-		
-        try {
+
+		try {
 			return mapper.writeValueAsString(song);
 		} catch (JsonProcessingException e) {
 			return null;
@@ -208,11 +217,12 @@ public class SongsServlet extends HttpServlet {
 
 	/**
 	 * Methode um übergebenen Json Song in ein Song Objekt zu parsen
+	 * 
 	 * @param content
 	 * @return
 	 */
 	private Song parseSongFromJsonToSong(String content) {
-        try {
+		try {
 			return mapper.readValue(content, Song.class);
 		} catch (JsonParseException e) {
 			return null;
