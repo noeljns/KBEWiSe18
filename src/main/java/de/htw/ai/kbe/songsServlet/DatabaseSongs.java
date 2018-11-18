@@ -2,21 +2,17 @@ package de.htw.ai.kbe.songsServlet;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -27,10 +23,12 @@ import com.fasterxml.jackson.databind.SerializationFeature;
  *
  */
 public class DatabaseSongs {
-	List<Song> songs;
-	String databaseFileName;
-	ReentrantLock dbAccessLock;
-	int songIdCounter = 0;
+
+	private ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+	private List<Song> songs = new ArrayList<>();
+	private ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+
+	private String databaseFileName;
 
 	/**
 	 * Konstruktor
@@ -40,8 +38,8 @@ public class DatabaseSongs {
 	public DatabaseSongs(String databaseFileName) {
 		this.databaseFileName = databaseFileName;
 		assert (this.databaseFileName != null);
-		this.dbAccessLock = new ReentrantLock();
-		load();
+		
+		// wenn file nicht existent, ein leeres erstellen
 	}
 
 	/**
@@ -51,17 +49,19 @@ public class DatabaseSongs {
 	 */
 	@SuppressWarnings("unchecked")
 	public void load() {
-		this.dbAccessLock.lock();
+		Lock writeLock = readWriteLock.writeLock();
+		writeLock.lock();
+
 		try {
-			ObjectMapper objectMapper = new ObjectMapper();
 			try (InputStream is = new BufferedInputStream(new FileInputStream(this.databaseFileName))) {
-				songs = (List<Song>) objectMapper.readValue(is, new TypeReference<List<Song>>() {
-				});
+				List<Song> songsFromFile = (List<Song>) mapper.readValue(is, new TypeReference<List<Song>>() {});
+				songs.addAll(songsFromFile);
 			} catch (Exception e) {
+				// Liste wäre leer
 				e.printStackTrace();
 			}
 		} finally {
-			this.dbAccessLock.unlock();
+			writeLock.unlock();
 		}
 	}
 
@@ -69,11 +69,12 @@ public class DatabaseSongs {
 	 * ladet eine List<Song> in eine json Datei
 	 */
 	public void save() {
-		this.dbAccessLock.lock();
+		Lock writeLock = readWriteLock.writeLock();
+		writeLock.lock();
+
 		try {
-			ObjectMapper objectMapper = new ObjectMapper();
 			try (OutputStream os = new BufferedOutputStream(new FileOutputStream(this.databaseFileName))) {
-				objectMapper.writeValue(os, songs);
+				mapper.writeValue(os, songs);
 				System.out.println("Speicherung des Inhalts der Datenbank in " + databaseFileName
 						+ " in Json Format war erfolgreich.");
 			} catch (Exception e) {
@@ -81,7 +82,7 @@ public class DatabaseSongs {
 			}
 
 		} finally {
-			this.dbAccessLock.unlock();
+			writeLock.unlock();
 		}
 	}
 
@@ -90,12 +91,14 @@ public class DatabaseSongs {
 	 * 
 	 * @return
 	 */
-	public List<Song> getSongs() {
-		this.dbAccessLock.lock();
+	public List<Song> getAllSongs() {
+		Lock readLock = readWriteLock.readLock();
+		readLock.lock();
+
 		try {
 			return this.songs;
 		} finally {
-			this.dbAccessLock.unlock();
+			readLock.unlock();
 		}
 	}
 
@@ -106,19 +109,18 @@ public class DatabaseSongs {
 	 * @return Song Objekt mit bestimmter ID, falls es exisitiert, ansonsten null
 	 */
 	public Song getSongById(int id) {
-		System.out.println("in database getSongById");
+		Lock readLock = readWriteLock.readLock();
+		readLock.lock();
 
-		this.dbAccessLock.lock();
 		try {
-			int counter = 0;
-			while (counter < this.songs.size()) {
-				if (this.songs.get(counter).getId() == id)
-					return this.songs.get(counter);
-				counter++;
+			if (id > 0 && id <= songs.size()) {
+				return songs.get(id - 1);
 			}
-			return null;
+			else {
+				return null;
+			}
 		} finally {
-			this.dbAccessLock.unlock();
+			readLock.unlock();
 		}
 	}
 
@@ -126,33 +128,17 @@ public class DatabaseSongs {
 	 * Methode um der Datenbank einen Song hinzuzufügen
 	 */
 	public void addSong(Song song) {
-		this.dbAccessLock.lock();
+		Lock writeLock = readWriteLock.writeLock();
+		writeLock.lock();
+		
 		try {
-			if (song.getId() == null) {
-				song.setId(getNextSongId());
-			}
-			this.songs.add(song);
+			// songs.size() ist automatisch letzter Index + 1 und damit letzte verwendete id
+			// daher ist nächste id size() + 1
+			int nextId = songs.size() + 1;
+			song.setId(nextId);
+			songs.add(song);
 		} finally {
-			this.dbAccessLock.unlock();
+			writeLock.unlock();
 		}
 	}
-	
-	private int getNextSongId(){
-        int maxID = 0;
-        for (Song song : songs) {
-            if(song.getId() > maxID)
-                maxID = song.getId();
-        }
-        return maxID+1;
-    }
-	
-	private boolean hasSongById(int id){
-        for (Song s : this.songs){
-            if (s.getId() == id){
-                return true;
-            }
-        }
-        return false;
-    }
-
 }

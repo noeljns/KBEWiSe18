@@ -21,6 +21,6 @@
 		der App, /song ist Pfad zum Servlet, SongsServlet Name des Servlets -->
 	<servlet-mapping>
 		<servlet-name>SongsServlet</servlet-name>
-		<url-pattern>/song</url-pattern>
+		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 </web-app>
