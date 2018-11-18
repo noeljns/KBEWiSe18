@@ -24,7 +24,8 @@ public class SongsServletTest {
 	private MockHttpServletRequest request;
 	private MockHttpServletResponse response;
 
-	private final static String URITODB_STRING = "/Users/jns/KBE/database/songs.json";
+	// holen für die Tests song_test.json, weil wir die Datei im Laufzeittest verändern
+	private final static String URITODB_STRING = "/Users/jns/KBE/database/songs_test.json";
 	// private final static String URITODB_STRING = "/Users/camiloocampo/Desktop/database/songs.json";
 
 	@Before
@@ -33,9 +34,6 @@ public class SongsServletTest {
 		request = new MockHttpServletRequest();
 		response = new MockHttpServletResponse();
 		config = new MockServletConfig();
-		// erst einmal initial datenbank holen mit nur 10 songs für laufzeittest
-		// test_json erstellen die nach test_run kopiert
-		//TODO
 		config.addInitParameter("uriToDatabaseFile", URITODB_STRING);
 		servlet.init(config); // throws ServletException
 		database = servlet.getDatabase();
@@ -49,23 +47,23 @@ public class SongsServletTest {
 	@Test
 	public void initShouldLoadTenSongs() {
 		List<Song> loadedSongs = database.getAllSongs();
-		assertTrue(loadedSongs.size() == 17);
+		assertTrue(loadedSongs.size() == 10);
 	}
 
 	@Test
 	@Ignore
 	public void initShouldLoadOurSongs() {
 		List<Song> loadedSongs = database.getAllSongs();
-		assertEquals(loadedSongs.get(0).getTitle(), "7 Years");
-		assertEquals(loadedSongs.get(1).getTitle(), "Private Show");
-		assertEquals(loadedSongs.get(2).getTitle(), "No");
-		assertEquals(loadedSongs.get(3).getTitle(), "i hate u, i love u");
-		assertEquals(loadedSongs.get(4).getTitle(), "I Took a Pill in Ibiza");
-		assertEquals(loadedSongs.get(5).getTitle(), "Bad Things");
-		assertEquals(loadedSongs.get(6).getTitle(), "Ghostbusters (I'm not a fraid)");
-		assertEquals(loadedSongs.get(7).getTitle(), "Team");
-		assertEquals(loadedSongs.get(8).getTitle(), "Mom");
-		assertEquals(loadedSongs.get(9).getTitle(), "Can’t Stop the Feeling");
+		assertEquals(loadedSongs.get(0).getTitle(), "Can’t Stop the Feeling");
+		assertEquals(loadedSongs.get(1).getTitle(), "Mom");
+		assertEquals(loadedSongs.get(2).getTitle(), "Team");
+		assertEquals(loadedSongs.get(3).getTitle(), "Ghostbusters (I'm not a fraid)");
+		assertEquals(loadedSongs.get(4).getTitle(), "Bad Things");
+		assertEquals(loadedSongs.get(5).getTitle(), "I Took a Pill in Ibiza");
+		assertEquals(loadedSongs.get(6).getTitle(), "i hate u, i love u");
+		assertEquals(loadedSongs.get(7).getTitle(), "No");
+		assertEquals(loadedSongs.get(8).getTitle(), "Private Show");
+		assertEquals(loadedSongs.get(9).getTitle(), "7 Years");
 	}
 
 	@Test

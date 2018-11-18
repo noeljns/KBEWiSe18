@@ -61,16 +61,17 @@ public class SongsServlet extends HttpServlet {
 	}
 
 	/**
-	 * Methode zur Bearbeitung einer http Request eines Clients
+	 * Methode zur Bearbeitung einer http Request eines Clients zur Abfrage eines oder aller Songs
 	 */
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		// CHECK DATABASE
+		// check database
 		if (database == null) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return;
 		}
 
+		// check header
 		String acceptValues = request.getHeader("Accept");
 		if (acceptValues != null
 				&& !(acceptValues.contains("*")
@@ -106,6 +107,9 @@ public class SongsServlet extends HttpServlet {
 		}
 	}
 
+	/**
+	 * Methode zur Bearbeitung einer http Request eines Clients zum Hinzufügen eines Songs
+	 */
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {		
 		if (!APPLICATION_JSON.equals(request.getContentType())) {
@@ -148,6 +152,12 @@ public class SongsServlet extends HttpServlet {
 		return parameters.containsKey("songId") || parameters.containsKey("all");
 	}
 	
+	/**
+	 * Methode zum Erstellen einer Antwort an den Clients
+	 * @param response
+	 * @param content
+	 * @throws IOException
+	 */
 	private void sendContent(HttpServletResponse response, String content) throws IOException {
 		if (content == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -196,6 +206,11 @@ public class SongsServlet extends HttpServlet {
 		}
 	}
 
+	/**
+	 * Methode um übergebenen Json Song in ein Song Objekt zu parsen
+	 * @param content
+	 * @return
+	 */
 	private Song parseSongFromJsonToSong(String content) {
         try {
 			return mapper.readValue(content, Song.class);
