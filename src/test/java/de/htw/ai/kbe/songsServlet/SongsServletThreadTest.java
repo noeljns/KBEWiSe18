@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONObject;
 import org.junit.Before;
@@ -22,36 +24,29 @@ import org.junit.After;
 @RunWith(ConcurrentTestRunner.class)
 public class SongsServletThreadTest {
 
-	public class SongsServletTest {
+	private SongsServlet servlet = new SongsServlet();
+	private DatabaseSongs database;
+	private MockServletConfig config;
+	private MockHttpServletRequest request;
+	private MockHttpServletResponse response;
 
-		private SongsServlet servlet;
-		private DatabaseSongs database;
-		private MockServletConfig config;
-		private MockHttpServletRequest request;
-		private MockHttpServletResponse response;
+	private final static String URITODB_STRING_THREAD = "/Users/camiloocampo/Desktop/database/songs_test_thread.json";
 
-		// holen für die Tests song_test.json, weil wir die Datei im Laufzeittest
-		// verändern
-		// private final static String URITODB_STRING =
-		// "/Users/jns/KBE/database/songs_test.json";
-		private final static String URITODB_STRING_THREAD = "/Users/camiloocampo/Desktop/database/songs_test_thread.json";
+	@Before
+	public void setUp() throws ServletException {
+		
+		// servlet = new SongsServlet();
+		request = new MockHttpServletRequest();
+		response = new MockHttpServletResponse();
+		config = new MockServletConfig();
+		config.addInitParameter("uriToDatabaseFile", URITODB_STRING_THREAD);
+		servlet.init(config); // throws ServletException
+		database = servlet.getDatabase();
 
-		@Before
-		public void setUp() throws ServletException {
-			System.out.println("hello im the threading in setup");
-			servlet = new SongsServlet();
-			request = new MockHttpServletRequest();
-			response = new MockHttpServletResponse();
-			config = new MockServletConfig();
-			config.addInitParameter("uriToDatabaseFile", URITODB_STRING_THREAD);
-			servlet.init(config); // throws ServletException
-			database = servlet.getDatabase();
+	}
 
-		}
-
-		@Test
-		public void doPost() throws Exception {
-			System.out.println("hello im the threading in postOne method");
+	@Test
+	public void doPost() throws IOException {
 			JSONObject obj = new JSONObject();
 			obj.put("title", "threadsafe");
 			obj.put("artist", "Camilo");
@@ -60,15 +55,14 @@ public class SongsServletThreadTest {
 			request.setContentType("application/json");
 			request.setContent(obj.toString().getBytes("utf-8"));
 			servlet.doPost(request, response);
-			
-		}
-
-		@After
-		public void testSizeOfDatabase() {
-			System.out.println("hello im the threading in testsize");
-			assertEquals(14, database.getAllSongs().size());
-
-		}
 
 	}
+
+	@After
+	public void testSizeOfDatabase() {
+		
+		assertEquals(14, database.getAllSongs().size());
+
+	}
+
 }
