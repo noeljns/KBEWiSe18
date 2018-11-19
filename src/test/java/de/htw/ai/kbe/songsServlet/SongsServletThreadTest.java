@@ -57,18 +57,40 @@ public class SongsServletThreadTest {
 		request.setContent(obj.toString().getBytes("utf-8"));
 		servlet.doPost(request, response);
 		
-		
-		
 	}
 	
 	@After
 	public void testSizeOfDatabase() {
-			assertEquals(14, database.getAllSongs().size());
+			assertEquals(15, database.getAllSongs().size());
 
 	}
 	
 	
-	
+	@Test
+	public void checkReadAndWrite() throws Exception{
+		
+		//thread one sends a do post request
+		if(Thread.currentThread().getName().contains("Thread-1")) {
+			
+			JSONObject obj = new JSONObject();
+			obj.put("title", "threadsafe");
+			obj.put("artist", "Camilo");
+			obj.put("album", "Jonas Jonas");
+			obj.put("released", "2018");
+			request.setContentType("application/json");
+			request.setContent(obj.toString().getBytes("utf-8"));
+			servlet.doPost(request, response);
+			Thread.sleep(5000);
+		}
+		//meanwhile thread 2 tries to read
+		if(Thread.currentThread().getName().contains("Thread-2")) {
+			request.addHeader("Accept", "*/*");
+			request.addParameter("all", "");
+			servlet.doGet(request, response);
+			System.out.println("response from 2nd thread " + response.getContentAsString());
+			
+		}
+	}
 	
 	
 	
