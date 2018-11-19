@@ -67,7 +67,7 @@ public class SongsServletThreadTest {
 	
 	
 	@Test
-	public void checkReadAndWrite() throws Exception{
+	public void checkWriteAndRead() throws Exception{
 		
 		//thread one sends a do post request
 		if(Thread.currentThread().getName().contains("Thread-1")) {
@@ -81,6 +81,7 @@ public class SongsServletThreadTest {
 			request.setContent(obj.toString().getBytes("utf-8"));
 			servlet.doPost(request, response);
 			Thread.sleep(5000);
+			database.save();
 		}
 		//meanwhile thread 2 tries to read
 		if(Thread.currentThread().getName().contains("Thread-2")) {
@@ -88,7 +89,7 @@ public class SongsServletThreadTest {
 			request.addParameter("all", "");
 			servlet.doGet(request, response);
 			System.out.println("response from 2nd thread " + response.getContentAsString());
-			
+			System.out.println("response from 2nd thread with respect to database " + database.getAllSongs().toString());
 		}
 	}
 	
