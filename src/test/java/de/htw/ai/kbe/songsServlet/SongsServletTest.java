@@ -17,10 +17,13 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockServletConfig;
 
-
-
-
-
+/**
+ * Testklasse eines Webservices, der get und post Anfragen von Song Objekten
+ * bearbeitet
+ * 
+ * @author jns, camilo
+ *
+ */
 public class SongsServletTest {
 
 	private SongsServlet servlet;
@@ -29,16 +32,18 @@ public class SongsServletTest {
 	private MockHttpServletRequest request;
 	private MockHttpServletResponse response;
 
-	// holen für die Tests song_test.json, weil wir die Datei im Laufzeittest
-	// verändern
+	// holen für Tests song_test.json, weil wir Datei im Laufzeittest verändern
+	private final static String URITODB_STRING = "/Users/jns/KBE/database/songs_test.json";
+	private final static String URITODB_STRING_POST = "/Users/jns/KBE/database/songs_test_post.json";
 	// private final static String URITODB_STRING =
-	// "/Users/jns/KBE/database/songs_test.json";
-	// private final static String URITODB_STRING = "/Users/camiloocampo/Desktop/database/songs_test.json";
-	// private final static String URITODB_STRING_POST = "/Users/camiloocampo/Desktop/database/songs_test_post.json";
-	
-	private final static String URITODB_STRING = "/home/s0558239/database/songs_test.json";
-	private final static String URITODB_STRING_POST = "/home/s0558239/database/songs_test_post.json";
-	
+	// "/Users/camiloocampo/Desktop/database/songs_test.json";
+	// private final static String URITODB_STRING_POST =
+	// "/Users/camiloocampo/Desktop/database/songs_test_post.json";
+	// private final static String URITODB_STRING =
+	// "/home/s0558239/database/songs_test.json";
+	// private final static String URITODB_STRING_POST =
+	// "/home/s0558239/database/songs_test_post.json";
+
 	@Before
 	public void setUp() throws ServletException {
 		servlet = new SongsServlet();
@@ -82,7 +87,6 @@ public class SongsServletTest {
 		request.addParameter("all", "");
 
 		servlet.doGet(request, response);
-
 		assertEquals(HttpServletResponse.SC_OK, response.getStatus());
 	}
 
@@ -92,96 +96,64 @@ public class SongsServletTest {
 		request.addParameter("all", "");
 
 		servlet.doGet(request, response);
-
 		assertEquals(HttpServletResponse.SC_OK, response.getStatus());
 	}
 
 	@Test
-	public void doGetShouldReturnOkWithNoAcceptHeader() {
-		
+	public void doGetShouldReturnTwoHundredWithNoAcceptHeader() throws Exception {
 		request.addParameter("all", "");
-		try {
-			servlet.doGet(request, response);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		assertEquals(HttpServletResponse.SC_OK, response.getStatus());
-		
-	}
-
-	@Test
-	public void doGetShouldReturnFourHundredWithXmlAcceptHeader() throws Exception {
-		request.addHeader("Accept", "application/xml");
 
 		servlet.doGet(request, response);
 
-		assertEquals(HttpServletResponse.SC_NOT_ACCEPTABLE, response.getStatus());
+		assertEquals(HttpServletResponse.SC_OK, response.getStatus());
 	}
 
 	@Test
-	public void doGetShouldReturnFourHundredWithHtmlAcceptHeader() {
-		request.addHeader("Accept", "text/html");
-		try {
-			servlet.doGet(request, response);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		assertEquals(HttpServletResponse.SC_NOT_ACCEPTABLE, response.getStatus());
-	}
-
-	@Test
-	public void doGetShouldAcceptAllParam() {
-
+	public void doGetShouldReturnFourHundredWithXMLAcceptHeader() throws Exception {
+		request.addHeader("Accept", "application/xml");
 		request.addParameter("all", "");
-		try {
-			servlet.doGet(request, response);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		assertEquals(HttpServletResponse.SC_OK, response.getStatus());
+
+		servlet.doGet(request, response);
+		assertEquals(HttpServletResponse.SC_NOT_ACCEPTABLE, response.getStatus());
 	}
 
 	@Test
-	public void doGetShouldAcceptsSongIdParam() throws ServletException, IOException {
+	public void doGetShouldReturnFourHundredWithHTMLAcceptHeader() throws Exception {
+		request.addHeader("Accept", "text/html");
+		request.addParameter("all", "");
 
-		request.addParameter("songId", "3");
-		try {
-			servlet.doGet(request, response);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		assertEquals(HttpServletResponse.SC_OK, response.getStatus());
-		assertTrue(response.getContentAsString().contains("Iggy"));
-
+		servlet.doGet(request, response);
+		assertEquals(HttpServletResponse.SC_NOT_ACCEPTABLE, response.getStatus());
 	}
 
-	// wenn es Accept header gibt, aber weder * nocht application/json, dann REJECT
-	// mit HTTP Statuscode 406
+	// if the accept header exists, but neither contains * nor application/json, then reject with http status code 406
 	@Test
-	public void doGetShouldOnlyAcceptWildCardOrJson() {
-
+	public void doGetShouldOnlyAcceptWildCardOrJson() throws Exception {
 		request.addHeader("Accept", "text/html");
 		request.addParameter("all", "istEgal");
-		try {
-			servlet.doGet(request, response);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
+		servlet.doGet(request, response);
 		assertEquals(HttpServletResponse.SC_NOT_ACCEPTABLE, response.getStatus());
+	}
 
+	@Test
+	public void doGetShouldReturnTwoHundredWithAllParam() throws Exception {
+		request.addParameter("all", "");
+
+		servlet.doGet(request, response);
+		assertEquals(HttpServletResponse.SC_OK, response.getStatus());
+	}
+
+	@Test
+	public void doGetShouldReturnTwoHundredWithSongIdParam() throws Exception {
+		request.addParameter("songId", "3");
+
+		servlet.doGet(request, response);
+		assertEquals(HttpServletResponse.SC_OK, response.getStatus());
 	}
 
 	@Test
 	public void doGetReturnsAllSongsInJson() throws Exception {
-
 		request.addHeader("Accept", "application/json");
 		request.addParameter("all", "");
 
@@ -190,6 +162,7 @@ public class SongsServletTest {
 		// allSongs are in json format
 		assertEquals(response.getContentType(), "application/json");
 
+		// response contains all songs
 		String content = response.getContentAsString();
 		assertTrue(content.contains("Can’t Stop the Feeling"));
 		assertTrue(content.contains("Mom"));
@@ -201,116 +174,103 @@ public class SongsServletTest {
 		assertTrue(content.contains("No"));
 		assertTrue(content.contains("Private Show"));
 		assertTrue(content.contains("7 Years"));
-
 	}
 
 	@Test
-	public void doGetSixReturnsSongSixAsJson() throws Exception {
-
+	public void doGetWithParamSongIdSixReturnsSongSixAsJson() throws Exception {
 		request.addHeader("Accept", "application/json");
 		request.addParameter("songId", "6");
 
 		servlet.doGet(request, response);
 
-		// allSongs are in json format
+		// songId=6 is in json format
 		assertEquals(response.getContentType(), "application/json");
+		
+		// response contains song with songId=6
 		String content = response.getContentAsString();
-
+		assertTrue(content.contains("6"));
 		assertTrue(content.contains("I Took a Pill in Ibiza"));
 	}
 
 	@Test
-	public void doGetWithLowerCaseReturnsBadRequest() throws Exception {
-
+	public void doGetWithIncorrectLowerCaseSongIdParamReturnsBadRequest() throws Exception {
 		request.addHeader("Accept", "application/json");
+		// songid instead of songId
 		request.addParameter("songid", "6");
 
 		servlet.doGet(request, response);
-
 		assertEquals(HttpServletResponse.SC_BAD_REQUEST, response.getStatus());
-
 	}
 
 	@Test
-	public void doGetWithNotExistingIdReturnsBadRequest() throws Exception {
-
+	public void doGetWithNotExistingSongIdReturnsBadRequest() throws Exception {
 		request.addHeader("Accept", "application/json");
+		// song with songId=600 does not exist in data base
 		request.addParameter("songid", "600");
 
 		servlet.doGet(request, response);
-
 		assertEquals(HttpServletResponse.SC_BAD_REQUEST, response.getStatus());
-
 	}
 
 	@Test
 	public void doPostWithCorrectJsonPayloadReturnsCorrectLocalHeader() throws Exception {
-
 		JSONObject obj = new JSONObject();
 		obj.put("title", "Testing with JUnit");
 		obj.put("artist", "Camilo");
 		obj.put("album", "Jonas Jonas");
 		obj.put("released", "2018");
+		
 		request.setContentType("application/json");
 		request.setContent(obj.toString().getBytes("utf-8"));
 		servlet.doPost(request, response);
 		Song postedSong = database.getSongById(11);
+		
 		assertEquals(postedSong.getTitle(), "Testing with JUnit");
 		assertEquals(HttpServletResponse.SC_CREATED, response.getStatus());
-		assertEquals("http://localhost?songId=11" , response.getHeader("Location"));
-		
+		assertEquals("http://localhost?songId=11", response.getHeader("Location"));
 	}
 
 	@Test
-	public void doPostWithoutTitleReturnsBadRequest() throws Exception{
-		
-		
+	public void doPostWithoutTitleReturnsBadRequest() throws Exception {
 		JSONObject obj = new JSONObject();
 		obj.put("title", null);
 		obj.put("artist", "Camilo");
 		obj.put("album", "Jonas Jonas");
 		obj.put("released", "2018");
+		
 		request.setContentType("application/json");
 		request.setContent(obj.toString().getBytes("utf-8"));
 		servlet.doPost(request, response);
-		
-		
+
 		assertEquals(HttpServletResponse.SC_BAD_REQUEST, response.getStatus());
-		
 	}
-	
+
 	@Test
-	public void doPostWithoutJsonPayloadReturnsBadRequest() throws Exception{
-		
-		
-		request.setContent("blaba".getBytes());
+	public void doPostWithoutJsonPayloadReturnsBadRequest() throws Exception {
+		request.setContent("noJsonFormat".getBytes());
 		servlet.doPost(request, response);
-		assertEquals(HttpServletResponse.SC_BAD_REQUEST, response.getStatus());
 		
+		assertEquals(HttpServletResponse.SC_BAD_REQUEST, response.getStatus());
 	}
-	
+
 	@Test
-	public void shutDownSavesDatabaseState() throws Exception{
+	public void shutDownSavesDatabaseState() throws Exception {
 		config = new MockServletConfig();
 		config.addInitParameter("uriToDatabaseFile", URITODB_STRING_POST);
 		servlet.init(config); // throws ServletException
 		database = servlet.getDatabase();
-		
-		
-		
+
 		JSONObject obj = new JSONObject();
 		obj.put("title", "i love junit");
 		obj.put("artist", "Camilo");
 		obj.put("album", "Jonas Jonas");
 		obj.put("released", "2018");
+		
 		request.setContentType("application/json");
 		request.setContent(obj.toString().getBytes("utf-8"));
 		servlet.doPost(request, response);
 		servlet.destroy();
-		assertEquals(11, database.getAllSongs().size());
 		
-
+		assertEquals(11, database.getAllSongs().size());
 	}
-	
-
 }

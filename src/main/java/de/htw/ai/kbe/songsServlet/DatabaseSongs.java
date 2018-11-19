@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 
 /**
- * Klasse, um Songs Objecte in Json Format zu speichern
+ * Klasse, um Song Objekte in Json Format zu speichern
  * 
  * @author jns, camilo
  *
@@ -39,12 +39,10 @@ public class DatabaseSongs {
 	public DatabaseSongs(String databaseFileName) {
 		this.databaseFileName = databaseFileName;
 		assert (this.databaseFileName != null);
-		
-		// wenn file nicht existent, ein leeres erstellen
 	}
 
 	/**
-	 * laded eine Liste von Song Objekten aus einer json Datei in eine List<Song>
+	 * Methode lädt eine Liste von Song Objekten aus einer json Datei in eine List<Song>
 	 * 
 	 * @param databaseFileName
 	 */
@@ -67,7 +65,7 @@ public class DatabaseSongs {
 	}
 
 	/**
-	 * ladet eine List<Song> in eine json Datei
+	 * Methode lädt eine List<Song> in eine json Datei
 	 */
 	public void save() {
 		Lock writeLock = readWriteLock.writeLock();
@@ -90,7 +88,7 @@ public class DatabaseSongs {
 	/**
 	 * Methode, die alle Song Objekte in der Datenbank als Liste zurückgibt
 	 * 
-	 * @return
+	 * @return Liste aller Songs
 	 */
 	public List<Song> getAllSongs() {
 		Lock readLock = readWriteLock.readLock();
@@ -107,7 +105,8 @@ public class DatabaseSongs {
 	 * Methode, die ein Song Objekt mit einer bestimmten ID aus der Datenbank
 	 * zurückgibt
 	 * 
-	 * @return Song Objekt mit bestimmter ID, falls es exisitiert, ansonsten null
+	 * @param Id des angeforderten Songs
+	 * @return Song Objekt mit bestimmter ID falls es exisitiert, ansonsten null
 	 */
 	public Song getSongById(int id) {
 		Lock readLock = readWriteLock.readLock();
@@ -127,6 +126,7 @@ public class DatabaseSongs {
 
 	/**
 	 * Methode um der Datenbank einen Song hinzuzufügen
+	 * @param Song Objekt das zu der Datenbank hinzugefügt werden soll
 	 */
 	public void addSong(Song song) {
 		Lock writeLock = readWriteLock.writeLock();
@@ -134,7 +134,7 @@ public class DatabaseSongs {
 		
 		try {
 			// songs.size() ist automatisch letzter Index + 1 und damit letzte verwendete id
-			// daher ist nächste id size() + 1
+			// daher ist die nächste freie id für den neuen song size() + 1
 			int nextId = songs.size() + 1;
 			song.setId(nextId);
 			songs.add(song);

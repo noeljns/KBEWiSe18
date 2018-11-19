@@ -65,6 +65,9 @@ public class SongsServlet extends HttpServlet {
 	/**
 	 * Methode zur Bearbeitung einer http Request eines Clients zur Abfrage eines
 	 * oder aller Songs
+	 * 
+	 * @param request Http Request an unser Servlet
+	 * @param response Http Request response
 	 */
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -109,6 +112,9 @@ public class SongsServlet extends HttpServlet {
 	/**
 	 * Methode zur Bearbeitung einer http Request eines Clients zum Hinzufügen eines
 	 * Songs
+	 * 
+	 * @param request Http Request an unser Servlet
+	 * @param response Http Request response
 	 */
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -130,6 +136,7 @@ public class SongsServlet extends HttpServlet {
 			return;
 		}
 
+		// Song muss zwingend einen Titel enthalten
 		if (song.getTitle() == null) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
@@ -154,16 +161,17 @@ public class SongsServlet extends HttpServlet {
 	/**
 	 * Methode prüft ob die Anfrage den validen Parameternamen all oder songIg
 	 * enthält
+	 * @return true falls die Parameter valide sind mit den Werten all oder songId, ansonsten false
 	 */
 	private boolean areParametersValid(Map<String, String[]> parameters) {
 		return parameters.containsKey("songId") || parameters.containsKey("all");
 	}
 
 	/**
-	 * Methode zum Erstellen einer Antwort an den Clients
+	 * Methode zum Erstellen einer Antwort an den Client
 	 * 
-	 * @param response
-	 * @param content
+	 * @param response Http Response
+	 * @param content enthält entweder einen oder alle Songs der Datenbank
 	 * @throws IOException
 	 */
 	private void sendContent(HttpServletResponse response, String content) throws IOException {
@@ -186,7 +194,7 @@ public class SongsServlet extends HttpServlet {
 	/**
 	 * Methode holt alle Songs in der Datenbank in json
 	 * 
-	 * @return
+	 * @return json String aller Songs in der Datenbank
 	 */
 	private String getAllSongsAsJson() {
 		List<Song> songsAsList = database.getAllSongs();
@@ -201,6 +209,9 @@ public class SongsServlet extends HttpServlet {
 
 	/**
 	 * Methode um Song mit bestimmter id aus Datenbank in json zu holen
+	 * 
+	 * @param id des angeforderten Songs
+	 * @return json String des angeforderten Songs
 	 */
 	private String getSingleSongAsJson(int id) {
 		Song song = database.getSongById(id);
@@ -218,8 +229,8 @@ public class SongsServlet extends HttpServlet {
 	/**
 	 * Methode um übergebenen Json Song in ein Song Objekt zu parsen
 	 * 
-	 * @param content
-	 * @return
+	 * @param content json String eines Songs
+	 * @return Songobjekt
 	 */
 	private Song parseSongFromJsonToSong(String content) {
 		try {
