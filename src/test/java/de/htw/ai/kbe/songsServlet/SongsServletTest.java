@@ -33,8 +33,11 @@ public class SongsServletTest {
 	// verändern
 	// private final static String URITODB_STRING =
 	// "/Users/jns/KBE/database/songs_test.json";
-	private final static String URITODB_STRING = "/Users/camiloocampo/Desktop/database/songs_test.json";
-	private final static String URITODB_STRING_POST = "/Users/camiloocampo/Desktop/database/songs_test_post.json";
+	// private final static String URITODB_STRING = "/Users/camiloocampo/Desktop/database/songs_test.json";
+	// private final static String URITODB_STRING_POST = "/Users/camiloocampo/Desktop/database/songs_test_post.json";
+	
+	private final static String URITODB_STRING = "/home/s0558239/database/songs_test.json";
+	private final static String URITODB_STRING_POST = "/home/s0558239/database/songs_test_post.json";
 	
 	@Before
 	public void setUp() throws ServletException {
@@ -59,7 +62,6 @@ public class SongsServletTest {
 	}
 
 	@Test
-	@Ignore
 	public void initShouldLoadOurSongs() {
 		List<Song> loadedSongs = database.getAllSongs();
 		assertEquals(loadedSongs.get(0).getTitle(), "Can’t Stop the Feeling");

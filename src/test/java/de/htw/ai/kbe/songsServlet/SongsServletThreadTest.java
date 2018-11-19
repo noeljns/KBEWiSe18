@@ -30,8 +30,10 @@ public class SongsServletThreadTest {
 	private MockHttpServletRequest request;
 	private MockHttpServletResponse response;
 
-	private final static String URITODB_STRING_THREAD = "/Users/camiloocampo/Desktop/database/songs_test_thread.json";
+	// private final static String URITODB_STRING_THREAD = "/Users/camiloocampo/Desktop/database/songs_test_thread.json";
+	private final static String URITODB_STRING_THREAD = "/home/s0558239/database/songs_test_thread.json";
 
+	
 	@Before
 	public void setUp() throws ServletException {
 		
