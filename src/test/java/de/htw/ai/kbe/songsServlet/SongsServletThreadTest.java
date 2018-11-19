@@ -44,25 +44,33 @@ public class SongsServletThreadTest {
 		database = servlet.getDatabase();
 
 	}
-
 	@Test
-	public void doPost() throws IOException {
-			JSONObject obj = new JSONObject();
-			obj.put("title", "threadsafe");
-			obj.put("artist", "Camilo");
-			obj.put("album", "Jonas Jonas");
-			obj.put("released", "2018");
-			request.setContentType("application/json");
-			request.setContent(obj.toString().getBytes("utf-8"));
-			servlet.doPost(request, response);
-
+	public void checkConcurrentWrite() throws Exception{
+		
+		
+		JSONObject obj = new JSONObject();
+		obj.put("title", "threadsafe");
+		obj.put("artist", "Camilo");
+		obj.put("album", "Jonas Jonas");
+		obj.put("released", "2018");
+		request.setContentType("application/json");
+		request.setContent(obj.toString().getBytes("utf-8"));
+		servlet.doPost(request, response);
+		
+		
+		
 	}
-
+	
 	@After
 	public void testSizeOfDatabase() {
-		
-		assertEquals(14, database.getAllSongs().size());
+			assertEquals(14, database.getAllSongs().size());
 
 	}
+	
+	
+	
+	
+	
+	
 
 }
