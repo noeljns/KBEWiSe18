@@ -259,6 +259,7 @@ public class SongsServletTest {
 		config.addInitParameter("uriToDatabaseFile", URITODB_STRING_POST);
 		servlet.init(config); // throws ServletException
 		database = servlet.getDatabase();
+		int size = database.getAllSongs().size();
 
 		JSONObject obj = new JSONObject();
 		obj.put("title", "i love junit");
@@ -271,6 +272,6 @@ public class SongsServletTest {
 		servlet.doPost(request, response);
 		servlet.destroy();
 		
-		assertEquals(11, database.getAllSongs().size());
+		assertEquals(size+1, database.getAllSongs().size());
 	}
 }
