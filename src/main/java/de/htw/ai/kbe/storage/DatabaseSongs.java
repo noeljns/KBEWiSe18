@@ -1,4 +1,4 @@
-package de.htw.ai.kbe.songsServlet;
+package de.htw.ai.kbe.storage;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -15,6 +15,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+
+import de.htw.ai.kbe.bean.Song;
 
 
 /**
@@ -41,6 +43,12 @@ public class DatabaseSongs {
 		assert (this.databaseFileName != null);
 	}
 
+	public static  DatabaseSongs getInstance() {
+								
+		String databaseFileName= "/Users/camiloocampo/Desktop/database/songs.json";
+		return new DatabaseSongs(databaseFileName);
+	}
+	
 	/**
 	 * Methode lädt eine Liste von Song Objekten aus einer json Datei in eine List<Song>
 	 * 

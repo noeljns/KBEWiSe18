@@ -1,10 +1,13 @@
-package de.htw.ai.kbe.songsServlet;
+package de.htw.ai.kbe.bean;
+
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Klasse die ein Song repräsentiert
  * @author jns
  *
  */
+@XmlRootElement(name= "song")
 public class Song {
 
 	private Integer id;
