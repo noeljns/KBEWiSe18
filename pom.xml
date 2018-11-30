@@ -7,7 +7,7 @@
 	<artifactId>songsServlet</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>songsServlet</name>
+	<name>songsRX</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -103,13 +103,11 @@
         </dependency>
 		
 		
-		
-		
 	</dependencies>
 
 
 	<build>
-		<finalName>songsServlet</finalName>
+		<finalName>songsRX</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
