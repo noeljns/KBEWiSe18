@@ -9,7 +9,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name= "song")
 public class Song {
-
 	private Integer id;
 	private String title;
 	private String artist;
@@ -19,7 +18,7 @@ public class Song {
 	/**
 	 * Konstruktor
 	 */
-	private Song() {
+	public Song() {
 	}
 
 	/**

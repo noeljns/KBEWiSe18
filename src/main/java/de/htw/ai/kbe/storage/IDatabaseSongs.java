@@ -7,7 +7,7 @@ import de.htw.ai.kbe.bean.Song;
 public interface IDatabaseSongs {
 
 
-	public Song getSongById(int id);
+	public Song getSongById(Integer id);
 	public List<Song> getAllSongs();
 	public void addSong(Song song);
 	//todo: update and delete

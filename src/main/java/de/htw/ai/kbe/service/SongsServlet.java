@@ -1,31 +1,21 @@
 package de.htw.ai.kbe.service;
 
-import java.io.IOException;
-
-import java.io.PrintWriter;
 import java.util.List;
-import java.util.Map;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
-import org.apache.commons.io.IOUtils;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import de.htw.ai.kbe.bean.Song;
+import de.htw.ai.kbe.storage.IDatabaseSongs;
 import de.htw.ai.kbe.storage.InMemoryDatabaseSongs;
 
 /**
@@ -39,33 +29,31 @@ import de.htw.ai.kbe.storage.InMemoryDatabaseSongs;
 //URL fuer diesen Service ist: http://localhost:8080/songsRX/rest/songs
 @Path("/songs")
 public class SongsServlet{
+	
+	private IDatabaseSongs database = new InMemoryDatabaseSongs();
 
-	private static final long serialVersionUID = 1L;
-	private static final String APPLICATION = "application/*";
-	private static final String APPLICATION_JSON = "application/json";
-	private static final String PARAMETER_ALL = "all";
-	private static final String PARAMETER_SONG = "songId";
-
-	private ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-
-	private String databaseFileName;
-	private InMemoryDatabaseSongs database;
-
+	@Inject
+	public SongsServlet(IDatabaseSongs database, UriInfo uriInfo) {
+		super();
+		this.database = database;
+		this.uriInfo = uriInfo;
+	}
+	
+	
 	@GET
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Song getSong(@PathParam("id") Integer id) {
-
-		Song song = InMemoryDatabaseSongs.getInstance().getSongById(id);
+		System.out.println("called the get song method in songsServlet for id " + id);
+		Song song = database.getSongById(id);
 		return song;
-
 	}
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<Song> getAllSongs() {
 		System.out.println("called the get all songs method in songsServlet");
-		List<Song> songList = InMemoryDatabaseSongs.getInstance().getAllSongs();
+		List<Song> songList = database.getAllSongs();
 		return songList;
 
 	}
@@ -145,6 +133,10 @@ public class SongsServlet{
 	 * @param request  Http Request an unser Servlet
 	 * @param response Http Request response
 	 */
+	
+	@Context
+	UriInfo uriInfo;
+	
 //	@Override
 //	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 //		if (!APPLICATION_JSON.equals(request.getContentType())) {

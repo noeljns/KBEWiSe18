@@ -38,15 +38,13 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 	 * 
 	 * @param databaseFileName
 	 */
-	public InMemoryDatabaseSongs(String databaseFileName) {
-		this.databaseFileName = databaseFileName;
+	public InMemoryDatabaseSongs() {
+		this.databaseFileName = "/Users/camiloocampo/Desktop/database/songs.json";
 		assert (this.databaseFileName != null);
 	}
 
-	public static  InMemoryDatabaseSongs getInstance() {
-								
-		String databaseFileName= "/Users/camiloocampo/Desktop/database/songs.json";
-		return new InMemoryDatabaseSongs(databaseFileName);
+	public static  InMemoryDatabaseSongs getInstance() {								
+		return new InMemoryDatabaseSongs();
 	}
 	
 	/**
@@ -116,7 +114,7 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 	 * @param Id des angeforderten Songs
 	 * @return Song Objekt mit bestimmter ID falls es exisitiert, ansonsten null
 	 */
-	public Song getSongById(int id) {
+	public Song getSongById(Integer id) {
 		Lock readLock = readWriteLock.readLock();
 		readLock.lock();
 
