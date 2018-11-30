@@ -39,8 +39,10 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 	 * @param databaseFileName
 	 */
 	public InMemoryDatabaseSongs() {
-		this.databaseFileName = "/Users/camiloocampo/Desktop/database/songs.json";
+		// this.databaseFileName = "/Users/camiloocampo/Desktop/database/songs.json";
+		this.databaseFileName = "/Users/jns/KBE/database/songs.json";
 		assert (this.databaseFileName != null);
+		load();
 	}
 
 	public static  InMemoryDatabaseSongs getInstance() {								
