@@ -10,6 +10,7 @@ public interface IDatabaseSongs {
 	public Song getSongById(Integer id);
 	public List<Song> getAllSongs();
 	public Integer addSong(Song song);
+	public boolean deleteSong(Integer id);
 	//todo: update and delete
 
 

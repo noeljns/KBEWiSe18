@@ -18,7 +18,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import de.htw.ai.kbe.bean.Song;
 
-
 /**
  * Klasse, um Song Objekte in Json Format zu speichern
  * 
@@ -45,12 +44,13 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 		load();
 	}
 
-	public static  InMemoryDatabaseSongs getInstance() {								
+	public static InMemoryDatabaseSongs getInstance() {
 		return new InMemoryDatabaseSongs();
 	}
-	
+
 	/**
-	 * Methode lädt eine Liste von Song Objekten aus einer json Datei in eine List<Song>
+	 * Methode lädt eine Liste von Song Objekten aus einer json Datei in eine
+	 * List<Song>
 	 * 
 	 * @param databaseFileName
 	 */
@@ -61,7 +61,8 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 
 		try {
 			try (InputStream is = new BufferedInputStream(new FileInputStream(this.databaseFileName))) {
-				List<Song> songsFromFile = (List<Song>) mapper.readValue(is, new TypeReference<List<Song>>() {});
+				List<Song> songsFromFile = (List<Song>) mapper.readValue(is, new TypeReference<List<Song>>() {
+				});
 				songs.addAll(songsFromFile);
 			} catch (Exception e) {
 				// Liste wäre leer
@@ -113,7 +114,8 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 	 * Methode, die ein Song Objekt mit einer bestimmten ID aus der Datenbank
 	 * zurückgibt
 	 * 
-	 * @param Id des angeforderten Songs
+	 * @param Id
+	 *            des angeforderten Songs
 	 * @return Song Objekt mit bestimmter ID falls es exisitiert, ansonsten null
 	 */
 	public Song getSongById(Integer id) {
@@ -123,8 +125,7 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 		try {
 			if (id > 0 && id <= songs.size()) {
 				return songs.get(id - 1);
-			}
-			else {
+			} else {
 				return null;
 			}
 		} finally {
@@ -134,12 +135,14 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 
 	/**
 	 * Methode um der Datenbank einen Song hinzuzufügen
-	 * @param Song Objekt das zu der Datenbank hinzugefügt werden soll
+	 * 
+	 * @param Song
+	 *            Objekt das zu der Datenbank hinzugefügt werden soll
 	 */
 	public Integer addSong(Song song) {
 		Lock writeLock = readWriteLock.writeLock();
 		writeLock.lock();
-		
+
 		try {
 			// songs.size() ist automatisch letzter Index + 1 und damit letzte verwendete id
 			// daher ist die nächste freie id für den neuen song size() + 1
@@ -150,8 +153,27 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 		} finally {
 			writeLock.unlock();
 		}
-		
+
 		// TODO
 		// oder soll hier das return statement?
 	}
+
+	// deletes song with given id from database and returns true if success,false otherwise
+	public boolean deleteSong(Integer id) {
+		Lock writeLock = readWriteLock.writeLock();
+		writeLock.lock();
+
+		boolean success = false;
+
+		try {
+			List<Song> newSongs = this.getAllSongs();
+			newSongs.removeIf(x -> x.getId() == id);
+			this.songs = newSongs;
+			success = true;
+			return success;
+		} finally {
+			writeLock.unlock();
+		}
+	}
+
 }
