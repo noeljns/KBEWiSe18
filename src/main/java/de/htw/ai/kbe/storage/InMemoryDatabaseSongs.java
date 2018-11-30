@@ -25,7 +25,7 @@ import de.htw.ai.kbe.bean.Song;
  * @author jns, camilo
  *
  */
-public class DatabaseSongs {
+public class InMemoryDatabaseSongs implements IDatabaseSongs {
 
 	private ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 	private List<Song> songs = new ArrayList<>();
@@ -38,15 +38,15 @@ public class DatabaseSongs {
 	 * 
 	 * @param databaseFileName
 	 */
-	public DatabaseSongs(String databaseFileName) {
+	public InMemoryDatabaseSongs(String databaseFileName) {
 		this.databaseFileName = databaseFileName;
 		assert (this.databaseFileName != null);
 	}
 
-	public static  DatabaseSongs getInstance() {
+	public static  InMemoryDatabaseSongs getInstance() {
 								
 		String databaseFileName= "/Users/camiloocampo/Desktop/database/songs.json";
-		return new DatabaseSongs(databaseFileName);
+		return new InMemoryDatabaseSongs(databaseFileName);
 	}
 	
 	/**

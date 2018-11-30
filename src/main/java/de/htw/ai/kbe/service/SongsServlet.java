@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import de.htw.ai.kbe.bean.Song;
-import de.htw.ai.kbe.storage.DatabaseSongs;
+import de.htw.ai.kbe.storage.InMemoryDatabaseSongs;
 
 /**
  * Klasse eines Webservices, der get und post Anfragen von Song Objekten
@@ -49,14 +49,14 @@ public class SongsServlet{
 	private ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 
 	private String databaseFileName;
-	private DatabaseSongs database;
+	private InMemoryDatabaseSongs database;
 
 	@GET
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Song getSong(@PathParam("id") Integer id) {
 
-		Song song = DatabaseSongs.getInstance().getSongById(id);
+		Song song = InMemoryDatabaseSongs.getInstance().getSongById(id);
 		return song;
 
 	}
@@ -65,7 +65,7 @@ public class SongsServlet{
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<Song> getAllSongs() {
 		System.out.println("called the get all songs method in songsServlet");
-		List<Song> songList = DatabaseSongs.getInstance().getAllSongs();
+		List<Song> songList = InMemoryDatabaseSongs.getInstance().getAllSongs();
 		return songList;
 
 	}
