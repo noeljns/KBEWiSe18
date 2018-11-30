@@ -38,8 +38,8 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 	 * @param databaseFileName
 	 */
 	public InMemoryDatabaseSongs() {
-	    this.databaseFileName = "/Users/camiloocampo/Desktop/database/songs.json";
-		//this.databaseFileName = "/Users/jns/KBE/database/songs.json";
+		this.databaseFileName = "/Users/camiloocampo/Desktop/database/songs.json";
+		// this.databaseFileName = "/Users/jns/KBE/database/songs.json";
 		assert (this.databaseFileName != null);
 		load();
 	}
@@ -114,8 +114,7 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 	 * Methode, die ein Song Objekt mit einer bestimmten ID aus der Datenbank
 	 * zurückgibt
 	 * 
-	 * @param Id
-	 *            des angeforderten Songs
+	 * @param Id des angeforderten Songs
 	 * @return Song Objekt mit bestimmter ID falls es exisitiert, ansonsten null
 	 */
 	public Song getSongById(Integer id) {
@@ -136,8 +135,7 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 	/**
 	 * Methode um der Datenbank einen Song hinzuzufügen
 	 * 
-	 * @param Song
-	 *            Objekt das zu der Datenbank hinzugefügt werden soll
+	 * @param Song Objekt das zu der Datenbank hinzugefügt werden soll
 	 */
 	public Integer addSong(Song song) {
 		Lock writeLock = readWriteLock.writeLock();
@@ -158,7 +156,8 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 		// oder soll hier das return statement?
 	}
 
-	// deletes song with given id from database and returns true if success,false otherwise
+	// deletes song with given id from database and returns true if success,false
+	// otherwise
 	public boolean deleteSong(Integer id) {
 		Lock writeLock = readWriteLock.writeLock();
 		writeLock.lock();
@@ -174,6 +173,23 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 		} finally {
 			writeLock.unlock();
 		}
+	}
+
+	public boolean updateSong(Song song) {
+		Integer id = song.getId();
+		Song songToUpdate = getSongById(id);
+		songToUpdate.updateFromSong(song);
+		return true;
+
+	}
+
+	public boolean isIdInDatabase(Integer id) {
+		for (Song song : songs) {
+			if (song.getId().equals(id)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

@@ -11,8 +11,8 @@ public interface IDatabaseSongs {
 	public List<Song> getAllSongs();
 	public Integer addSong(Song song);
 	public boolean deleteSong(Integer id);
-	//todo: update and delete
-
+	public boolean updateSong(Song song);
+	public boolean isIdInDatabase(Integer id);
 
 
 }

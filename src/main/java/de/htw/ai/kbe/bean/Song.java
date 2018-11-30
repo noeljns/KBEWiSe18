@@ -1,6 +1,7 @@
 package de.htw.ai.kbe.bean;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * Klasse die ein Song repräsentiert
@@ -30,10 +31,20 @@ public class Song {
 		private String album;
 		private Integer released;
 
-		public Builder(Integer id, String title) {
+		public Builder() {
 
-			this.id = id;
-			this.title = title;
+		}
+
+		public Builder id(Integer i) {
+
+			id = i;
+			return this;
+		}
+
+		public Builder title(String tit) {
+
+			title = tit;
+			return this;
 		}
 
 		public Builder artist(String art) {
@@ -122,6 +133,34 @@ public class Song {
 	 */
 	public Integer getReleased() {
 		return released;
+	}
+
+	public void updateFromSong(Song song) {
+//TODO fehler fall song= null
+		if (song.getTitle() != null) {
+			this.setTitle(song.getTitle());
+		}
+		this.setArtist(song.getArtist());
+		this.setReleased(song.getReleased());
+		this.setAlbum(song.getAlbum());
+
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+
+	}
+
+	public void setArtist(String artist) {
+		this.artist = artist;
+	}
+
+	public void setAlbum(String album) {
+		this.album = album;
+	}
+
+	public void setReleased(Integer released) {
+		this.released = released;
 	}
 
 	/**

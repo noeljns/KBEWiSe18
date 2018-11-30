@@ -33,8 +33,8 @@ import de.htw.ai.kbe.storage.InMemoryDatabaseSongs;
 
 //URL fuer diesen Service ist: http://localhost:8080/songsRX/rest/songs
 @Path("/songs")
-public class SongsServlet{
-	
+public class SongsServlet {
+
 	private IDatabaseSongs database = new InMemoryDatabaseSongs();
 
 	@Inject
@@ -43,8 +43,7 @@ public class SongsServlet{
 		this.database = database;
 		this.uriInfo = uriInfo;
 	}
-	
-	
+
 	@GET
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -63,34 +62,82 @@ public class SongsServlet{
 
 	}
 
-	
-	
+	/**
+	 * Methode zur Bearbeitung einer http Request eines Clients zum Hinzufügen eines
+	 * Songs
+	 * 
+	 * @param request  Http Request an unser Servlet
+	 * @param response Http Request response
+	 */
+
+	@Context
+	UriInfo uriInfo;
+
+	@POST
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces(MediaType.TEXT_PLAIN)
+	public Response createSong(Song song) {
+
+		if (song == null) {
+			return Response.status(Response.Status.BAD_REQUEST).build();
+
+		}
+
+		// Song muss zwingend einen Titel enthalten!
+		if (song.getTitle() == null) {
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+
+		int newId = database.addSong(song);
+		System.out.println("new id: " + newId);
+		UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
+		uriBuilder.path(Integer.toString(newId));
+		return Response.created(uriBuilder.build()).build();
+
+	}
+
 	@PUT
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("/{id}")
 	public Response updateSong(@PathParam("id") Integer id, Song song) {
-		return Response.status(Response.Status.METHOD_NOT_ALLOWED).entity("PUT not implemented").build();
+		if (song == null) {
+			return Response.status(Response.Status.BAD_REQUEST).build();
+
+		}
+		// Song muss zwingend einen Titel enthalten!
+		if (song.getTitle() == null) {
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+		// wenn die id in unserer datenbank nicht vorhanden ist
+		if(!database.isIdInDatabase(id)) {
+			return Response.status(Response.Status.BAD_REQUEST).build();	
+		}
+		//id in url ist nicht diesselbe wie id in payload
+		if(id != song.getId()) {
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+		
+		
+		database.updateSong(song);
+		
+		return Response.status(Response.Status.NO_CONTENT).build();
 	}
 
 	@DELETE
 	@Path("/{id}")
 	public Response delete(@PathParam("id") Integer id) {
-		return Response.status(Response.Status.METHOD_NOT_ALLOWED).entity("DELETE not implemented").build();
+		// wenn die id in unserer datenbank nicht vorhanden ist
+		if(!database.isIdInDatabase(id)) {
+			return Response.status(Response.Status.BAD_REQUEST).build();	
+		}
+		database.deleteSong(id);
+		return Response.status(Response.Status.NO_CONTENT).build();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	/**
-	 * Methode, um Servlet zu initiieren und Datenbank zu laden	
+	 * Methode, um Servlet zu initiieren und Datenbank zu laden
 	 */
-	//@Override
+	// @Override
 //	public void init(ServletConfig servletConfig) throws ServletException {
 //		this.databaseFileName = servletConfig.getInitParameter("uriToDatabaseFile");
 //		this.database = new DatabaseSongs(databaseFileName);
@@ -155,33 +202,6 @@ public class SongsServlet{
 //		}
 //	}
 
-	/**
-	 * Methode zur Bearbeitung einer http Request eines Clients zum Hinzufügen eines
-	 * Songs
-	 * 
-	 * @param request  Http Request an unser Servlet
-	 * @param response Http Request response
-	 */
-	
-	@Context UriInfo uriInfo;
-	@POST
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@Produces(MediaType.TEXT_PLAIN)
-	public Response createSong(Song song) {
-		 System.out.println("im post");
-		 System.out.println(song.getTitle());
-		 
-		 int newId = database.addSong(song);
-		 System.out.println("new id: " + newId);
-		 UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
-	     uriBuilder.path(Integer.toString(newId));
-	     return Response.created(uriBuilder.build()).build();
-
-	}
-	
-	
-	
-	
 //	@Override
 //	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 //		if (!APPLICATION_JSON.equals(request.getContentType())) {
