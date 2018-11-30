@@ -4,10 +4,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Klasse die ein Song repräsentiert
+ * 
  * @author jns
  *
  */
-@XmlRootElement(name= "song")
+@XmlRootElement(name = "song")
 public class Song {
 	private Integer id;
 	private String title;
@@ -21,8 +22,57 @@ public class Song {
 	public Song() {
 	}
 
+	public static class Builder {
+
+		private Integer id;
+		private String title;
+		private String artist;
+		private String album;
+		private Integer released;
+
+		public Builder(Integer id, String title) {
+
+			this.id = id;
+			this.title = title;
+		}
+
+		public Builder artist(String art) {
+
+			artist = art;
+			return this;
+		}
+
+		public Builder album(String al) {
+
+			album = al;
+			return this;
+
+		}
+
+		public Builder released(Integer rel) {
+
+			released = rel;
+			return this;
+
+		}
+
+		public Song build() {
+
+			return new Song(this);
+		}
+
+	}
+
+	private Song(Builder builder) {
+		this.id = builder.id;
+		this.title = builder.title;
+		this.album = builder.album;
+		this.released = builder.released;
+	}
+
 	/**
 	 * Methode gibt die Id eines Songs zurück
+	 * 
 	 * @return Song
 	 */
 	public Integer getId() {
@@ -31,6 +81,7 @@ public class Song {
 
 	/**
 	 * Methode setzt die Id eines Songs
+	 * 
 	 * @param id des Songs
 	 */
 	public void setId(int id) {
@@ -39,6 +90,7 @@ public class Song {
 
 	/**
 	 * Methode gibt den Titel eines Songs zurück
+	 * 
 	 * @return Songtitel
 	 */
 	public String getTitle() {
@@ -47,6 +99,7 @@ public class Song {
 
 	/**
 	 * Methode gibt den Künstlername eines Songs zurück
+	 * 
 	 * @return Künstlername
 	 */
 	public String getArtist() {
@@ -55,6 +108,7 @@ public class Song {
 
 	/**
 	 * Methode gibt das Album eines Songs zurück
+	 * 
 	 * @return Songalbum
 	 */
 	public String getAlbum() {
@@ -63,6 +117,7 @@ public class Song {
 
 	/**
 	 * Methode gibt das Veröffentlichungsdatum eines Songs zurück
+	 * 
 	 * @return Veröffentlichungsdatum
 	 */
 	public Integer getReleased() {
@@ -71,6 +126,7 @@ public class Song {
 
 	/**
 	 * Methode gibt den Song im Stringformat zurück
+	 * 
 	 * @return String eines Songs
 	 */
 	@Override

@@ -3,17 +3,22 @@ package de.htw.ai.kbe.service;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
 import de.htw.ai.kbe.bean.Song;
 import de.htw.ai.kbe.storage.IDatabaseSongs;
 import de.htw.ai.kbe.storage.InMemoryDatabaseSongs;
@@ -58,6 +63,30 @@ public class SongsServlet{
 
 	}
 
+	
+	
+	@PUT
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Path("/{id}")
+	public Response updateSong(@PathParam("id") Integer id, Song song) {
+		return Response.status(Response.Status.METHOD_NOT_ALLOWED).entity("PUT not implemented").build();
+	}
+
+	@DELETE
+	@Path("/{id}")
+	public Response delete(@PathParam("id") Integer id) {
+		return Response.status(Response.Status.METHOD_NOT_ALLOWED).entity("DELETE not implemented").build();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * Methode, um Servlet zu initiieren und Datenbank zu laden	
 	 */
@@ -134,8 +163,24 @@ public class SongsServlet{
 	 * @param response Http Request response
 	 */
 	
-	@Context
-	UriInfo uriInfo;
+	@Context UriInfo uriInfo;
+	@POST
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces(MediaType.TEXT_PLAIN)
+	public Response createSong(Song song) {
+		 System.out.println("im post");
+		 System.out.println(song.getTitle());
+		 
+		 int newId = database.addSong(song);
+		 System.out.println("new id: " + newId);
+		 UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
+	     uriBuilder.path(Integer.toString(newId));
+	     return Response.created(uriBuilder.build()).build();
+
+	}
+	
+	
+	
 	
 //	@Override
 //	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
