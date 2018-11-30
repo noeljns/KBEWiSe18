@@ -136,7 +136,7 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 	 * Methode um der Datenbank einen Song hinzuzufügen
 	 * @param Song Objekt das zu der Datenbank hinzugefügt werden soll
 	 */
-	public void addSong(Song song) {
+	public Integer addSong(Song song) {
 		Lock writeLock = readWriteLock.writeLock();
 		writeLock.lock();
 		
@@ -146,8 +146,12 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 			int nextId = songs.size() + 1;
 			song.setId(nextId);
 			songs.add(song);
+			return song.getId();
 		} finally {
 			writeLock.unlock();
 		}
+		
+		// TODO
+		// oder soll hier das return statement?
 	}
 }
