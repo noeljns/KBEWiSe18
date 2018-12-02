@@ -1,7 +1,8 @@
 package de.htw.ai.kbe.bean;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 /**
  * Klasse die ein Song repräsentiert
@@ -10,7 +11,9 @@ import javax.xml.bind.annotation.XmlType;
  *
  */
 @XmlRootElement(name = "song")
+// alternative zu setter Methoden: @XmlAccessorType(XmlAccessType.FIELD)
 public class Song {
+
 	private Integer id;
 	private String title;
 	private String artist;
@@ -93,9 +96,12 @@ public class Song {
 	/**
 	 * Methode setzt die Id eines Songs
 	 * 
-	 * @param id des Songs
+	 * @param id
+	 *            des Songs
 	 */
-	public void setId(int id) {
+	public void setId(Integer id) {
+		// muss Integer sein, statt nur int, da sonst get/set Methodenpaar nicht
+		// gefunden wird für xml
 		this.id = id;
 	}
 
@@ -108,6 +114,10 @@ public class Song {
 		return title;
 	}
 
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	/**
 	 * Methode gibt den Künstlername eines Songs zurück
 	 * 
@@ -115,6 +125,10 @@ public class Song {
 	 */
 	public String getArtist() {
 		return artist;
+	}
+
+	public void setArtist(String artist) {
+		this.artist = artist;
 	}
 
 	/**
@@ -126,6 +140,10 @@ public class Song {
 		return album;
 	}
 
+	public void setAlbum(String album) {
+		this.album = album;
+	}
+
 	/**
 	 * Methode gibt das Veröffentlichungsdatum eines Songs zurück
 	 * 
@@ -135,32 +153,17 @@ public class Song {
 		return released;
 	}
 
+	public void setReleased(Integer released) {
+		this.released = released;
+	}
+
 	public void updateFromSong(Song song) {
-//TODO fehler fall song= null
-		if (song.getTitle() != null) {
-			this.setTitle(song.getTitle());
-		}
+		// song wird bereits auf Ebene des Web Services geprüft bzgl song != null und
+		// song.getTitle() != null
+		this.setTitle(song.getTitle());
 		this.setArtist(song.getArtist());
 		this.setReleased(song.getReleased());
 		this.setAlbum(song.getAlbum());
-
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-
-	}
-
-	public void setArtist(String artist) {
-		this.artist = artist;
-	}
-
-	public void setAlbum(String album) {
-		this.album = album;
-	}
-
-	public void setReleased(Integer released) {
-		this.released = released;
 	}
 
 	/**

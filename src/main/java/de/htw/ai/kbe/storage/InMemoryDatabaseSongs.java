@@ -42,6 +42,8 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 		// this.databaseFileName = "/Users/jns/KBE/database/songs.json";
 		assert (this.databaseFileName != null);
 		load();
+		
+		// TODO wie gedacht, dass Konfigurationswege sich holt bei Dependecy Injection?
 	}
 
 	public static InMemoryDatabaseSongs getInstance() {
@@ -152,44 +154,37 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 			writeLock.unlock();
 		}
 
-		// TODO
-		// oder soll hier das return statement?
+		// TODO	wo in MyApplication kann man aufrufen database.save(), wenn container runterfährt
+
 	}
 
 	// deletes song with given id from database and returns true if success,false
 	// otherwise
-	public boolean deleteSong(Integer id) {
+	public void deleteSong(Integer id) {
 		Lock writeLock = readWriteLock.writeLock();
 		writeLock.lock();
 
-		boolean success = false;
-
 		try {
-			List<Song> newSongs = this.getAllSongs();
-			newSongs.removeIf(x -> x.getId() == id);
-			this.songs = newSongs;
-			success = true;
-			return success;
+			songs.removeIf(song -> song.getId() == id);
 		} finally {
 			writeLock.unlock();
 		}
 	}
 
-	public boolean updateSong(Song song) {
+	public void updateSong(Song song) {
 		Integer id = song.getId();
 		Song songToUpdate = getSongById(id);
 		songToUpdate.updateFromSong(song);
-		return true;
-
 	}
 
 	public boolean isIdInDatabase(Integer id) {
 		for (Song song : songs) {
-			if (song.getId().equals(id)) {
+			if(id.equals(song.getId())) {
 				return true;
 			}
 		}
 		return false;
+	
+		// alternativ: return songs.stream().filter(song -> song.getId() == id).findAny().isPresent();
 	}
-
 }

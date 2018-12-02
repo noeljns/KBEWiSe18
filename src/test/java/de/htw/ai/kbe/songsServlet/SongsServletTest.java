@@ -26,7 +26,7 @@
 // */
 //public class SongsServletTest {
 //
-//	private SongsServlet servlet;
+//	private SongWebService servlet;
 //	private DatabaseSongs database;
 //	private MockServletConfig config;
 //	private MockHttpServletRequest request;
@@ -46,7 +46,7 @@
 //
 //	@Before
 //	public void setUp() throws ServletException {
-//		servlet = new SongsServlet();
+//		servlet = new SongWebService();
 //		request = new MockHttpServletRequest();
 //		response = new MockHttpServletResponse();
 //		config = new MockServletConfig();

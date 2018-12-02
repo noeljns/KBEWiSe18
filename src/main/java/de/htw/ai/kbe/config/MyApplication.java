@@ -8,11 +8,9 @@ import de.htw.ai.kbe.di.DependencyBinder;
 
 @ApplicationPath("/rest")
 public class MyApplication extends ResourceConfig {
-	
-		public MyApplication() {
-			register(new DependencyBinder());
-			packages("de.htw.ai.kbe.service");
-		}
-	
+
+	public MyApplication() {
+		register(new DependencyBinder());
+		packages("de.htw.ai.kbe.service");
+	}
 }
-		
