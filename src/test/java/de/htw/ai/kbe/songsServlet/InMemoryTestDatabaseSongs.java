@@ -1,4 +1,4 @@
-package de.htw.ai.kbe.storage;
+package de.htw.ai.kbe.songsServlet;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import de.htw.ai.kbe.bean.Song;
+import de.htw.ai.kbe.storage.IDatabaseSongs;
 
 /**
  * Klasse, um Song Objekte in Json Format zu speichern
@@ -24,7 +25,7 @@ import de.htw.ai.kbe.bean.Song;
  * @author jns, camilo
  *
  */
-public class InMemoryDatabaseSongs implements IDatabaseSongs {
+public class InMemoryTestDatabaseSongs implements IDatabaseSongs {
 
 	private ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 	private List<Song> songs = new ArrayList<>();
@@ -37,13 +38,13 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 	 * 
 	 * @param databaseFileName
 	 */
-	public InMemoryDatabaseSongs() {
+	public InMemoryTestDatabaseSongs() {
 
 		load();
 	}
 
-	public static InMemoryDatabaseSongs getInstance() {
-		return new InMemoryDatabaseSongs();
+	public static InMemoryTestDatabaseSongs getInstance() {
+		return new InMemoryTestDatabaseSongs();
 	}
 
 	/**
@@ -59,7 +60,7 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 
 		try {
 			try {
-				InputStream is = this.getClass().getClassLoader().getResourceAsStream("songs.json");
+				InputStream is = this.getClass().getClassLoader().getResourceAsStream("songs_test.json");
 				List<Song> songsFromFile = (List<Song>) mapper.readValue(is, new TypeReference<List<Song>>() {
 				});
 				songs.addAll(songsFromFile);
