@@ -1,9 +1,11 @@
 package de.htw.ai.kbe.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -32,6 +34,8 @@ import de.htw.ai.kbe.storage.IDatabaseSongs;
 @Path("/songs")
 public class SongWebService {
 
+	@Context private HttpServletResponse response;
+	
 	private IDatabaseSongs database;
 
 	@Inject
@@ -39,11 +43,25 @@ public class SongWebService {
 		super(); // nicht notwendig; würde automatisch im Hintergrund aufgerufen werden
 		this.database = database;
 	}
-
+	
+	
 	@GET
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Song getSong(@PathParam("id") Integer id) {
+
+		if (!database.isIdInDatabase(id)) {
+
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+
+			try {
+				response.flushBuffer();
+				return null;
+			} catch (Exception e) {
+			}
+			
+		}
+
 		System.out.println("called the get song method in songsServlet for id " + id);
 		Song song = database.getSongById(id);
 		return song;
@@ -99,14 +117,14 @@ public class SongWebService {
 			return Response.status(Response.Status.BAD_REQUEST).build();
 		}
 		// wenn die id in unserer datenbank nicht vorhanden ist
-		if(!database.isIdInDatabase(id)) {
-			return Response.status(Response.Status.BAD_REQUEST).build();	
-		}
-		// id in url ist nicht diesselbe wie id in payload
-		if(id != song.getId()) {
+		if (!database.isIdInDatabase(id)) {
 			return Response.status(Response.Status.BAD_REQUEST).build();
 		}
-		
+		// id in url ist nicht diesselbe wie id in payload
+		if (id != song.getId()) {
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+
 		database.updateSong(song);
 		return Response.status(Response.Status.NO_CONTENT).build();
 	}
@@ -115,8 +133,8 @@ public class SongWebService {
 	@Path("/{id}")
 	public Response delete(@PathParam("id") Integer id) {
 		// wenn die id in unserer datenbank nicht vorhanden ist
-		if(!database.isIdInDatabase(id)) {
-			return Response.status(Response.Status.BAD_REQUEST).build();	
+		if (!database.isIdInDatabase(id)) {
+			return Response.status(Response.Status.BAD_REQUEST).build();
 		}
 		database.deleteSong(id);
 		return Response.status(Response.Status.NO_CONTENT).build();
