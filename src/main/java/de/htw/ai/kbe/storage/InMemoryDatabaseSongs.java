@@ -38,7 +38,6 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 	 * @param databaseFileName
 	 */
 	public InMemoryDatabaseSongs() {
-
 		load();
 	}
 
@@ -50,7 +49,6 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 	 * Methode lädt eine Liste von Song Objekten aus einer json Datei in eine
 	 * List<Song>
 	 * 
-	 * @param databaseFileName
 	 */
 	@SuppressWarnings("unchecked")
 	public void load() {
