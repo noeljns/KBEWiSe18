@@ -12,7 +12,7 @@ public class AuthToken {
 				random.ints(30).toString();
 	}
 
-	public String getToken() {
+	public String getTokenStr() {
 		return token;
 	}
 }
