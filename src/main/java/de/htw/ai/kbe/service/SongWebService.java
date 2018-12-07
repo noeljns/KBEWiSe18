@@ -30,12 +30,13 @@ import de.htw.ai.kbe.storage.IDatabaseSongs;
  * @author jns, camilo
  *
  */
-//URL fuer diesen Service ist: http://localhost:8080/songsRX/rest/songs
+// URL fuer diesen Service ist: http://localhost:8080/songsRX/rest/songs
 @Path("/songs")
 public class SongWebService {
 
-	@Context private HttpServletResponse response;
-	
+	@Context
+	private HttpServletResponse response;
+
 	private IDatabaseSongs database;
 
 	@Inject
@@ -43,15 +44,13 @@ public class SongWebService {
 		super(); // nicht notwendig; würde automatisch im Hintergrund aufgerufen werden
 		this.database = database;
 	}
-	
-	
+
 	@GET
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Song getSong(@PathParam("id") Integer id) {
 
 		if (!database.isIdInDatabase(id)) {
-
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 
 			try {
@@ -59,7 +58,6 @@ public class SongWebService {
 				return null;
 			} catch (Exception e) {
 			}
-			
 		}
 
 		System.out.println("called the get song method in songsServlet for id " + id);
@@ -79,8 +77,10 @@ public class SongWebService {
 	 * Methode zur Bearbeitung einer http Request eines Clients zum Hinzufügen eines
 	 * Songs
 	 * 
-	 * @param request  Http Request an unser Servlet
-	 * @param response Http Request response
+	 * @param request
+	 *            Http Request an unser Servlet
+	 * @param response
+	 *            Http Request response
 	 */
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -94,7 +94,7 @@ public class SongWebService {
 
 		// Song muss zwingend einen Titel enthalten!
 		if (song.getTitle() == null) {
-			return Response.status(Response.Status.BAD_REQUEST).build();
+			return Response.status(Response.Status.BAD_REQUEST).entity("Song must contain a title.").build();
 		}
 
 		int newId = database.addSong(song);
@@ -114,11 +114,11 @@ public class SongWebService {
 		}
 		// Song muss zwingend einen Titel enthalten!
 		if (song.getTitle() == null) {
-			return Response.status(Response.Status.BAD_REQUEST).build();
+			return Response.status(Response.Status.BAD_REQUEST).entity("Song must contain a title.").build();
 		}
 		// wenn die id in unserer datenbank nicht vorhanden ist
 		if (!database.isIdInDatabase(id)) {
-			return Response.status(Response.Status.BAD_REQUEST).build();
+			return Response.status(Response.Status.BAD_REQUEST).entity("Song not found with the provided id.").build();
 		}
 		// id in url ist nicht diesselbe wie id in payload
 		if (id != song.getId()) {
@@ -134,7 +134,7 @@ public class SongWebService {
 	public Response delete(@PathParam("id") Integer id) {
 		// wenn die id in unserer datenbank nicht vorhanden ist
 		if (!database.isIdInDatabase(id)) {
-			return Response.status(Response.Status.BAD_REQUEST).build();
+			return Response.status(Response.Status.BAD_REQUEST).entity("Song not found with the provided id.").build();
 		}
 		database.deleteSong(id);
 		return Response.status(Response.Status.NO_CONTENT).build();

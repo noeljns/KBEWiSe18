@@ -3,6 +3,7 @@ package de.htw.ai.kbe.songsServlet;
 import static org.junit.Assert.assertEquals;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -11,6 +12,9 @@ import javax.ws.rs.core.Response.Status;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
+import org.json.simple.JSONObject;
+import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.htw.ai.kbe.bean.Song;
@@ -19,54 +23,130 @@ import de.htw.ai.kbe.storage.IDatabaseSongs;
 import de.htw.ai.kbe.storage.InMemoryDatabaseSongs;
 
 public class SongWebServiceTest extends JerseyTest {
-	
-	
+
 	@Override
 	protected Application configure() {
 		return new ResourceConfig(SongWebService.class).register(new AbstractBinder() {
 			@Override
 			protected void configure() {
-				bind( InMemoryTestDatabaseSongs.class).to(IDatabaseSongs.class);
+				bind(InMemoryTestDatabaseSongs.class).to(IDatabaseSongs.class);
 			}
 		});
 	}
 
 
+	// TODO wäre so etwas möglich? whenUpdateSongWithExistingIdInUrlAndPayloadThenSongTitleIsUpdated()
 	@Test
-	public void givenExistingIDReturnsCorrectSong() {
-		
-		 Song response = target("/songs/2").request()
-			        .get(Song.class);
-		 assertEquals(2, (int)response.getId());
-	}
-		
-	 
-	@Test
-	public void givenStringAsIdReturnsNotFound() {
-		
-		 Response response = target("/songs/notanumber").request()
-			        .get();
-		 assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
-		 System.out.println("first response:" + response.toString());
-	}
-	
-	
-	//Fall3: abgefragte id existiert nicht (Fehlermeldung. id existiert nicht= schlechter Request= 400)
+	public void updateSongWithExistingIdInUrlAndPayloadReturns204() {
+		// payload: id ist 3, title ist "Update Song...", alles andere ist null
+		Song song = new Song();
+		song.setId(3);
+		song.setTitle("Update Song With Id 3");
+		Entity<Song> songEntity = Entity.entity(song, MediaType.APPLICATION_JSON);
 
-//	@Test
-//	public void givenNonExistingIdReturnsNotFound() {
-//		
-//		 Response response = target("/songs/250").request()
-//			        .get();
-//		 //assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
-//		 
-//		 System.out.println(response.toString());
-//		 
-//		 //assertEquals(HttpServletResponse.SC_NOT_FOUND, response.getStatus());
-//	}
-//	
+		int id = 3; 				// id in url ist 3
+		Response response = target("/songs/" + id).request().put(songEntity);
+
+		Assert.assertEquals(204, response.getStatus());
+	}
+	
+	@Test
+	public void updateSongWithExistingIdInUrlButDifferentPayloadReturns400() {
+		// payload: id ist 8, title ist "Update Song...", alles andere ist null
+		Song song = new Song();
+		song.setId(8);
+		song.setTitle("Update Song With Id 8 Again");
+		Entity<Song> songEntity = Entity.entity(song, MediaType.APPLICATION_JSON);
+
+		int id = 3; 				// id in url ist 3
+		Response response = target("/songs/" + id).request().put(songEntity);
+		Assert.assertEquals(400, response.getStatus());
+	}
+	
+	@Test
+	public void updateSongWithNotExistingIdReturns400() {
+		// payload: id ist 37, title ist "Update Song...", alles andere ist null
+		Song song = new Song();
+		song.setId(37);
+		song.setTitle("Update Song With Id 8 Again");
+		Entity<Song> songEntity = Entity.entity(song, MediaType.APPLICATION_JSON);
+
+		int id = 37; 				// id in url 37
+		Response response = target("/songs/" + id).request().put(songEntity);
+		Assert.assertEquals(400, response.getStatus());
+	}
+	
+	@Test
+	public void updateSongWithoutTitleReturns400() {
+		// payload: id ist 3, title ist "Update Song...", alles andere ist null
+		Song song = new Song();
+		song.setId(3);
+		String title = null;
+		song.setTitle(title);
+		Entity<Song> songEntity = Entity.entity(song, MediaType.APPLICATION_JSON);
+
+		int id = 3; 				// id in url 3
+		Response response = target("/songs/" + id).request().put(songEntity);
+		Assert.assertEquals(400, response.getStatus());
+	}
+	
+	@Test
+	public void updateSongWithInvalidJsonReturns400() {
+		Entity songEntity = Entity.entity("Invalid json string.", MediaType.APPLICATION_JSON);
+
+		int id = 3; 				// id in url 3
+		Response response = target("/songs/" + id).request().put(songEntity);
+		Assert.assertEquals(400, response.getStatus());
+	}
+	
+	@Test
+	public void updateSongWithInvalidXmlReturns400() {
+		Entity songEntity = Entity.entity("<?xml version=\"1.0\" encoding=\"UTF-8\" ?><songs>Invalid xml</songs>", MediaType.APPLICATION_XML);
+
+		int id = 3; 				// id in url 3
+		Response response = target("/songs/" + id).request().put(songEntity);
+		Assert.assertEquals(400, response.getStatus());
+	}
+	
+	@Test
+	public void updateSongWithoutIdInUrlReturns405() {
+		// payload: id ist 3, title ist "Update Song...", alles andere ist null
+		Song song = new Song();
+		song.setId(3);
+		String title = null;
+		song.setTitle(title);
+		Entity<Song> songEntity = Entity.entity(song, MediaType.APPLICATION_JSON);
+
+		Response response = target("/songs/").request().put(songEntity);
+		Assert.assertEquals(405, response.getStatus());
+	}
+	
+	@Test
+	public void updateSongWithStringAsIdInUrlReturns404() {
+		// payload: id ist 3, title ist "Update Song...", alles andere ist null
+		Song song = new Song();
+		song.setId(3);
+		String title = null;
+		song.setTitle(title);
+		Entity<Song> songEntity = Entity.entity(song, MediaType.APPLICATION_JSON);
+
+		Response response = target("/songs/notanumber").request().put(songEntity);
+		Assert.assertEquals(404, response.getStatus());
+	}
+	
+
 	
 	
-	
-	
+	@Test
+	public void getSongWithExistingIdReturnsCorrectSong() {
+		Song response = target("/songs/2").request().get(Song.class);
+		assertEquals(2, (int) response.getId());
+	}
+
+	@Test
+	public void getSongWithStringAsIdReturnsNotFound() {
+		Response response = target("/songs/notanumber").request().get();
+		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+	}
+
 }
