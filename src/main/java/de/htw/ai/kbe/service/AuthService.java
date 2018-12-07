@@ -18,8 +18,9 @@ public class AuthService {
 
 	@Inject
 	public AuthService(IAuthDatabase authDb) {
+		super();
 		this.authDatabase = authDb;
-		System.out.println("AuthService is created \n");
+		System.out.println("AuthService is created in AuthService and  authDB. \n");
 	}
 
 	@GET

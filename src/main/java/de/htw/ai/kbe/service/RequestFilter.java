@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 
 import de.htw.ai.kbe.storage.AuthDatabase;
+import de.htw.ai.kbe.storage.IAuthDatabase;
 
 // NEU ist @Provider
 @Provider
@@ -21,11 +22,11 @@ public class RequestFilter implements ContainerRequestFilter {
 
 	@Context
 	private ResourceInfo resinfo;
-	private AuthDatabase authdb;
-
+	private IAuthDatabase authdb;
+	
 	@Inject
-	public RequestFilter(AuthDatabase authDB) {
-		System.out.println("Filter was created \n");
+	public RequestFilter(IAuthDatabase authDB) {
+		System.out.println("RequestFilter was created and authDB. \n");
 		this.authdb = authDB;
 	}
 
@@ -36,9 +37,10 @@ public class RequestFilter implements ContainerRequestFilter {
 		if (resinfo.getResourceClass().getName().equals(AuthService.class.getName())) {
 			System.out.println("AuthService is called to check whether userId exists \n");
 		}
+		
 		// Get http:://localhost:8080/songsRX/rest/songs
 		else {
-			System.out.println("A request like Get http:://localhost:8080/songsRX/rest/songs was sent. \n");
+			System.out.println("A request like Get http:://localhost:8080/songsRX/rest/songs was sent.");
 			ResponseBuilder responseBuilder = null;
 			Response response = null;
 			List<String> token = context.getHeaders().getOrDefault("Authorization", null);
@@ -48,7 +50,8 @@ public class RequestFilter implements ContainerRequestFilter {
 				response = responseBuilder.status(Status.UNAUTHORIZED).build();
 				context.abortWith(response);
 			} else if (authdb.isTokenValid(token.get(0)) == false) {
-				System.out.println("Request does contain a token, but it is not valid \n");
+				System.out.println("Request does contain a token, but it is not valid");
+				System.out.println("the token that postman sent: " + token.get(0) + "\n");
 				responseBuilder = Response.serverError();
 				response = responseBuilder.status(Status.FORBIDDEN).build();
 				context.abortWith(response);
