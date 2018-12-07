@@ -8,7 +8,8 @@ public class AuthToken {
 	
 	public AuthToken(User user) {
 		Random random = new Random();
-		this.token = random.ints(30).toString();
+		this.token =  user.getUserid().hashCode() +
+				random.ints(30).toString();
 	}
 
 	public String getToken() {
