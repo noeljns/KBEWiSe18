@@ -1,9 +1,11 @@
-package de.htw.ai.kbe.user;
+package de.htw.ai.kbe.bean;
+
+import de.htw.ai.kbe.user.AuthToken;
 
 public class User {
 	
 	private Integer id;
-	private String userid;
+	private String userId;
 	private String lastName;
 	private String firstName;
 	private AuthToken token;
@@ -23,11 +25,11 @@ public class User {
 	}
 
 	public String getUserid() {
-		return userid;
+		return userId;
 	}
 
-	public void setUserid(String userid) {
-		this.userid = userid;
+	public void setUserid(String userId) {
+		this.userId = userId;
 	}
 
 	public String getLastName() {

@@ -8,10 +8,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import de.htw.ai.kbe.bean.User;
 import de.htw.ai.kbe.storage.IAuthDatabase;
-import de.htw.ai.kbe.user.User;
 
-@Path("/Auth")
+@Path("/auth")
 public class AuthService {
 
 	private IAuthDatabase authDatabase;
@@ -26,6 +26,7 @@ public class AuthService {
 	public Response getAuthToken(@QueryParam("userId") String userId) {
 		String token;
 		if (authDatabase.getUserById(userId) == null) {
+			System.out.println("went in the 403 we wrote in getAuthToken");
 			return Response.status(Response.Status.FORBIDDEN).build();
 		}
 

@@ -1,7 +1,8 @@
 package de.htw.ai.kbe.storage;
 
 import java.util.List;
-import de.htw.ai.kbe.user.User;
+
+import de.htw.ai.kbe.bean.User;
 
 public interface IAuthDatabase {
 	

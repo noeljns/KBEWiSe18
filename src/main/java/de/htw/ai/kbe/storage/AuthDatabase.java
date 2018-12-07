@@ -11,7 +11,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import de.htw.ai.kbe.user.User;
+import de.htw.ai.kbe.bean.User;
 
 public class AuthDatabase implements IAuthDatabase {
 	private ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
@@ -29,6 +29,8 @@ public class AuthDatabase implements IAuthDatabase {
 	 */
 	@SuppressWarnings("unchecked")
 	public void load() {
+		System.out.println("the user database is loaded");
+		System.out.println("the user database is loaded");
 		Lock writeLock = readWriteLock.writeLock();
 		writeLock.lock();
 
@@ -37,6 +39,12 @@ public class AuthDatabase implements IAuthDatabase {
 				InputStream is = this.getClass().getClassLoader().getResourceAsStream("auth_database.json");
 				List<User> userFromFile = (List<User>) mapper.readValue(is, new TypeReference<List<User>>() {
 				});
+				
+				// Test
+				if(userFromFile.isEmpty()) {
+					System.out.println("Unsere userFromFile Liste ist leer!");
+				}
+				
 				users.addAll(userFromFile);
 			} catch (Exception e) {
 				// Liste wäre leer
@@ -52,6 +60,16 @@ public class AuthDatabase implements IAuthDatabase {
 		Lock readLock = readWriteLock.readLock();
 		readLock.lock();
 
+		// Test
+		if(users.isEmpty()) {
+			System.out.println("Unsere users Liste ist leer!");
+		}
+		
+		// Test
+		for (User user : users) {
+			System.out.println("userId: " + user.getUserid());
+		}
+		
 		try {
 			for (User user : users) {
 				if (user.getUserid().equals(userid)) {

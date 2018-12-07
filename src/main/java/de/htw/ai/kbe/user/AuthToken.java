@@ -2,6 +2,8 @@ package de.htw.ai.kbe.user;
 
 import java.util.Random;
 
+import de.htw.ai.kbe.bean.User;
+
 public class AuthToken {
 	private String token;
 	private User user;

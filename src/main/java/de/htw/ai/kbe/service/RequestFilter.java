@@ -23,7 +23,9 @@ public class RequestFilter implements ContainerRequestFilter {
 
 	    @Inject
 	    public RequestFilter(AuthDatabase authDB) {
-	        this.authdb = authDB;
+	        
+	    	System.out.println("FILTER WAS CREATED");
+	    	this.authdb = authDB;
 	    }
 
 	    @Override
