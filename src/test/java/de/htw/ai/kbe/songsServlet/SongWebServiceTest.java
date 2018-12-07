@@ -91,12 +91,29 @@ public class SongWebServiceTest extends JerseyTest {
 	}
 	
 	@Test
+	public void updateSongWithValidJsonReturns204() {
+		Entity songEntity = Entity.entity("{\"id\": 4, \"title\": \"Update With Valid Json\"}", MediaType.APPLICATION_JSON);
+		int id = 4; 				// id in url 4
+		Response response = target("/songs/" + id).request().put(songEntity);
+		Assert.assertEquals(204, response.getStatus());
+	}
+	
+	@Test
 	public void updateSongWithInvalidJsonReturns400() {
 		Entity songEntity = Entity.entity("Invalid json string.", MediaType.APPLICATION_JSON);
 
 		int id = 3; 				// id in url 3
 		Response response = target("/songs/" + id).request().put(songEntity);
 		Assert.assertEquals(400, response.getStatus());
+	}
+	
+	@Test
+	public void updateSongWithValidXmlReturns204() {
+		Entity songEntity = Entity.entity("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><song><id>4</id><title>Update mit XML</title></song>", MediaType.APPLICATION_XML);
+
+		int id = 4; 				// id in url 4
+		Response response = target("/songs/" + id).request().put(songEntity);
+		Assert.assertEquals(204, response.getStatus());
 	}
 	
 	@Test
@@ -135,8 +152,6 @@ public class SongWebServiceTest extends JerseyTest {
 	}
 	
 
-	
-	
 	@Test
 	public void getSongWithExistingIdReturnsCorrectSong() {
 		Song response = target("/songs/2").request().get(Song.class);

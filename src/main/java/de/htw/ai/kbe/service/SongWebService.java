@@ -122,7 +122,7 @@ public class SongWebService {
 		}
 		// id in url ist nicht diesselbe wie id in payload
 		if (id != song.getId()) {
-			return Response.status(Response.Status.BAD_REQUEST).build();
+			return Response.status(Response.Status.BAD_REQUEST).entity("Song id in payload must be equal to id in url.").build();
 		}
 
 		database.updateSong(song);
