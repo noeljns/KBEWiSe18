@@ -1,6 +1,4 @@
-package de.htw.ai.kbe.bean;
-
-import de.htw.ai.kbe.user.AuthToken;
+package de.htw.ai.kbe.user;
 
 public class User {
 	
@@ -24,11 +22,11 @@ public class User {
 		this.id = id;
 	}
 
-	public String getUserid() {
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setUserid(String userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 

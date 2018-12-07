@@ -2,10 +2,10 @@
   "id" : 1,
   "userId" : "mmuster",
   "lastName" : "Muster",
-  "firstName" : "Maxime",
+  "firstName" : "Maxime"
 }, {
   "id" : 2,
   "userId" : "eschuler",
   "lastName" : "Schuler",
-  "firstName" : "Elena",
+  "firstName" : "Elena"
 } ]
