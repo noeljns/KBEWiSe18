@@ -1,6 +1,7 @@
 package de.htw.ai.kbe.user;
 
 import java.util.Random;
+import java.util.stream.IntStream;
 
 public class AuthToken {
 	private String token;

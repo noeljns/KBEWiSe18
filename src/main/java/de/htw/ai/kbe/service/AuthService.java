@@ -19,6 +19,7 @@ public class AuthService {
 	@Inject
 	public AuthService(IAuthDatabase authDb) {
 		this.authDatabase = authDb;
+		System.out.println("AuthService is created \n");
 	}
 
 	@GET
@@ -31,11 +32,8 @@ public class AuthService {
 		}
 
 		User user = authDatabase.getUserById(userId);
-
 		token = user.getToken().getTokenStr();
-
 		return Response.ok(token).build();
-
 	}
 
 }

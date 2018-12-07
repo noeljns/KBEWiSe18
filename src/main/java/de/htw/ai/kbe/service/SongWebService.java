@@ -49,7 +49,7 @@ public class SongWebService {
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Song getSong(@PathParam("id") Integer id) {
-
+		System.out.println("called the get a song by in method in songWebService");
 		if (!database.isIdInDatabase(id)) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 
@@ -68,7 +68,7 @@ public class SongWebService {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<Song> getAllSongs() {
-		System.out.println("called the get all songs method in songsServlet");
+		System.out.println("called the get all songs method in songWebService");
 		List<Song> songList = database.getAllSongs();
 		return songList;
 	}

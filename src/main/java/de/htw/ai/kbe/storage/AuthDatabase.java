@@ -22,6 +22,11 @@ public class AuthDatabase implements IAuthDatabase {
 		load();
 	}
 
+	// NEU
+	public synchronized static AuthDatabase getInstance() {
+		return new AuthDatabase();
+	}
+	
 	/**
 	 * Methode lädt eine Liste von User Objekten aus einer json Datei in eine
 	 * List<User>

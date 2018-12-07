@@ -10,6 +10,7 @@ import de.htw.ai.kbe.di.DependencyBinder;
 public class MyApplication extends ResourceConfig {
 
 	public MyApplication() {
+		System.out.println("start of MyApplication constructor before register ");
 		register(new DependencyBinder());
 		packages("de.htw.ai.kbe.service");
 	}
