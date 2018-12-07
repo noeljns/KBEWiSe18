@@ -1,10 +1,8 @@
 package de.htw.ai.kbe.service;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -32,6 +30,8 @@ import de.htw.ai.kbe.storage.IDatabaseSongs;
  */
 // URL fuer diesen Service ist: http://localhost:8080/songsRX/rest/songs
 @Path("/songs")
+// jetzt werden alle Methoden gefiltert mit RequestFilter
+@Secure
 public class SongWebService {
 
 	@Context
@@ -45,6 +45,8 @@ public class SongWebService {
 		this.database = database;
 	}
 
+	// TODO konsistenz bei get auch Response returnieren, und mit Response.ok Song / List<Song> Entitäten liefern
+	
 	@GET
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })

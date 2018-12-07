@@ -16,6 +16,6 @@ public class DependencyBinder extends AbstractBinder {
 		bind(InMemoryDatabaseSongs.class).to(IDatabaseSongs.class).in(Singleton.class);
 		System.out.println("before binding auth database in configure method of DependencyBinder \n");
 		bind(AuthDatabase.class).to(IAuthDatabase.class).in(Singleton.class);
-		// von Flo teilweise: bind(AuthDatabase.getInstance()).to(IAuthDatabase.class);		
+		// von Flo teilweise: bind(TestAuthDatabase.getInstance()).to(IAuthDatabase.class);		
 	}
 }

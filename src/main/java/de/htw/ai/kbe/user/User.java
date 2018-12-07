@@ -53,7 +53,7 @@ public class User {
 	public AuthToken getToken() {
 		// User hat noch keinen token, daher ist token aktuell noch null
 		// ansonsten hat User bereits einen token, dieser wird dann direkt retuniert
-		if(token == null) {
+		if (token == null) {
 			token = new AuthToken(this);
 		}
 		 

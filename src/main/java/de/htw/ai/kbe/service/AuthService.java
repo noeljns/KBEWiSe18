@@ -26,15 +26,13 @@ public class AuthService {
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response getAuthToken(@QueryParam("userId") String userId) {
-		String token;
-		if (authDatabase.getUserById(userId) == null) {
+		User user = authDatabase.getUserById(userId);
+		if (user == null) {
 			System.out.println("went in the 403 we wrote in getAuthToken");
 			return Response.status(Response.Status.FORBIDDEN).build();
 		}
 
-		User user = authDatabase.getUserById(userId);
-		token = user.getToken().getTokenStr();
+		String token = user.getToken().getTokenStr();
 		return Response.ok(token).build();
 	}
-
 }

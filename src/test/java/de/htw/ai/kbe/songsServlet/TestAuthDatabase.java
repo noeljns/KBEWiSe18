@@ -1,4 +1,5 @@
-package de.htw.ai.kbe.storage;
+package de.htw.ai.kbe.songsServlet;
+
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -11,20 +12,21 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import de.htw.ai.kbe.storage.IAuthDatabase;
 import de.htw.ai.kbe.user.User;
 
-public class AuthDatabase implements IAuthDatabase {
+public class TestAuthDatabase implements IAuthDatabase {
 	private ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 	private List<User> users = new ArrayList<>();
 	private ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
 
-	public AuthDatabase() {
+	public TestAuthDatabase() {
 		load();
 	}
 
 	// NEU
-	public synchronized static AuthDatabase getInstance() {
-		return new AuthDatabase();
+	public synchronized static TestAuthDatabase getInstance() {
+		return new TestAuthDatabase();
 	}
 	
 	/**
@@ -41,7 +43,7 @@ public class AuthDatabase implements IAuthDatabase {
 
 		try {
 			try {
-				InputStream is = this.getClass().getClassLoader().getResourceAsStream("auth_database.json");
+				InputStream is = this.getClass().getClassLoader().getResourceAsStream("auth_databasea_test.json");
 				List<User> userFromFile = (List<User>) mapper.readValue(is, new TypeReference<List<User>>() {
 				});
 				
