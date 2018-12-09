@@ -2,6 +2,11 @@ package de.htw.ai.kbe.user;
 
 import java.util.Random;
 
+/**
+ * Klasse die ein Authentifizierungs Token repräsentiert
+ * @author camilo, jns
+ *
+ */
 public class AuthToken {
 
 	protected String token;
@@ -9,10 +14,8 @@ public class AuthToken {
 	AuthToken(User user) {
 		Random random = new Random();
 		this.token =  user.getUserId().hashCode() + Integer.toString(random.nextInt());
-		System.out.println("Token for user " + user.getUserId() + " has been created: " + token);
-		System.out.println();
 	}
-
+	
 	public String getTokenStr() {
 		return token;
 	}

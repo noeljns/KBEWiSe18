@@ -46,6 +46,11 @@ public class SongWebService {
 	}
 
 	// TODO konsistenz bei getSong auch Response returnieren, und mit Response.ok Song / List<Song> Entitäten liefern
+	/**
+	 * Methode um einen Song herauszugeben
+	 * @param id
+	 * @return angefragten Song
+	 */
 	@GET
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -67,6 +72,10 @@ public class SongWebService {
 	}
 
 	// TODO konsistenz bei getAllSongs auch Response returnieren, und mit Response.ok Song / List<Song> Entitäten liefern
+	/**
+	 * Methode um alle Songs herauszugeben
+	 * @return alle Songs
+	 */
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<Song> getAllSongs() {
@@ -75,13 +84,10 @@ public class SongWebService {
 	}
 
 	/**
-	 * Methode zur Bearbeitung einer http Request eines Clients zum Hinzufügen eines
+	 * Methode zur Bearbeitung einer Request zum Hinzufügen eines
 	 * Songs
 	 * 
-	 * @param request
-	 *            Http Request an unser Servlet
-	 * @param response
-	 *            Http Request response
+	 * @return response
 	 */
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -104,6 +110,12 @@ public class SongWebService {
 		return Response.created(uriBuilder.build()).build();
 	}
 
+	/**
+	 * Methode zur Bearbeitung einer Request zum Bearbeiten eines
+	 * Songs
+	 * 
+	 * @return response
+	 */
 	@PUT
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Path("/{id}")
@@ -129,6 +141,12 @@ public class SongWebService {
 		return Response.status(Response.Status.NO_CONTENT).build();
 	}
 
+	/**
+	 * Methode zur Bearbeitung einer Request zum Löschen eines
+	 * Songs
+	 * 
+	 * @return response
+	 */
 	@DELETE
 	@Path("/{id}")
 	public Response delete(@PathParam("id") Integer id) {

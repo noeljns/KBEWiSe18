@@ -1,7 +1,5 @@
 package de.htw.ai.kbe.bean;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -80,6 +78,7 @@ public class Song {
 	private Song(Builder builder) {
 		this.id = builder.id;
 		this.title = builder.title;
+		this.artist = builder.artist;
 		this.album = builder.album;
 		this.released = builder.released;
 	}

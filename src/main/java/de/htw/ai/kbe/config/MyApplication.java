@@ -6,11 +6,15 @@ import org.glassfish.jersey.server.ResourceConfig;
 
 import de.htw.ai.kbe.di.DependencyBinder;
 
+/**
+ * Jersey spezifische Klasse, um den Dependecy Binder zu registrieren
+ * @author camilo, jns
+ *
+ */
 @ApplicationPath("/rest")
 public class MyApplication extends ResourceConfig {
 
 	public MyApplication() {
-		System.out.println("start of MyApplication constructor before register ");
 		register(new DependencyBinder());
 		packages("de.htw.ai.kbe.service");
 	}

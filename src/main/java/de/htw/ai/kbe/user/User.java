@@ -1,5 +1,10 @@
 package de.htw.ai.kbe.user;
 
+/**
+ * Klasse die eine/n User/in repräsentiert
+ * @author camilo, jns
+ *
+ */
 public class User {
 	
 	private Integer id;

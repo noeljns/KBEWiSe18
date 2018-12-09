@@ -7,6 +7,11 @@ import java.lang.annotation.Target;
 
 import javax.ws.rs.NameBinding;
 
+/**
+ * Meta-Annotation für einen Filterungsprozess
+ * @author camilo, jns
+ *
+ */
 @NameBinding
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})

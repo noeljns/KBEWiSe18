@@ -17,7 +17,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import de.htw.ai.kbe.bean.Song;
 
 /**
- * Klasse, um Song Objekte in Json Format zu speichern
+ * Klasse, um Song Objekte aus einer Json Datei zu laden und zu verwalten
  * 
  * @author jns, camilo
  *
@@ -149,8 +149,10 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 		}
 	}
 
-	// deletes song with given id from database and returns true if success,false
-	// otherwise
+	/**
+	 * Methode um Song Objekt zu löschen
+	 * @param Id des zu löschenden Songs
+	 */
 	public void deleteSong(Integer id) {
 		Lock writeLock = readWriteLock.writeLock();
 		writeLock.lock();
@@ -162,12 +164,21 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 		}
 	}
 
+	/**
+	 * Methode um Song Objekt zu bearbeiten
+	 * @param zu bearbeitendes Song Objekt
+	 */
 	public void updateSong(Song song) {
 		Integer id = song.getId();
 		Song songToUpdate = getSongById(id);
 		songToUpdate.updateFromSong(song);
 	}
 
+	/**
+	 * Methode um zu prüfen, ob Song Objekt in Datenbanke liegt
+	 * @param Id des zu überprüfenden Songs
+	 * @return wenn das Song Objekt existiert true, ansonsten false
+	 */
 	public boolean isIdInDatabase(Integer id) {
 		for (Song song : songs) {
 			if (id.equals(song.getId())) {

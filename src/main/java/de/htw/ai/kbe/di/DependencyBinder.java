@@ -9,13 +9,15 @@ import de.htw.ai.kbe.storage.IAuthDatabase;
 import de.htw.ai.kbe.storage.IDatabaseSongs;
 import de.htw.ai.kbe.storage.InMemoryDatabaseSongs;
 
+/**
+ * Klasse die klärt, welche Implementierung der Datenbanken jeweils genutzt werden sollen
+ * @author camilo, jns
+ *
+ */
 public class DependencyBinder extends AbstractBinder {
 	@Override
 	protected void configure() {
-		System.out.println("start of configure method of DependencyBinder ");
 		bind(InMemoryDatabaseSongs.class).to(IDatabaseSongs.class).in(Singleton.class);
-		System.out.println("before binding auth database in configure method of DependencyBinder \n");
 		bind(AuthDatabase.class).to(IAuthDatabase.class).in(Singleton.class);
-		// von Flo teilweise: bind(TestAuthDatabase.getInstance()).to(IAuthDatabase.class);		
 	}
 }

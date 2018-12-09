@@ -14,6 +14,11 @@ import javax.ws.rs.ext.Provider;
 
 import de.htw.ai.kbe.storage.IAuthDatabase;
 
+/**
+ * Klasse, um Anfragen zu filtern
+ * @author camilo, jns
+ *
+ */
 @Provider
 @Secure
 public class RequestFilter implements ContainerRequestFilter {
@@ -27,6 +32,9 @@ public class RequestFilter implements ContainerRequestFilter {
 		this.authdb = authDB;
 	}
 
+	/**
+	 * Methode filtert Anfragen ohne token oder ohne validen token heraus
+	 */
 	@Override
 	public void filter(ContainerRequestContext context) throws IOException {
 		// AuthService wird nicht gefiltert, sprich folgender Aufruf geht immer durch: 
