@@ -22,7 +22,6 @@ public class AuthDatabase implements IAuthDatabase {
 		load();
 	}
 
-	// NEU
 	public synchronized static AuthDatabase getInstance() {
 		return new AuthDatabase();
 	}
@@ -34,8 +33,6 @@ public class AuthDatabase implements IAuthDatabase {
 	 */
 	@SuppressWarnings("unchecked")
 	public void load() {
-		System.out.println("the user database is loaded");
-		System.out.println("the user database is loaded");
 		Lock writeLock = readWriteLock.writeLock();
 		writeLock.lock();
 
@@ -44,20 +41,11 @@ public class AuthDatabase implements IAuthDatabase {
 				InputStream is = this.getClass().getClassLoader().getResourceAsStream("auth_database.json");
 				List<User> userFromFile = (List<User>) mapper.readValue(is, new TypeReference<List<User>>() {
 				});
-				
-				// Test
-				if(userFromFile.isEmpty()) {
-					System.out.println("Unsere userFromFile Liste ist leer!");
-				}
-				
-				// Test
-				for (User user : userFromFile) {
-					System.out.println("userId: " + user.getUserId());
-				}
-				
+								
 				users.addAll(userFromFile);
 			} catch (Exception e) {
 				// Liste wäre leer
+                System.out.println("It was not possible to read auth_database.json file, hence database is empty.");
 				e.printStackTrace();
 			}
 		} finally {
@@ -69,16 +57,6 @@ public class AuthDatabase implements IAuthDatabase {
 	public User getUserById(String username) {
 		Lock readLock = readWriteLock.readLock();
 		readLock.lock();
-
-		// Test
-		if(users.isEmpty()) {
-			System.out.println("Unsere users Liste ist leer!");
-		}
-		
-		// Test
-		for (User user : users) {
-			System.out.println("userId: " + user.getUserId());
-		}
 		
 		try {
 			for (User user : users) {

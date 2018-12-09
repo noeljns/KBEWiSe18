@@ -3,9 +3,7 @@ package de.htw.ai.kbe.service;
 import java.io.IOException;
 import java.util.List;
 
-import javax.annotation.Priority;
 import javax.inject.Inject;
-import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
@@ -16,10 +14,8 @@ import javax.ws.rs.ext.Provider;
 
 import de.htw.ai.kbe.storage.IAuthDatabase;
 
-// NEU ist @Provider
 @Provider
 @Secure
-@Priority(Priorities.AUTHORIZATION)
 public class RequestFilter implements ContainerRequestFilter {
 
 	@Context
@@ -28,7 +24,6 @@ public class RequestFilter implements ContainerRequestFilter {
 	
 	@Inject
 	public RequestFilter(IAuthDatabase authDB) {
-		System.out.println("RequestFilter was created and authDB. \n");
 		this.authdb = authDB;
 	}
 
@@ -36,10 +31,8 @@ public class RequestFilter implements ContainerRequestFilter {
 	public void filter(ContainerRequestContext context) throws IOException {
 		// AuthService wird nicht gefiltert, sprich folgender Aufruf geht immer durch: 
 		// GET /songsRX/rest/auth?userID=mmuster
-
-		// Get http:://localhost:8080/songsRX/rest/songs
-		//System.out.println("A request like Get http:://localhost:8080/songsRX/rest/songs was sent.");
-				
+		// da AuthService Klasse nicht mit @Secure annotiert ist
+		
 		List<String> token = context.getHeaders().getOrDefault("Authorization", null);
 		// es wurde kein token mitgeschickt
 		if (token == null) {
@@ -55,7 +48,7 @@ public class RequestFilter implements ContainerRequestFilter {
 		}
 		// es wurde ein valider token mitgeschickt
 		else {
-			System.out.println("Auth was successful");
+			System.out.println("Authentification / Authorization was successful");
 		}
 	}
 }

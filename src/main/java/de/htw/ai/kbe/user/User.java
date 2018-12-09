@@ -56,7 +56,12 @@ public class User {
 		if (token == null) {
 			token = new AuthToken(this);
 		}
-		 
+		
+		// debug user for JUnit Test
+		if (this.userId.equals("debugUser")){
+            return new DebugToken(this);
+        }
+		
 		return token;
 	}
 

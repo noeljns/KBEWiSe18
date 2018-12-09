@@ -22,7 +22,7 @@ import de.htw.ai.kbe.bean.Song;
 import de.htw.ai.kbe.storage.IDatabaseSongs;
 
 /**
- * Klasse eines Webservices, der get und post Anfragen von Song Objekten
+ * Klasse eines Webservices, der get, post, put und delete Anfragen von Song Objekten
  * bearbeitet
  * 
  * @author jns, camilo
@@ -30,7 +30,7 @@ import de.htw.ai.kbe.storage.IDatabaseSongs;
  */
 // URL fuer diesen Service ist: http://localhost:8080/songsRX/rest/songs
 @Path("/songs")
-// jetzt werden alle Methoden gefiltert mit RequestFilter
+// durch @Secure werden alle Methoden gefiltert von RequestFilter
 @Secure
 public class SongWebService {
 
@@ -45,13 +45,13 @@ public class SongWebService {
 		this.database = database;
 	}
 
-	// TODO konsistenz bei get auch Response returnieren, und mit Response.ok Song / List<Song> Entitäten liefern
-	
+	// TODO konsistenz bei getSong auch Response returnieren, und mit Response.ok Song / List<Song> Entitäten liefern
 	@GET
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Song getSong(@PathParam("id") Integer id) {
-		System.out.println("called the get a song by in method in songWebService");
+		System.out.println("called the get song method in songsServlet for id " + id);
+		
 		if (!database.isIdInDatabase(id)) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 
@@ -62,15 +62,14 @@ public class SongWebService {
 			}
 		}
 
-		System.out.println("called the get song method in songsServlet for id " + id);
 		Song song = database.getSongById(id);
 		return song;
 	}
 
+	// TODO konsistenz bei getAllSongs auch Response returnieren, und mit Response.ok Song / List<Song> Entitäten liefern
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<Song> getAllSongs() {
-		System.out.println("called the get all songs method in songWebService");
 		List<Song> songList = database.getAllSongs();
 		return songList;
 	}
@@ -91,7 +90,6 @@ public class SongWebService {
 		// Song darf nicht null sein
 		if (song == null) {
 			return Response.status(Response.Status.BAD_REQUEST).build();
-
 		}
 
 		// Song muss zwingend einen Titel enthalten!
@@ -120,7 +118,7 @@ public class SongWebService {
 		}
 		// wenn die id in unserer datenbank nicht vorhanden ist
 		if (!database.isIdInDatabase(id)) {
-			return Response.status(Response.Status.BAD_REQUEST).entity("Song not found with the provided id.").build();
+			return Response.status(Response.Status.BAD_REQUEST).entity("Song with the provided id does not exist.").build();
 		}
 		// id in url ist nicht diesselbe wie id in payload
 		if (id != song.getId()) {
@@ -136,9 +134,9 @@ public class SongWebService {
 	public Response delete(@PathParam("id") Integer id) {
 		// wenn die id in unserer datenbank nicht vorhanden ist
 		if (!database.isIdInDatabase(id)) {
-			return Response.status(Response.Status.BAD_REQUEST).entity("Song not found with the provided id.").build();
+			return Response.status(Response.Status.BAD_REQUEST).entity("Song with the provided id does not exist.").build();
 		}
 		database.deleteSong(id);
-		return Response.status(Response.Status.NO_CONTENT).build();
+		return Response.status(Response.Status.NO_CONTENT).entity("Song with id " + id + " has been deleted.").build();
 	}
 }

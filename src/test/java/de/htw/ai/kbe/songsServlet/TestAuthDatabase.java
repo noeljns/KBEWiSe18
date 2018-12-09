@@ -1,6 +1,5 @@
 package de.htw.ai.kbe.songsServlet;
 
-
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,6 @@ public class TestAuthDatabase implements IAuthDatabase {
 		load();
 	}
 
-	// NEU
 	public synchronized static TestAuthDatabase getInstance() {
 		return new TestAuthDatabase();
 	}
@@ -36,30 +34,19 @@ public class TestAuthDatabase implements IAuthDatabase {
 	 */
 	@SuppressWarnings("unchecked")
 	public void load() {
-		System.out.println("the user database is loaded");
-		System.out.println("the user database is loaded");
 		Lock writeLock = readWriteLock.writeLock();
 		writeLock.lock();
 
 		try {
 			try {
-				InputStream is = this.getClass().getClassLoader().getResourceAsStream("auth_databasea_test.json");
+				InputStream is = this.getClass().getClassLoader().getResourceAsStream("auth_database_test.json");
 				List<User> userFromFile = (List<User>) mapper.readValue(is, new TypeReference<List<User>>() {
 				});
-				
-				// Test
-				if(userFromFile.isEmpty()) {
-					System.out.println("Unsere userFromFile Liste ist leer!");
-				}
-				
-				// Test
-				for (User user : userFromFile) {
-					System.out.println("userId: " + user.getUserId());
-				}
-				
+								
 				users.addAll(userFromFile);
 			} catch (Exception e) {
 				// Liste wäre leer
+                System.out.println("It was not possible to read auth_database_test.json file, hence database is empty.");
 				e.printStackTrace();
 			}
 		} finally {
@@ -71,16 +58,6 @@ public class TestAuthDatabase implements IAuthDatabase {
 	public User getUserById(String username) {
 		Lock readLock = readWriteLock.readLock();
 		readLock.lock();
-
-		// Test
-		if(users.isEmpty()) {
-			System.out.println("Unsere users Liste ist leer!");
-		}
-		
-		// Test
-		for (User user : users) {
-			System.out.println("userId: " + user.getUserId());
-		}
 		
 		try {
 			for (User user : users) {

@@ -12,6 +12,11 @@ import de.htw.ai.kbe.storage.IAuthDatabase;
 import de.htw.ai.kbe.user.User;
 
 @Path("/auth")
+/**
+ * Klasse um zu prüfen, ob es dem Client der Anfrage erlaubt ist, einen token zu bekommen
+ * @author camilo, jns
+ *
+ */
 public class AuthService {
 
 	private IAuthDatabase authDatabase;
@@ -20,18 +25,18 @@ public class AuthService {
 	public AuthService(IAuthDatabase authDb) {
 		super();
 		this.authDatabase = authDb;
-		System.out.println("AuthService is created in AuthService and  authDB. \n");
 	}
 
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response getAuthToken(@QueryParam("userId") String userId) {
 		User user = authDatabase.getUserById(userId);
+		// userId does not exist, hence client ist not authorized to get a token
 		if (user == null) {
-			System.out.println("went in the 403 we wrote in getAuthToken");
 			return Response.status(Response.Status.FORBIDDEN).build();
 		}
 
+		// userId does exist, hence client ist authorized to get a token
 		String token = user.getToken().getTokenStr();
 		return Response.ok(token).build();
 	}

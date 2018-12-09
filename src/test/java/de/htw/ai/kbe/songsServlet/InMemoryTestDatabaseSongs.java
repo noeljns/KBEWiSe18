@@ -1,8 +1,6 @@
 package de.htw.ai.kbe.songsServlet;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -20,7 +18,7 @@ import de.htw.ai.kbe.bean.Song;
 import de.htw.ai.kbe.storage.IDatabaseSongs;
 
 /**
- * Klasse, um Song Objekte in Json Format zu speichern
+ * Test Klasse, um Song Objekte in Json Format zu speichern
  * 
  * @author jns, camilo
  *
@@ -39,7 +37,6 @@ public class InMemoryTestDatabaseSongs implements IDatabaseSongs {
 	 * @param databaseFileName
 	 */
 	public InMemoryTestDatabaseSongs() {
-
 		load();
 	}
 
@@ -51,7 +48,6 @@ public class InMemoryTestDatabaseSongs implements IDatabaseSongs {
 	 * Methode lädt eine Liste von Song Objekten aus einer json Datei in eine
 	 * List<Song>
 	 * 
-	 * @param databaseFileName
 	 */
 	@SuppressWarnings("unchecked")
 	public void load() {
@@ -66,6 +62,7 @@ public class InMemoryTestDatabaseSongs implements IDatabaseSongs {
 				songs.addAll(songsFromFile);
 			} catch (Exception e) {
 				// Liste wäre leer
+                System.out.println("It was not possible to read songs_test.json file, hence database is empty.");
 				e.printStackTrace();
 			}
 		} finally {
@@ -151,10 +148,6 @@ public class InMemoryTestDatabaseSongs implements IDatabaseSongs {
 		} finally {
 			writeLock.unlock();
 		}
-
-		// TODO wo in MyApplication kann man aufrufen database.save(), wenn container
-		// runterfährt
-
 	}
 
 	// deletes song with given id from database and returns true if success,false

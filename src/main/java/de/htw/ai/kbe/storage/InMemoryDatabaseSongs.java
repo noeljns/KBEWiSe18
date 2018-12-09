@@ -61,6 +61,7 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 				songs.addAll(songsFromFile);
 			} catch (Exception e) {
 				// Liste wäre leer
+                System.out.println("It was not possible to read songs.json file, hence database is empty.");
 				e.printStackTrace();
 			}
 		} finally {
@@ -146,10 +147,6 @@ public class InMemoryDatabaseSongs implements IDatabaseSongs {
 		} finally {
 			writeLock.unlock();
 		}
-
-		// TODO wo in MyApplication kann man aufrufen database.save(), wenn container
-		// runterfährt
-
 	}
 
 	// deletes song with given id from database and returns true if success,false
