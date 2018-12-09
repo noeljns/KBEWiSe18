@@ -78,6 +78,26 @@ public class SongWebServiceTest extends JerseyTest {
 		Response response = target("/songs/" + id).request().header("Authorization", DebugToken.DEBUG_TOKEN).put(songEntity);
 		Assert.assertEquals(400, response.getStatus());
 	}
+
+	@Test
+	public void updateSongsWithXmlButShouldSendJSONReturns400() {
+
+		Entity songEntity = Entity.entity("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><song><id>4</id><title>Update mit XML</title></song>", MediaType.APPLICATION_JSON);
+		int id = 4; 				// id in url 4
+		Response response = target("/songs/" + id).request().header("Authorization", DebugToken.DEBUG_TOKEN).put(songEntity);
+		Assert.assertEquals(400, response.getStatus());;
+	}
+	
+	@Test
+	public void updateSongsWithJSONButShouldSendXmlReturns400() {
+
+		Entity songEntity = Entity.entity("{\"id\": 4, \"title\": \"Update With Valid Json\"}", MediaType.APPLICATION_XML);
+		int id = 4; 				// id in url 4
+		Response response = target("/songs/" + id).request().header("Authorization", DebugToken.DEBUG_TOKEN).put(songEntity);
+		Assert.assertEquals(400, response.getStatus());;
+	}
+	
+	
 	
 	@Test
 	public void updateSongWithoutTitleReturns400() {

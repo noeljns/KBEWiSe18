@@ -41,3 +41,4 @@ public class AuthService {
 		return Response.ok(token).build();
 	}
 }
+	
