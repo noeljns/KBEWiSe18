@@ -173,7 +173,7 @@ public class SongWebServiceTest extends JerseyTest {
 		Response response = target("/songs/notanumber").request().header("Authorization", DebugToken.DEBUG_TOKEN).put(songEntity);
 		Assert.assertEquals(404, response.getStatus());
 	}
-	
+
 
 	@Test
 	@Ignore

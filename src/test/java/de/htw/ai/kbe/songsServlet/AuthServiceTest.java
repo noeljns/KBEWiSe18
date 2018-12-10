@@ -63,7 +63,24 @@ public class AuthServiceTest extends JerseyTest {
 		assertEquals(403, response.getStatus());
 
 	}
+	
+	@Test
+	public void whenEmptyStringUserSendsAuthRequestThenForbidden() {
+		Response response = target("/auth").queryParam("userId", "").request().get();
 
+		assertEquals(403, response.getStatus());
+		
+	}
+
+	@Test
+	public void whenNullUserSendsAuthRequestThenForbidden() {
+		String nullString= null;
+		
+		Response response = target("/auth").queryParam("userId", nullString).request().get();
+
+		assertEquals(403, response.getStatus());
+		
+	}
 	
 	
 	
