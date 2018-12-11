@@ -2,7 +2,6 @@ package de.htw.ai.kbe.songsServlet;
 
 import static org.junit.Assert.assertEquals;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
@@ -13,7 +12,6 @@ import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.htw.ai.kbe.bean.Song;
@@ -36,8 +34,6 @@ public class SongWebServiceTest extends JerseyTest {
 			}
 		});
 	}
-
-	// TODO wäre so etwas möglich? whenUpdateSongWithExistingIdInUrlAndPayloadThenSongTitleIsUpdated()
 	
 	@Test
 	public void updateSongWithExistingIdInUrlAndPayloadReturns204() {
@@ -46,10 +42,9 @@ public class SongWebServiceTest extends JerseyTest {
 		song.setId(3);
 		song.setTitle("Update Song With Id 3");
 		Entity<Song> songEntity = Entity.entity(song, MediaType.APPLICATION_JSON);
-
 		int id = 3; 				// id in url ist 3
-		Response response = target("/songs/" + id).request().header("Authorization", DebugToken.DEBUG_TOKEN).put(songEntity);
 		
+		Response response = target("/songs/" + id).request().header("Authorization", DebugToken.DEBUG_TOKEN).put(songEntity);
 		Assert.assertEquals(204, response.getStatus());
 	}
 	
@@ -58,10 +53,10 @@ public class SongWebServiceTest extends JerseyTest {
 		// payload: id ist 8, title ist "Update Song...", alles andere ist null
 		Song song = new Song();
 		song.setId(8);
-		song.setTitle("Update Song With Id 8 Again");
+		song.setTitle("Update Song With Id 8");
 		Entity<Song> songEntity = Entity.entity(song, MediaType.APPLICATION_JSON);
-
 		int id = 3; 				// id in url ist 3
+		
 		Response response = target("/songs/" + id).request().header("Authorization", DebugToken.DEBUG_TOKEN).put(songEntity);
 		Assert.assertEquals(400, response.getStatus());
 	}
@@ -71,44 +66,43 @@ public class SongWebServiceTest extends JerseyTest {
 		// payload: id ist 37, title ist "Update Song...", alles andere ist null
 		Song song = new Song();
 		song.setId(37);
-		song.setTitle("Update Song With Id 8 Again");
+		song.setTitle("Update Song With Id 37");
 		Entity<Song> songEntity = Entity.entity(song, MediaType.APPLICATION_JSON);
-
 		int id = 37; 				// id in url 37
+		
 		Response response = target("/songs/" + id).request().header("Authorization", DebugToken.DEBUG_TOKEN).put(songEntity);
 		Assert.assertEquals(400, response.getStatus());
 	}
 
 	@Test
 	public void updateSongsWithXmlButShouldSendJSONReturns400() {
-
 		Entity songEntity = Entity.entity("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><song><id>4</id><title>Update mit XML</title></song>", MediaType.APPLICATION_JSON);
 		int id = 4; 				// id in url 4
+		
 		Response response = target("/songs/" + id).request().header("Authorization", DebugToken.DEBUG_TOKEN).put(songEntity);
 		Assert.assertEquals(400, response.getStatus());;
 	}
 	
 	@Test
 	public void updateSongsWithJSONButShouldSendXmlReturns400() {
-
 		Entity songEntity = Entity.entity("{\"id\": 4, \"title\": \"Update With Valid Json\"}", MediaType.APPLICATION_XML);
 		int id = 4; 				// id in url 4
+		
 		Response response = target("/songs/" + id).request().header("Authorization", DebugToken.DEBUG_TOKEN).put(songEntity);
 		Assert.assertEquals(400, response.getStatus());;
 	}
 	
 	
-	
 	@Test
 	public void updateSongWithoutTitleReturns400() {
-		// payload: id ist 3, title ist "Update Song...", alles andere ist null
+		// payload: id ist 3, title ist null
 		Song song = new Song();
 		song.setId(3);
 		String title = null;
 		song.setTitle(title);
 		Entity<Song> songEntity = Entity.entity(song, MediaType.APPLICATION_JSON);
-
 		int id = 3; 				// id in url 3
+		
 		Response response = target("/songs/" + id).request().header("Authorization", DebugToken.DEBUG_TOKEN).put(songEntity);
 		Assert.assertEquals(400, response.getStatus());
 	}
@@ -117,6 +111,7 @@ public class SongWebServiceTest extends JerseyTest {
 	public void updateSongWithValidJsonReturns204() {
 		Entity songEntity = Entity.entity("{\"id\": 4, \"title\": \"Update With Valid Json\"}", MediaType.APPLICATION_JSON);
 		int id = 4; 				// id in url 4
+		
 		Response response = target("/songs/" + id).request().header("Authorization", DebugToken.DEBUG_TOKEN).put(songEntity);
 		Assert.assertEquals(204, response.getStatus());
 	}
@@ -124,8 +119,8 @@ public class SongWebServiceTest extends JerseyTest {
 	@Test
 	public void updateSongWithInvalidJsonReturns400() {
 		Entity songEntity = Entity.entity("Invalid json string.", MediaType.APPLICATION_JSON);
-
 		int id = 3; 				// id in url 3
+		
 		Response response = target("/songs/" + id).request().header("Authorization", DebugToken.DEBUG_TOKEN).put(songEntity);
 		Assert.assertEquals(400, response.getStatus());
 	}
@@ -133,8 +128,8 @@ public class SongWebServiceTest extends JerseyTest {
 	@Test
 	public void updateSongWithValidXmlReturns204() {
 		Entity songEntity = Entity.entity("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><song><id>4</id><title>Update mit XML</title></song>", MediaType.APPLICATION_XML);
-
 		int id = 4; 				// id in url 4
+		
 		Response response = target("/songs/" + id).request().header("Authorization", DebugToken.DEBUG_TOKEN).put(songEntity);
 		Assert.assertEquals(204, response.getStatus());
 	}
@@ -142,8 +137,8 @@ public class SongWebServiceTest extends JerseyTest {
 	@Test
 	public void updateSongWithInvalidXmlReturns400() {
 		Entity songEntity = Entity.entity("<?xml version=\"1.0\" encoding=\"UTF-8\" ?><songs>Invalid xml</songs>", MediaType.APPLICATION_XML);
-
 		int id = 3; 				// id in url 3
+		
 		Response response = target("/songs/" + id).request().header("Authorization", DebugToken.DEBUG_TOKEN).put(songEntity);
 		Assert.assertEquals(400, response.getStatus());
 	}
@@ -174,19 +169,17 @@ public class SongWebServiceTest extends JerseyTest {
 		Assert.assertEquals(404, response.getStatus());
 	}
 
+	
 
 	@Test
-	@Ignore
 	public void getSongWithExistingIdReturnsCorrectSong() {
-		Song response = target("/songs/2").request().get(Song.class);
+		Song response = target("/songs/2").request().header("Authorization", DebugToken.DEBUG_TOKEN).get(Song.class);
 		assertEquals(2, (int) response.getId());
 	}
 
 	@Test
-	@Ignore
 	public void getSongWithStringAsIdReturnsNotFound() {
-		Response response = target("/songs/notanumber").request().get();
+		Response response = target("/songs/notanumber").request().header("Authorization", DebugToken.DEBUG_TOKEN).get();
 		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
 	}
-
 }

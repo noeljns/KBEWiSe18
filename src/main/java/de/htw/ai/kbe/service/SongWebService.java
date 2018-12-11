@@ -45,7 +45,6 @@ public class SongWebService {
 		this.database = database;
 	}
 
-	// TODO konsistenz bei getSong auch Response returnieren, und mit Response.ok Song / List<Song> Entitäten liefern
 	/**
 	 * Methode um einen Song herauszugeben
 	 * @param id
@@ -55,7 +54,6 @@ public class SongWebService {
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Song getSong(@PathParam("id") Integer id) {
-		System.out.println("called the get song method in songsServlet for id " + id);
 		
 		if (!database.isIdInDatabase(id)) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -71,7 +69,6 @@ public class SongWebService {
 		return song;
 	}
 
-	// TODO konsistenz bei getAllSongs auch Response returnieren, und mit Response.ok Song / List<Song> Entitäten liefern
 	/**
 	 * Methode um alle Songs herauszugeben
 	 * @return alle Songs

@@ -16,8 +16,6 @@ import de.htw.ai.kbe.service.RequestFilter;
 import de.htw.ai.kbe.service.SongWebService;
 import de.htw.ai.kbe.storage.IAuthDatabase;
 import de.htw.ai.kbe.storage.IDatabaseSongs;
-import de.htw.ai.kbe.user.AuthToken;
-import de.htw.ai.kbe.user.User;
 
 public class AuthServiceTest extends JerseyTest {
 
@@ -35,55 +33,35 @@ public class AuthServiceTest extends JerseyTest {
 
 	@Test
 	public void whenMaximSendsAuthRequestThenTokenIsSent() {
-
 		Response response = target("/auth").queryParam("userId", "mmuster").request().get();
-
 		String generatedToken = response.readEntity(String.class);
-
 		assertNotNull(generatedToken);
-
 	}
 
 	@Test
 	public void whenElenaSendsAuthRequestThenTokenIsSent() {
-
 		Response response = target("/auth").queryParam("userId", "eschuler").request().get();
-
 		String generatedToken = response.readEntity(String.class);
-
 		assertNotNull(generatedToken);
 
 	}
 
 	@Test
 	public void whenUnknownUserSendsAuthRequestThenForbidden() {
-
 		Response response = target("/auth").queryParam("userId", "unknown").request().get();
-
 		assertEquals(403, response.getStatus());
-
 	}
 	
 	@Test
-	public void whenEmptyStringUserSendsAuthRequestThenForbidden() {
+	public void whenUserSendsAuthRequestWithEmptyStringThenForbidden() {
 		Response response = target("/auth").queryParam("userId", "").request().get();
-
 		assertEquals(403, response.getStatus());
-		
 	}
 
 	@Test
-	public void whenNullUserSendsAuthRequestThenForbidden() {
+	public void whenUserSendsAuthRequestWithNullThenForbidden() {
 		String nullString= null;
-		
 		Response response = target("/auth").queryParam("userId", nullString).request().get();
-
 		assertEquals(403, response.getStatus());
-		
 	}
-	
-	
-	
-	
-	
 }
