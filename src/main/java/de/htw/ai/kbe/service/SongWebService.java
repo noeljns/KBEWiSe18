@@ -149,7 +149,7 @@ public class SongWebService {
 	public Response delete(@PathParam("id") Integer id) {
 		// wenn die id in unserer datenbank nicht vorhanden ist
 		if (!database.isIdInDatabase(id)) {
-			return Response.status(Response.Status.BAD_REQUEST).entity("Song with the provided id does not exist.").build();
+			return Response.status(Response.Status.NOT_FOUND).entity("Song with the provided id does not exist.").build();
 		}
 		database.deleteSong(id);
 		return Response.status(Response.Status.NO_CONTENT).entity("Song with id " + id + " has been deleted.").build();

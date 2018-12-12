@@ -52,7 +52,7 @@ public class RequestFilter implements ContainerRequestFilter {
 		else if (authdb.isTokenValid(token.get(0)) == false) {
 			System.out.println("Request contains a token that is not valid: " + token.get(0));
 			System.out.println();
-			context.abortWith(Response.serverError().status(Status.FORBIDDEN).build());
+			context.abortWith(Response.serverError().status(Status.UNAUTHORIZED).build());
 		}
 		// es wurde ein valider token mitgeschickt
 		else {
