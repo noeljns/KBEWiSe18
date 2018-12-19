@@ -8,7 +8,7 @@ package de.htw.ai.kbe.user;
 public class User {
 	
 	private Integer id;
-	private String userId;
+	private String unsername;
 	private String lastName;
 	private String firstName;
 	private AuthToken token;
@@ -27,12 +27,12 @@ public class User {
 		this.id = id;
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getUsername() {
+		return unsername;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUsername(String userId) {
+		this.unsername = userId;
 	}
 
 	public String getLastName() {
@@ -63,7 +63,7 @@ public class User {
 		}
 		
 		// debug user for JUnit Test
-		if (this.userId.equals("debugUser")){
+		if (this.unsername.equals("debugUser")){
             return new DebugToken(this);
         }
 		

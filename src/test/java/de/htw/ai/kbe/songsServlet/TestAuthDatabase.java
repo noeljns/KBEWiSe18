@@ -61,7 +61,7 @@ public class TestAuthDatabase implements IAuthDatabase {
 		
 		try {
 			for (User user : users) {
-				if (user.getUserId().equals(username)) {
+				if (user.getUsername().equals(username)) {
 					return user;
 				}
 			}
