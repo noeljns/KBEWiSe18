@@ -1,12 +1,16 @@
 package de.htw.ai.kbe.user;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 /**
- * Klasse die eine/n SongRXUser/in repräsentiert
+ * Entity-Klasse die eine/n SongRXUser/in repräsentiert
  * @author camilo, jns
  *
  */
+@Entity
 public class SongRXUser {
-	
+	@Id
 	private Integer id;
 	private String username;
 	private String lastname;
@@ -14,7 +18,7 @@ public class SongRXUser {
 	private AuthToken token;
 	
 	/**
-	 * Konstruktor
+	 * leerer Standard-Konstruktor
 	 */
 	public SongRXUser() {
 	}

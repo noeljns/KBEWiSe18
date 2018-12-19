@@ -1,17 +1,24 @@
 package de.htw.ai.kbe.bean;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
+
 /**
- * Klasse die ein Song repräsentiert
+ * Entity-Klasse die ein Song repräsentiert
  * 
  * @author jns
  *
  */
 @XmlRootElement(name = "song")
 // alternative zu setter Methoden: @XmlAccessorType(XmlAccessType.FIELD)
+@Entity 
+// @ Table (name="song") müsste man machen, wenn die Tabelle auf PostgreSQL anders hieße
 public class Song {
 
+	@Id
 	private Integer id;
 	private String title;
 	private String artist;
@@ -19,7 +26,7 @@ public class Song {
 	private Integer released;
 
 	/**
-	 * Konstruktor
+	 * leerer Standard-Konstruktor
 	 */
 	public Song() {
 	}
