@@ -8,7 +8,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import de.htw.ai.kbe.storage.IAuthDatabase;
+import de.htw.ai.kbe.storage.AuthDAO;
 import de.htw.ai.kbe.user.User;
 
 
@@ -20,10 +20,10 @@ import de.htw.ai.kbe.user.User;
 @Path("/auth")
 public class AuthService {
 
-	private IAuthDatabase authDatabase;
+	private AuthDAO authDatabase;
 
 	@Inject
-	public AuthService(IAuthDatabase authDb) {
+	public AuthService(AuthDAO authDb) {
 		super();
 		this.authDatabase = authDb;
 	}

@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 
-import de.htw.ai.kbe.storage.IAuthDatabase;
+import de.htw.ai.kbe.storage.AuthDAO;
 
 /**
  * Klasse, um Anfragen zu filtern
@@ -25,10 +25,10 @@ public class RequestFilter implements ContainerRequestFilter {
 
 	@Context
 	private ResourceInfo resinfo;
-	private IAuthDatabase authdb;
+	private AuthDAO authdb;
 	
 	@Inject
-	public RequestFilter(IAuthDatabase authDB) {
+	public RequestFilter(AuthDAO authDB) {
 		this.authdb = authDB;
 	}
 

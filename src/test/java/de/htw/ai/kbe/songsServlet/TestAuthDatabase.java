@@ -11,10 +11,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import de.htw.ai.kbe.storage.IAuthDatabase;
+import de.htw.ai.kbe.storage.AuthDAO;
 import de.htw.ai.kbe.user.User;
 
-public class TestAuthDatabase implements IAuthDatabase {
+public class TestAuthDatabase implements AuthDAO {
 	private ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 	private List<User> users = new ArrayList<>();
 	private ReadWriteLock readWriteLock = new ReentrantReadWriteLock();

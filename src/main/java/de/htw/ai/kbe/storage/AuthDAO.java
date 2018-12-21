@@ -4,7 +4,7 @@ import java.util.List;
 
 import de.htw.ai.kbe.user.User;
 
-public interface IAuthDatabase {
+public interface AuthDAO {
 	
 	public User getUserById(String userid);	
 	public List<User> getUsers();

@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import de.htw.ai.kbe.bean.Song;
-import de.htw.ai.kbe.storage.IDatabaseSongs;
+import de.htw.ai.kbe.storage.SongsDAO;
 
 /**
  * Test Klasse, um Song Objekte in Json Format zu speichern
@@ -23,7 +23,7 @@ import de.htw.ai.kbe.storage.IDatabaseSongs;
  * @author jns, camilo
  *
  */
-public class InMemoryTestDatabaseSongs implements IDatabaseSongs {
+public class InMemoryTestDatabaseSongs implements SongsDAO {
 
 	private ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 	private List<Song> songs = new ArrayList<>();

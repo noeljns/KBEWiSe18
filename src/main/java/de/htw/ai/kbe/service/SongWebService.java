@@ -19,7 +19,7 @@ import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import de.htw.ai.kbe.bean.Song;
-import de.htw.ai.kbe.storage.IDatabaseSongs;
+import de.htw.ai.kbe.storage.SongsDAO;
 
 /**
  * Klasse eines Webservices, der get, post, put und delete Anfragen von Song Objekten
@@ -31,18 +31,17 @@ import de.htw.ai.kbe.storage.IDatabaseSongs;
 // URL fuer diesen Service ist: http://localhost:8080/songsRX/rest/songs
 @Path("/songs")
 // durch @Secure werden alle Methoden gefiltert von RequestFilter
-@Secure
+//@Secure
 public class SongWebService {
 
 	@Context
 	private HttpServletResponse response;
 
-	private IDatabaseSongs database;
+	private SongsDAO database;
 
 	@Inject
-	public SongWebService(IDatabaseSongs database) {
-		super(); // nicht notwendig; würde automatisch im Hintergrund aufgerufen werden
-		this.database = database;
+	public SongWebService(SongsDAO dao) {
+		this.database = dao;
 	}
 
 	/**
@@ -138,20 +137,5 @@ public class SongWebService {
 		return Response.status(Response.Status.NO_CONTENT).build();
 	}
 
-	/**
-	 * Methode zur Bearbeitung einer Request zum Löschen eines
-	 * Songs
-	 * 
-	 * @return response
-	 */
-	@DELETE
-	@Path("/{id}")
-	public Response delete(@PathParam("id") Integer id) {
-		// wenn die id in unserer datenbank nicht vorhanden ist
-		if (!database.isIdInDatabase(id)) {
-			return Response.status(Response.Status.NOT_FOUND).entity("Song with the provided id does not exist.").build();
-		}
-		database.deleteSong(id);
-		return Response.status(Response.Status.NO_CONTENT).entity("Song with id " + id + " has been deleted.").build();
-	}
+
 }

@@ -18,17 +18,17 @@ import de.htw.ai.kbe.user.User;
  * @author camilo, jns
  *
  */
-public class AuthDatabase implements IAuthDatabase {
+public class DBAuthDAO implements AuthDAO {
 	private ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 	private List<User> users = new ArrayList<>();
 	private ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
 
-	public AuthDatabase() {
+	public DBAuthDAO() {
 		load();
 	}
 
-	public synchronized static AuthDatabase getInstance() {
-		return new AuthDatabase();
+	public synchronized static DBAuthDAO getInstance() {
+		return new DBAuthDAO();
 	}
 	
 	/**

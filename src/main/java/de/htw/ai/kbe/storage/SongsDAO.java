@@ -4,7 +4,7 @@ import java.util.List;
 
 import de.htw.ai.kbe.bean.Song;
 
-public interface IDatabaseSongs {
+public interface SongsDAO {
 	
 	public Song getSongById(Integer id);
 	public List<Song> getAllSongs();
