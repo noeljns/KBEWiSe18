@@ -11,9 +11,9 @@ public class AuthToken {
 
 	protected String token;
 
-	AuthToken(User user) {
+	AuthToken(SongRXUser user) {
 		Random random = new Random();
-		this.token =  user.getUserId().hashCode() + Integer.toString(random.nextInt());
+		this.token =  user.getUsername().hashCode() + Integer.toString(random.nextInt());
 	}
 	
 	public String getTokenStr() {

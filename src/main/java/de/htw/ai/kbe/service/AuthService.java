@@ -8,8 +8,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import de.htw.ai.kbe.storage.AuthDAO;
-import de.htw.ai.kbe.user.User;
+import de.htw.ai.kbe.storage.IAuthDatabase;
+import de.htw.ai.kbe.user.SongRXUser;
 
 
 /**
@@ -36,7 +36,7 @@ public class AuthService {
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response getAuthToken(@QueryParam("userId") String userId) {
-		User user = authDatabase.getUserById(userId);
+		SongRXUser user = authDatabase.getUserById(userId);
 		// userId does not exist, hence client ist not authorized to get a token
 		if (user == null) {
 			return Response.status(Response.Status.FORBIDDEN).build();

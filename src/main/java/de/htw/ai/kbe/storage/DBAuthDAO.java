@@ -11,16 +11,16 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import de.htw.ai.kbe.user.User;
+import de.htw.ai.kbe.user.SongRXUser;
 
 /**
- * Klasse um authentifizierte User zu speichern
+ * Klasse um authentifizierte SongRXUser zu speichern
  * @author camilo, jns
  *
  */
 public class DBAuthDAO implements AuthDAO {
 	private ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-	private List<User> users = new ArrayList<>();
+	private List<SongRXUser> users = new ArrayList<>();
 	private ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
 
 	public DBAuthDAO() {
@@ -32,8 +32,8 @@ public class DBAuthDAO implements AuthDAO {
 	}
 	
 	/**
-	 * Methode lädt eine Liste von User Objekten aus einer json Datei in eine
-	 * List<User>
+	 * Methode lädt eine Liste von SongRXUser Objekten aus einer json Datei in eine
+	 * List<SongRXUser>
 	 * 
 	 */
 	@SuppressWarnings("unchecked")
@@ -44,7 +44,7 @@ public class DBAuthDAO implements AuthDAO {
 		try {
 			try {
 				InputStream is = this.getClass().getClassLoader().getResourceAsStream("auth_database.json");
-				List<User> userFromFile = (List<User>) mapper.readValue(is, new TypeReference<List<User>>() {
+				List<SongRXUser> userFromFile = (List<SongRXUser>) mapper.readValue(is, new TypeReference<List<SongRXUser>>() {
 				});
 								
 				users.addAll(userFromFile);
@@ -59,18 +59,18 @@ public class DBAuthDAO implements AuthDAO {
 	}
 
 	/**
-	 * Methode um einen User aus der Datenbank zu bekommen
+	 * Methode um einen SongRXUser aus der Datenbank zu bekommen
 	 * @param identifizierender username des Users
-	 * @return angefragten User
+	 * @return angefragten SongRXUser
 	 */
 	@Override
-	public User getUserById(String username) {
+	public SongRXUser getUserById(String username) {
 		Lock readLock = readWriteLock.readLock();
 		readLock.lock();
 		
 		try {
-			for (User user : users) {
-				if (user.getUserId().equals(username)) {
+			for (SongRXUser user : users) {
+				if (user.getUsername().equals(username)) {
 					return user;
 				}
 			}
@@ -84,11 +84,11 @@ public class DBAuthDAO implements AuthDAO {
 	}
 
 	/**
-	 * Methode um alle User in der Datebank zu bekommen
-	 * @return alle User
+	 * Methode um alle SongRXUser in der Datebank zu bekommen
+	 * @return alle SongRXUser
 	 */
 	@Override
-	public List<User> getUsers() {
+	public List<SongRXUser> getUsers() {
 		Lock readLock = readWriteLock.readLock();
 		readLock.lock();
 
@@ -110,7 +110,7 @@ public class DBAuthDAO implements AuthDAO {
 		readLock.lock();
 
 		try {
-			for (User user : users) {
+			for (SongRXUser user : users) {
 				if (user.getToken().getTokenStr().equals(token)) {
 					return true;
 				}

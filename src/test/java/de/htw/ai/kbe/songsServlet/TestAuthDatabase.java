@@ -12,11 +12,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import de.htw.ai.kbe.storage.AuthDAO;
-import de.htw.ai.kbe.user.User;
+import de.htw.ai.kbe.user.SongRXUser;
 
 public class TestAuthDatabase implements AuthDAO {
 	private ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-	private List<User> users = new ArrayList<>();
+	private List<SongRXUser> users = new ArrayList<>();
 	private ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
 
 	public TestAuthDatabase() {
@@ -28,8 +28,8 @@ public class TestAuthDatabase implements AuthDAO {
 	}
 	
 	/**
-	 * Methode lädt eine Liste von User Objekten aus einer json Datei in eine
-	 * List<User>
+	 * Methode lädt eine Liste von SongRXUser Objekten aus einer json Datei in eine
+	 * List<SongRXUser>
 	 * 
 	 */
 	@SuppressWarnings("unchecked")
@@ -40,7 +40,7 @@ public class TestAuthDatabase implements AuthDAO {
 		try {
 			try {
 				InputStream is = this.getClass().getClassLoader().getResourceAsStream("auth_database_test.json");
-				List<User> userFromFile = (List<User>) mapper.readValue(is, new TypeReference<List<User>>() {
+				List<SongRXUser> userFromFile = (List<SongRXUser>) mapper.readValue(is, new TypeReference<List<SongRXUser>>() {
 				});
 								
 				users.addAll(userFromFile);
@@ -55,13 +55,13 @@ public class TestAuthDatabase implements AuthDAO {
 	}
 
 	@Override
-	public User getUserById(String username) {
+	public SongRXUser getUserById(String username) {
 		Lock readLock = readWriteLock.readLock();
 		readLock.lock();
 		
 		try {
-			for (User user : users) {
-				if (user.getUserId().equals(username)) {
+			for (SongRXUser user : users) {
+				if (user.getUsername().equals(username)) {
 					return user;
 				}
 			}
@@ -75,7 +75,7 @@ public class TestAuthDatabase implements AuthDAO {
 	}
 
 	@Override
-	public List<User> getUsers() {
+	public List<SongRXUser> getUsers() {
 		Lock readLock = readWriteLock.readLock();
 		readLock.lock();
 
@@ -92,7 +92,7 @@ public class TestAuthDatabase implements AuthDAO {
 		readLock.lock();
 
 		try {
-			for (User user : users) {
+			for (SongRXUser user : users) {
 				if (user.getToken().getTokenStr().equals(token)) {
 					return true;
 				}

@@ -9,7 +9,7 @@ public class DebugToken extends AuthToken {
 	private String token;
 	public static final String DEBUG_TOKEN = "debugToken";
 
-	public DebugToken(User user) {
+	public DebugToken(SongRXUser user) {
 		super(user);
 		this.token = DEBUG_TOKEN;
 	}
