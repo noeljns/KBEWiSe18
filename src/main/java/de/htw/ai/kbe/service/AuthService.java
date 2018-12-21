@@ -8,7 +8,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import de.htw.ai.kbe.storage.IAuthDatabase;
+import de.htw.ai.kbe.storage.AuthDAO;
 import de.htw.ai.kbe.user.SongRXUser;
 
 
