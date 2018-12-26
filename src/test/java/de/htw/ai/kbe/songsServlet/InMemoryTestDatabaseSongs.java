@@ -56,7 +56,7 @@ public class InMemoryTestDatabaseSongs implements SongsDAO {
 
 		try {
 			try {
-				InputStream is = this.getClass().getClassLoader().getResourceAsStream("songs_test.json");
+				InputStream is = ClassLoader.getSystemResourceAsStream("songs_test.json");
 				List<Song> songsFromFile = (List<Song>) mapper.readValue(is, new TypeReference<List<Song>>() {
 				});
 				songs.addAll(songsFromFile);

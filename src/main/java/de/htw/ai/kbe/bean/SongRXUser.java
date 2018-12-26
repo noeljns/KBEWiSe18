@@ -1,7 +1,13 @@
-package de.htw.ai.kbe.user;
+package de.htw.ai.kbe.bean;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import de.htw.ai.kbe.user.AuthToken;
+import de.htw.ai.kbe.user.DebugToken;
 
 /**
  * Entity-Klasse die eine/n SongRXUser/in repräsentiert
@@ -9,12 +15,18 @@ import javax.persistence.Id;
  *
  */
 @Entity
+//muss man mit Backtipps machen, weil PostgreSQL das fälschlicherweise als "song" an Hibernate übermittelt
+//mit `SongRXUser` wird garantiert, dass es als Song übermittelt wird
+@Table(name = "`SongRXUser`") 
 public class SongRXUser {
+	
 	@Id
+	@Column(name = "user_id")
 	private Integer id;
 	private String username;
 	private String lastname;
 	private String firstname;
+	@Transient
 	private AuthToken token;
 	
 	/**

@@ -1,5 +1,7 @@
 package de.htw.ai.kbe.user;
 
+import de.htw.ai.kbe.bean.SongRXUser;
+
 /**
  * Klasse die ein Debugging und Testing Authentifizierungs Token repräsentiert
  * @author camilo, jns

@@ -4,7 +4,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.htw.ai.kbe</groupId>
-	<artifactId>songsServlet</artifactId>
+	<artifactId>songsWS</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>songsRX</name>
@@ -115,10 +115,7 @@
 			<artifactId>jersey-test-framework-provider-jdk-http</artifactId>
 			<version>2.26</version>
 		</dependency>
-
-
 	</dependencies>
-
 
 	<build>
 		<finalName>songsRX</finalName>

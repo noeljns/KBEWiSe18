@@ -2,7 +2,7 @@ package de.htw.ai.kbe.storage;
 
 import java.util.List;
 
-import de.htw.ai.kbe.user.SongRXUser;
+import de.htw.ai.kbe.bean.SongRXUser;
 
 public interface AuthDAO {
 	

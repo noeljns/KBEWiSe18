@@ -1,6 +1,9 @@
 package de.htw.ai.kbe.bean;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -14,11 +17,15 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "song")
 // alternative zu setter Methoden: @XmlAccessorType(XmlAccessType.FIELD)
-@Entity 
-// @ Table (name="song") müsste man machen, wenn die Tabelle auf PostgreSQL anders hieße
+@Entity
+// muss man mit Backtipps machen, weil PostgreSQL das fälschlicherweise als "song" an Hibernate übermittelt
+// mit `Song` wird garantiert, dass es als Song übermittelt wird
+@Table(name = "`Song`") 
 public class Song {
 
 	@Id
+	@Column(name = "song_id")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String title;
 	private String artist;

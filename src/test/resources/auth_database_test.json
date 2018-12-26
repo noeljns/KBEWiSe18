@@ -1,16 +1,16 @@
 [ {
   "id" : 1,
-  "userId" : "mmuster",
-  "lastName" : "Muster",
-  "firstName" : "Maxime"
+  "username" : "mmuster",
+  "lastname" : "Muster",
+  "firstname" : "Maxime"
 }, {
   "id" : 2,
-  "userId" : "eschuler",
-  "lastName" : "Schuler",
-  "firstName" : "Elena"
+  "username" : "eschuler",
+  "lastname" : "Schuler",
+  "firstname" : "Elena"
 }, {
   "id" : 3,
-  "userId" : "debugUser",
-  "lastName" : "debug",
-  "firstName" : "user"
+  "username" : "debugUser",
+  "lastname" : "debug",
+  "firstname" : "user"
 } ]

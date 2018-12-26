@@ -6,9 +6,9 @@ import javax.persistence.Persistence;
 
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 
-import de.htw.ai.kbe.storage.DBAuthDAO;
-import de.htw.ai.kbe.storage.AuthDAO;
 import de.htw.ai.kbe.storage.SongsDAO;
+import de.htw.ai.kbe.storage.AuthDAO;
+import de.htw.ai.kbe.storage.DBAuthDAO;
 import de.htw.ai.kbe.storage.DBSongsDAO;
 
 /**
@@ -23,6 +23,6 @@ public class DependencyBinder extends AbstractBinder {
 		.to(EntityManagerFactory.class);
 		
 		bind(DBSongsDAO.class).to(SongsDAO.class).in(Singleton.class);
-		//bind(DBAuthDAO.class).to(AuthDAO.class).in(Singleton.class);
+		bind(DBAuthDAO.class).to(AuthDAO.class).in(Singleton.class);
 	}
 }

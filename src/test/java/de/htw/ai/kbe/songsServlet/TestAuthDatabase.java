@@ -11,8 +11,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import de.htw.ai.kbe.bean.SongRXUser;
 import de.htw.ai.kbe.storage.AuthDAO;
-import de.htw.ai.kbe.user.SongRXUser;
 
 public class TestAuthDatabase implements AuthDAO {
 	private ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
@@ -39,7 +39,7 @@ public class TestAuthDatabase implements AuthDAO {
 
 		try {
 			try {
-				InputStream is = this.getClass().getClassLoader().getResourceAsStream("auth_database_test.json");
+				InputStream is = ClassLoader.getSystemResourceAsStream("auth_database_test.json");
 				List<SongRXUser> userFromFile = (List<SongRXUser>) mapper.readValue(is, new TypeReference<List<SongRXUser>>() {
 				});
 								

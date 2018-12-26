@@ -1,14 +1,6 @@
 package de.htw.ai.kbe.storage;
 
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -16,10 +8,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 
 import de.htw.ai.kbe.bean.Song;
 
@@ -36,31 +24,11 @@ public class DBSongsDAO implements SongsDAO {
 	/**
 	 * Konstruktor
 	 * 
-	 * @param databaseFileName
+	 * @param EntityManagerFactory
 	 */
 	@Inject
 	public DBSongsDAO(EntityManagerFactory emf) {
 		this.emf = emf;
-	}
-
-//	public static DBSongsDAO getInstance() {
-//		return new DBSongsDAO();
-//	}
-
-	/**
-	 * Methode lädt eine Liste von Song Objekten aus einer json Datei in eine
-	 * List<Song>
-	 * 
-	 */
-	public void load() {
-
-	}
-
-	/**
-	 * Methode lädt eine List<Song> in eine json Datei
-	 */
-	public void save() {
-
 	}
 
 	/**
@@ -69,17 +37,14 @@ public class DBSongsDAO implements SongsDAO {
 	 * @return Liste aller Songs
 	 */
 	public List<Song> getAllSongs() {
-
 		EntityManager em = emf.createEntityManager();
-		List<Song> songs = new ArrayList<>();
 
 		try {
-			TypedQuery<Song> query = em.createQuery("SELECT s FROM Song s", Song.class);
-			songs = query.getResultList();
+			TypedQuery<Song> query = em.createQuery("SELECT s FROM Song s ORDER BY s.id", Song.class);
+			return query.getResultList();
 		} finally {
 			em.close();
 		}
-		return new ArrayList<Song>(songs);
 	}
 
 	/**
@@ -91,14 +56,12 @@ public class DBSongsDAO implements SongsDAO {
 	 */
 	public Song getSongById(Integer id) {
 		EntityManager em = emf.createEntityManager();
-		Song entity = null;
+
 		try {
-			entity = em.find(Song.class, id);
+			return em.find(Song.class, id);
 		} finally {
 			em.close();
 		}
-		return entity;
-
 	}
 
 	/**
@@ -107,7 +70,6 @@ public class DBSongsDAO implements SongsDAO {
 	 * @param Song Objekt das zu der Datenbank hinzugefügt werden soll
 	 */
 	public Integer addSong(Song song) {
-		// override hat keine bedeutung !!!
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
 		try {
@@ -123,7 +85,6 @@ public class DBSongsDAO implements SongsDAO {
 		} finally {
 			em.close();
 		}
-
 	}
 
 	/**
@@ -132,7 +93,6 @@ public class DBSongsDAO implements SongsDAO {
 	 * @param Id des zu löschenden Songs
 	 */
 	public void deleteSong(Integer id) {
-
 	}
 
 	/**
@@ -153,7 +113,6 @@ public class DBSongsDAO implements SongsDAO {
 		} finally {
 			em.close();
 		}
-
 	}
 
 	/**
@@ -163,13 +122,10 @@ public class DBSongsDAO implements SongsDAO {
 	 * @return wenn das Song Objekt existiert true, ansonsten false
 	 */
 	public boolean isIdInDatabase(Integer id) {
-		EntityManager em = emf.createEntityManager();
-		boolean result = false;
-		try {
-			result = em.find(Song.class, id) != null;
-		} finally {
-			em.close();
-		}
-		return result;
+		return getSongById(id) != null;
+	}
+
+	@Override
+	public void save() {		
 	}
 }

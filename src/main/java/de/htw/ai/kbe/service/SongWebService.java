@@ -31,7 +31,7 @@ import de.htw.ai.kbe.storage.SongsDAO;
 // URL fuer diesen Service ist: http://localhost:8080/songsRX/rest/songs
 @Path("/songs")
 // durch @Secure werden alle Methoden gefiltert von RequestFilter
-//@Secure
+@Secure
 public class SongWebService {
 
 	@Context
@@ -137,5 +137,10 @@ public class SongWebService {
 		return Response.status(Response.Status.NO_CONTENT).build();
 	}
 
+	@DELETE
+    @Path("/{id}")
+    public Response deleteSong(@PathParam("id") Integer id) {
+        return Response.status(Response.Status.METHOD_NOT_ALLOWED).entity("DELETE not implemented").build();
 
+    }
 }
