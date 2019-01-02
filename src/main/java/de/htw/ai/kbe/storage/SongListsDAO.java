@@ -11,5 +11,5 @@ public interface SongListsDAO {
 	public void deleteSongList(Integer id);
 	public boolean isIdInDatabase(Integer id);
 	public boolean isPublicById(Integer id);
-	
+
 }

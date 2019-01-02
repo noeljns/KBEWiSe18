@@ -19,8 +19,8 @@ import de.htw.ai.kbe.storage.AuthDAO;
  * @author camilo, jns
  *
  */
-@Provider
-@Secure
+//@Provider
+//@Secure
 public class RequestFilter implements ContainerRequestFilter {
 
 	@Context

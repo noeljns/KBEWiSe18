@@ -6,6 +6,7 @@
 
         <class>de.htw.ai.kbe.bean.Song</class>
         <class>de.htw.ai.kbe.bean.SongRXUser</class>
+        <class>de.htw.ai.kbe.bean.SongList</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
         <properties>

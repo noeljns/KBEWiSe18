@@ -9,10 +9,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import de.htw.ai.kbe.bean.Song;
 import de.htw.ai.kbe.bean.SongList;
+import de.htw.ai.kbe.storage.SongListsDAO;
 import de.htw.ai.kbe.storage.SongsDAO;
 
 /**
@@ -26,10 +28,14 @@ import de.htw.ai.kbe.storage.SongsDAO;
 //@Secure
 public class SongListWebService {
 	
-	private SongsDAO database;
+	
+	@Context
+	private HttpServletResponse response;
+	
+	private SongListsDAO database;
 
 	@Inject
-	public SongListWebService(SongsDAO dao) {
+	public SongListWebService(SongListsDAO dao) {
 		this.database = dao;
 	}
 
@@ -42,11 +48,37 @@ public class SongListWebService {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<SongList> getAllSongLists(@QueryParam("userId") String userId) {
-		// existiert token?
-		
-		// ist es der korrekte token? sonst nur public
-		return null;
+		List<SongList> songList = database.getAllSongLists();
+		return songList;
 	}
+	
+	/**
+	 * Methode um eine Songliste herauszugeben
+	 * @param id
+	 * @return angefragte Songliste
+	 */
+	// TODO einheitlich Reponse schicken?
+	@GET
+	@Path("/{id}")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public SongList getSongList(@PathParam("id") Integer id) {
+		
+		if (!database.isIdInDatabase(id)) {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+
+			try {
+				response.flushBuffer();
+				return null;
+			} catch (Exception e) {
+			}
+		}
+
+		SongList songlist = database.getSongListById(id);
+		return songlist;
+	}
+	
+	
+	
 }
 
 
