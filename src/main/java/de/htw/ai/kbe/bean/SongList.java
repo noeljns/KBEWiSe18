@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 
@@ -14,11 +16,14 @@ public class SongList {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
+	@ManyToOne(targetEntity= SongRXUser.class)
+	@JoinColumn(name="owner")
 	private SongRXUser owner;
 	@Column(name = "isprivate")
 	private boolean isPrivate;
 	@Column(name = "songlist")
-	private Integer[] songList;
+	//TODO Dynamischer Datentyp? Wo wird diese Array initialisiert?
+	private Integer[] songList = new Integer[10];
 
 	/**
 	 * leerer Standard-Konstruktor
