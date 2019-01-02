@@ -1,11 +1,16 @@
 package de.htw.ai.kbe.bean;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -16,14 +21,18 @@ public class SongList {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
+	
+	
 	@ManyToOne(targetEntity= SongRXUser.class)
-	@JoinColumn(name="owner")
+	@JoinColumn(name="user_id")
 	private SongRXUser owner;
 	@Column(name = "isprivate")
 	private boolean isPrivate;
-	@Column(name = "songlist")
+	//@Column(name = "songlist")
 	//TODO Dynamischer Datentyp? Wo wird diese Array initialisiert?
-	private Integer[] songList = new Integer[10];
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "SongList_Song",joinColumns= {@JoinColumn( name = "songList_id", referencedColumnName= "id")},inverseJoinColumns= {@JoinColumn( name = "song_id", referencedColumnName= "id")})
+	List<Song> songList;	
 
 	/**
 	 * leerer Standard-Konstruktor
@@ -47,13 +56,13 @@ public class SongList {
 		this.owner = owner;
 	}
 
-	public Integer[] getSongList() {
-		return songList;
-	}
-
-	public void setSongList(Integer[] songList) {
-		this.songList = songList;
-	}
+//	public Integer[] getSongList() {
+//		return songList;
+//	}
+//
+//	public void setSongList(Integer[] songList) {
+//		this.songList = songList;
+//	}
 
 	public boolean isPrivate() {
 		return isPrivate;
