@@ -1,19 +1,25 @@
 package de.htw.ai.kbe.bean;
 
-import java.util.List;
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 
 @Entity
+@Table(name = "`SongLists`") 
 public class SongList {
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
-	private SongRXUser user;
-	private List<Song> songList;
+	private SongRXUser owner;
+	@Column(name = "isprivate")
 	private boolean isPrivate;
-	
+	@Column(name = "songlist")
+	private Integer[] songList;
+
 	/**
 	 * leerer Standard-Konstruktor
 	 */
@@ -28,19 +34,19 @@ public class SongList {
 		this.id = id;
 	}
 
-	public SongRXUser getUser() {
-		return user;
+	public SongRXUser getOwner() {
+		return owner;
 	}
 
-	public void setUser(SongRXUser user) {
-		this.user = user;
+	public void setOwner(SongRXUser owner) {
+		this.owner = owner;
 	}
 
-	public List<Song> getSongList() {
+	public Integer[] getSongList() {
 		return songList;
 	}
 
-	public void setSongList(List<Song> songList) {
+	public void setSongList(Integer[] songList) {
 		this.songList = songList;
 	}
 

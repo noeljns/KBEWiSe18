@@ -49,6 +49,7 @@ public class SongWebService {
 	 * @param id
 	 * @return angefragten Song
 	 */
+	// TODO einheitlich Reponse schicken?
 	@GET
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -72,6 +73,7 @@ public class SongWebService {
 	 * Methode um alle Songs herauszugeben
 	 * @return alle Songs
 	 */
+	// TODO einheitlich Reponse schicken?
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<Song> getAllSongs() {
