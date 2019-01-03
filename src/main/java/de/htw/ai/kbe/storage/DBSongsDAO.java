@@ -12,7 +12,7 @@ import javax.persistence.TypedQuery;
 import de.htw.ai.kbe.bean.Song;
 
 /**
- * Klasse, um Song Objekte aus einer Json Datei zu laden und zu verwalten
+ * Klasse, um Song Objekte zu laden und zu verwalten
  * 
  * @author jns, camilo
  *
@@ -79,7 +79,7 @@ public class DBSongsDAO implements SongsDAO {
 			return song.getId();
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Error adding contact: " + e.getMessage());
+			System.out.println("Error adding song: " + e.getMessage());
 			transaction.rollback();
 			throw new PersistenceException("Could not persist entity: " + e.toString());
 		} finally {

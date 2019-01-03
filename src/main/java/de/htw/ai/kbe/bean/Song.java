@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * Entity-Klasse die ein Song repräsentiert
  * 
- * @author jns
+ * @author camilo, jns
  *
  */
 @XmlRootElement(name = "song")
@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Song {
 
 	@Id
-	@Column(name = "song_id")
+	@Column(name = "id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String title;

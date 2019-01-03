@@ -63,6 +63,20 @@ public class DBAuthDAO implements AuthDAO {
 		}
 	}
 
+	@Override
+	public SongRXUser getUserByToken(String token) {
+		List<SongRXUser> users = getUsers();
+
+		for (SongRXUser user : users) {
+			if (user.getToken().getTokenStr().equals(token)) {
+				return user;
+			}
+		}
+
+		// users ist entweder leer oder token nicht valide
+		return null;
+	}
+
 	/**
 	 * Methode um einen token zu validieren
 	 * @param zu validierender token
@@ -70,15 +84,6 @@ public class DBAuthDAO implements AuthDAO {
 	 */
 	@Override
 	public boolean isTokenValid(String token) {
-		List<SongRXUser> users = getUsers();
-
-		for (SongRXUser user : users) {
-			if (user.getToken().getTokenStr().equals(token)) {
-				return true;
-			}
-		}
-
-		// users ist entweder leer oder token nicht valide
-		return false;
+		return getUserByToken(token) != null;
 	}
 }

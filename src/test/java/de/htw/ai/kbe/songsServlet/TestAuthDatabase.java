@@ -87,6 +87,11 @@ public class TestAuthDatabase implements AuthDAO {
 	}
 
 	@Override
+	public SongRXUser getUserByToken(String token) {
+		return null;
+	}
+
+	@Override
 	public boolean isTokenValid(String token) {
 		Lock readLock = readWriteLock.readLock();
 		readLock.lock();

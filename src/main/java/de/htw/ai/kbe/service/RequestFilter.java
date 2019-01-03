@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 
+import de.htw.ai.kbe.bean.SongRXUser;
 import de.htw.ai.kbe.storage.AuthDAO;
 
 /**
@@ -19,8 +20,8 @@ import de.htw.ai.kbe.storage.AuthDAO;
  * @author camilo, jns
  *
  */
-//@Provider
-//@Secure
+@Provider
+@Secure
 public class RequestFilter implements ContainerRequestFilter {
 
 	@Context
@@ -47,16 +48,45 @@ public class RequestFilter implements ContainerRequestFilter {
 			System.out.println("Request does not contain any token");
 			System.out.println();
 			context.abortWith(Response.serverError().status(Status.UNAUTHORIZED).build());
+			return;
 		}
+		
+		SongRXUser user = authdb.getUserByToken(token.get(0));
 		// es wurde ein token mitgeschickt, aber er ist nicht valide
-		else if (authdb.isTokenValid(token.get(0)) == false) {
+		// fuer diesen token wird kein user gefunden, token ist falsch
+		if (user == null) {
 			System.out.println("Request contains a token that is not valid: " + token.get(0));
 			System.out.println();
 			context.abortWith(Response.serverError().status(Status.UNAUTHORIZED).build());
 		}
-		// es wurde ein valider token mitgeschickt
+		// es wurde ein valider token mitgeschickt und der dazugehörige user damit identifiziert
+		// Anfrage wird an Endpoints weitergeleitet
 		else {
 			System.out.println("Authentification / Authorization was successful");
+			// legen username des authorifizierten Users in Principal Objekt des RequestSecurityContexts ab
+			// sprich je nachdem eschuler oder mmuster
+			// source: https://simplapi.wordpress.com/2015/09/19/jersey-jax-rs-securitycontext-in-action/
+			context.setSecurityContext(new RequestSecurityContext(user.getUsername()));
 		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

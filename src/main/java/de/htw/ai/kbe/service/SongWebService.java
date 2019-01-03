@@ -31,7 +31,7 @@ import de.htw.ai.kbe.storage.SongsDAO;
 // URL fuer diesen Service ist: http://localhost:8080/songsRX/rest/songs
 @Path("/songs")
 // durch @Secure werden alle Methoden gefiltert von RequestFilter
-//@Secure
+@Secure
 public class SongWebService {
 
 	@Context

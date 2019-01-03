@@ -5,6 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.htw.ai.kbe.user.AuthToken;
 import de.htw.ai.kbe.user.DebugToken;
@@ -14,6 +18,7 @@ import de.htw.ai.kbe.user.DebugToken;
  * @author camilo, jns
  *
  */
+@XmlRootElement(name = "user")
 @Entity
 //muss man mit Backtipps machen, weil PostgreSQL das fälschlicherweise als "song" an Hibernate übermittelt
 //mit `SongRXUser` wird garantiert, dass es als Song übermittelt wird
@@ -21,12 +26,15 @@ import de.htw.ai.kbe.user.DebugToken;
 public class SongRXUser {
 	
 	@Id
-	@Column(name = "user_id")
+	@Column(name = "id")
 	private Integer id;
 	private String username;
 	private String lastname;
 	private String firstname;
+	// TODO token wird mitgeschickt bei Json
 	@Transient
+	@XmlTransient
+	@JsonIgnore
 	private AuthToken token;
 	
 	/**

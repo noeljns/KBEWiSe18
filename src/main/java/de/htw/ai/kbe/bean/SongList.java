@@ -1,6 +1,7 @@
 package de.htw.ai.kbe.bean;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,37 +14,116 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 
+/**
+ * Entity-Klasse die eine Songliste repräsentiert
+ * 
+ * @author jns
+ *
+ */
+@XmlRootElement(name = "songList")
 @Entity
-@Table(name = "`SongLists`") 
+@Table(name = "`SongList`")
 public class SongList {
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
-	
-	@ManyToOne(targetEntity= SongRXUser.class)
-	@JoinColumn(name="user_id")
+
+	// One User und Many Songlisten
+	// da owner ein komplexer Datentyp ist, erkennt Hibernate, dass es sich um die
+	// bereits bekannte Entität SongRXUser handelt
+	// Konvention: Verknüpft die Spalte SongList.user_id mit dem Primärschlüssel von
+	// SongRXUser.id
+	@ManyToOne
+	@JoinColumn(name = "user_id")
 	private SongRXUser owner;
-	@Column(name = "isprivate")
+
+	@Column(name = "is_private")
 	private boolean isPrivate;
-	//@Column(name = "songlist")
-	//TODO Dynamischer Datentyp? Wo wird diese Array initialisiert?
+
+	// Many Songlisten und Many Songs
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "SongList_Song",joinColumns= {@JoinColumn( name = "songList_id", referencedColumnName= "id")},inverseJoinColumns= {@JoinColumn( name = "song_id", referencedColumnName= "id")})
-	List<Song> songList;	
+	@JoinTable(name = "`SongList_Song`",
+		joinColumns = { @JoinColumn(name = "songlist_id", referencedColumnName = "id") },
+		inverseJoinColumns = { @JoinColumn(name = "song_id", referencedColumnName = "id") })
+	// Set, da keine Reihenfolge und jeder Song nur genau einmal darin enthalten
+	private Set<Song> songList = new HashSet<>();
 
 	/**
 	 * leerer Standard-Konstruktor
 	 */
 	public SongList() {
 	}
+	
+	// Builder
+	public static class Builder {
 
+		private Integer id;
+		private SongRXUser owner;
+		private boolean isPrivate;
+		private Set<Song> songList;
+
+		public Builder() {
+
+		}
+
+		public Builder id(Integer i) {
+			id = i;
+			return this;
+		}
+
+		public Builder owner(SongRXUser own) {
+
+			owner = own;
+			return this;
+		}
+
+		public Builder isPrivate(boolean isP) {
+
+			isPrivate = isP;
+			return this;
+		}
+
+		public Builder songList(Set<Song> songL) {
+
+			songList = songL;
+			return this;
+
+		}
+
+
+		public SongList build() {
+
+			return new SongList(this);
+		}
+
+	}
+
+	private SongList(Builder builder) {
+		this.id = builder.id;
+		this.owner = builder.owner;
+		this.isPrivate = builder.isPrivate;
+		this.songList = builder.songList;
+	}
+
+	/**
+	 * Methode gibt die Id einer Songliste zurück
+	 * 
+	 * @return id der Songliste
+	 */
 	public Integer getId() {
 		return id;
 	}
 
+	/**
+	 * Methode setzt die Id einer Songliste
+	 * 
+	 * @param id
+	 *            der Songliste
+	 */
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -56,13 +136,13 @@ public class SongList {
 		this.owner = owner;
 	}
 
-//	public Integer[] getSongList() {
-//		return songList;
-//	}
-//
-//	public void setSongList(Integer[] songList) {
-//		this.songList = songList;
-//	}
+	public Set<Song> getSongList() {
+		return songList;
+	}
+
+	public void setSongList(Set<Song> songList) {
+		this.songList = songList;
+	}
 
 	public boolean isPrivate() {
 		return isPrivate;
