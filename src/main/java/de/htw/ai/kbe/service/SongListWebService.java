@@ -96,22 +96,25 @@ public class SongListWebService {
 		}
 
 		SongList songlist = database.getSongListById(id);
-
+		
 		// anfragender / authorifizierter User will seine eigene Liste oder eine fremde
 		// Liste
 		// in Principal ist der durch RequestFilter authorifizierte User hinterlegt
+		// Beispiel: mmuster will songlist 3 und diese gehört auch mmuster
 		if (securityContext.getUserPrincipal().getName().equals(songlist.getOwner().getUsername())) {
 			return songlist;
 		}
 
 		// anfragender / authorifizierter User will Liste eines anderen Users und die
 		// Liste ist public
-		else if (!songlist.isPrivate()) {
+		// Beispiel: mmuster will songlist 3 und diese gehört aber eschuler, ist aber public
+		else if (! songlist.isPrivate()) {
 			return songlist;
 		}
 
 		// anfragender / authorifizierter User will Liste eines anderen Users und die
 		// Liste ist private
+		// Beispiel: mmuster will songlist 3 und diese gehört aber eschuler, ist aber private
 		else if (songlist.isPrivate()) {
 			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 		}
