@@ -1,5 +1,6 @@
 package de.htw.ai.kbe.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -16,14 +17,19 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import java.util.Set;
+
+import de.htw.ai.kbe.bean.Song;
 import de.htw.ai.kbe.bean.SongList;
 import de.htw.ai.kbe.storage.SongListsDAO;
+import de.htw.ai.kbe.storage.SongsDAO;
 
 /**
- * Klasse eines Webservices, der get, post und delete Anfragen von Songlisten Objekten
- * bearbeitet
+ * Klasse eines Webservices, der get, post und delete Anfragen von Songlisten
+ * Objekten bearbeitet
  * 
  * @author camilo, jns
  *
@@ -38,10 +44,12 @@ public class SongListWebService {
 	private HttpServletResponse response;
 
 	private SongListsDAO database;
+	private SongsDAO songDatabase;
 
 	@Inject
-	public SongListWebService(SongListsDAO dao) {
+	public SongListWebService(SongListsDAO dao, SongsDAO sdao) {
 		this.database = dao;
+		this.songDatabase = sdao;
 	}
 
 	/**
@@ -96,7 +104,7 @@ public class SongListWebService {
 		}
 
 		SongList songlist = database.getSongListById(id);
-		
+
 		// anfragender / authorifizierter User will seine eigene Liste oder eine fremde
 		// Liste
 		// in Principal ist der durch RequestFilter authorifizierte User hinterlegt
@@ -107,14 +115,16 @@ public class SongListWebService {
 
 		// anfragender / authorifizierter User will Liste eines anderen Users und die
 		// Liste ist public
-		// Beispiel: mmuster will songlist 3 und diese gehört aber eschuler, ist aber public
-		else if (! songlist.isPrivate()) {
+		// Beispiel: mmuster will songlist 3 und diese gehört aber eschuler, ist aber
+		// public
+		else if (!songlist.isPrivate()) {
 			return songlist;
 		}
 
 		// anfragender / authorifizierter User will Liste eines anderen Users und die
 		// Liste ist private
-		// Beispiel: mmuster will songlist 3 und diese gehört aber eschuler, ist aber private
+		// Beispiel: mmuster will songlist 3 und diese gehört aber eschuler, ist aber
+		// private
 		else if (songlist.isPrivate()) {
 			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 		}
@@ -133,14 +143,52 @@ public class SongListWebService {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response createSongList(@Context UriInfo uriInfo, SongList songList) {
-
 		// wird immer für mmuster angelegt
 		// URL mit neuer ID für die neue Songliste wird im Location Header
 		// zurückgeschickt
-		// alle Songs in der Payload Anfrage müssen in der DB existieren, ansonsten
-		// BAD_REQUEST zurückschicken
+		
+		if(songList== null) {
+			return Response.status(Response.Status.BAD_REQUEST).entity("there is no payload").build();
+		}
+		
+		if(songList.getSongList() == null) {
+			
+			return Response.status(Response.Status.BAD_REQUEST).entity("there are no songs in this list").build();
+		}
+		
+		
+		// zuerst gucken ob die songs im payload tatsächlich existieren
+		Set<Song> songs = songList.getSongList();
+		// List<Integer> songIds = new ArrayList<Integer>();
+		
+		for (Song song : songs) {
+			if (!songDatabase.isIdInDatabase(song.getId())) {
+				return Response.status(Response.Status.BAD_REQUEST).build();
+			}
+			
+			// songIds.add(song.getId());
+		}
+		
+		// Songs holen
+		//Set<Song> songLists = null;
+		// songLists.setSongList(songs);
+		
+		// nur mmuster
+		// songLists.setOwner();
+		
+		System.out.println("id: " + songList.getId());
+		System.out.println("owner: " + songList.getOwner());
+		System.out.println("private: " + songList.isPrivate());
+		System.out.println("songs: " + songList.getSongList());
+		System.out.println("toString: " + songList.toString());
 
-		return Response.status(Response.Status.METHOD_NOT_ALLOWED).entity("POST not implemented").build();
+
+		// datenbank aufrufen um songlist zu adden
+		Integer newId= database.addSongList(songList);
+		System.out.println("new id: " + newId.intValue());
+		UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
+		uriBuilder.path(Integer.toString(newId));
+		return Response.created(uriBuilder.build()).build();
 	}
 
 	/**
@@ -154,10 +202,29 @@ public class SongListWebService {
 	@Path("/{id}")
 	public Response deleteSongList(@Context SecurityContext securityContext, @PathParam("id") Integer id) {
 
-		// User können nur eigene Songlisten löschen
-		// falls User fremde Liste versucht zu löschen, FORBIDDEN senden
+		// es existiert keine Songliste mit der angefragten id in der Datenbank
+		if (!database.isIdInDatabase(id)) {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 
-		return Response.status(Response.Status.METHOD_NOT_ALLOWED).entity("DELETE not implemented").build();
+			try {
+				response.flushBuffer();
+				return null;
+			} catch (Exception e) {
+			}
+		}
+
+		SongList songlist = database.getSongListById(id);
+
+		// anfragender / authorifizierter User will seine eigene Liste löschen
+		// in Principal ist der durch RequestFilter authorifizierte User hinterlegt
+		// Beispiel: mmuster will songlist 3 löschen und diese gehört auch mmuster
+		if (securityContext.getUserPrincipal().getName().equals(songlist.getOwner().getUsername())) {
+			/// hier DAO methode aufrufen zum löschen des songLists
+			database.deleteSongList(id);
+			return Response.status(Response.Status.OK).build();
+		}
+		// Beispiel: mmuster will songlist 3 löschen aber diese gehört eschuler
+		return Response.status(Response.Status.FORBIDDEN).build();
 	}
 
 }

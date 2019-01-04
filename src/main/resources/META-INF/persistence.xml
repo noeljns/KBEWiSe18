@@ -12,8 +12,8 @@
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://db.f4.htw-berlin.de:5432/_s0558239__songsdb"/>
-            <!-- property name="javax.persistence.jdbc.user" value="s0558239"/ -->
-            <!--  <property name="javax.persistence.jdbc.password" value="...missing..."/ -->
+            <!-- property name="javax.persistence.jdbc.user" value="s0558239"/-->
+           	<!-- property name="javax.persistence.jdbc.password" value="...missing..."/-->
             <property name="javax.persistence.jdbc.user" value="_s0558239__songsdb_generic"/>
             <property name="javax.persistence.jdbc.password" value="gen48!gen"/>
 
