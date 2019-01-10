@@ -79,6 +79,7 @@ public class SongRXUser {
 	 * Methode, um Token für den SongRXUser zu generieren
 	 * @return generierten token
 	 */
+	@JsonIgnore
 	public AuthToken getToken() {
 		// SongRXUser hat noch keinen token, daher ist token aktuell noch null
 		// ansonsten hat SongRXUser bereits einen token, dieser wird dann direkt retuniert
@@ -94,6 +95,7 @@ public class SongRXUser {
 		return token;
 	}
 
+	@JsonIgnore
 	public void setToken(AuthToken token) {
 		this.token = token;
 	}

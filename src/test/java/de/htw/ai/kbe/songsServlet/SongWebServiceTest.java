@@ -12,7 +12,6 @@ import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.htw.ai.kbe.bean.Song;
@@ -37,7 +36,6 @@ public class SongWebServiceTest extends JerseyTest {
 	}
 	
 	@Test
-	@Ignore
 	public void updateSongWithExistingIdInUrlAndPayloadReturns204() {
 		// payload: id ist 3, title ist "Update Song...", alles andere ist null
 		Song song = new Song();
@@ -51,7 +49,6 @@ public class SongWebServiceTest extends JerseyTest {
 	}
 	
 	@Test
-	@Ignore
 	public void updateSongWithExistingIdInUrlButDifferentPayloadReturns400() {
 		// payload: id ist 8, title ist "Update Song...", alles andere ist null
 		Song song = new Song();
@@ -65,7 +62,6 @@ public class SongWebServiceTest extends JerseyTest {
 	}
 	
 	@Test
-	@Ignore
 	public void updateSongWithNotExistingIdReturns400() {
 		// payload: id ist 37, title ist "Update Song...", alles andere ist null
 		Song song = new Song();
@@ -79,7 +75,6 @@ public class SongWebServiceTest extends JerseyTest {
 	}
 
 	@Test
-	@Ignore
 	public void updateSongsWithXmlButShouldSendJSONReturns400() {
 		Entity songEntity = Entity.entity("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><song><id>4</id><title>Update mit XML</title></song>", MediaType.APPLICATION_JSON);
 		int id = 4; 				// id in url 4
@@ -89,7 +84,6 @@ public class SongWebServiceTest extends JerseyTest {
 	}
 	
 	@Test
-	@Ignore
 	public void updateSongsWithJSONButShouldSendXmlReturns400() {
 		Entity songEntity = Entity.entity("{\"id\": 4, \"title\": \"Update With Valid Json\"}", MediaType.APPLICATION_XML);
 		int id = 4; 				// id in url 4
@@ -100,7 +94,6 @@ public class SongWebServiceTest extends JerseyTest {
 	
 	
 	@Test
-	@Ignore
 	public void updateSongWithoutTitleReturns400() {
 		// payload: id ist 3, title ist null
 		Song song = new Song();
@@ -115,7 +108,6 @@ public class SongWebServiceTest extends JerseyTest {
 	}
 	
 	@Test
-	@Ignore
 	public void updateSongWithValidJsonReturns204() {
 		Entity songEntity = Entity.entity("{\"id\": 4, \"title\": \"Update With Valid Json\"}", MediaType.APPLICATION_JSON);
 		int id = 4; 				// id in url 4
@@ -125,7 +117,6 @@ public class SongWebServiceTest extends JerseyTest {
 	}
 	
 	@Test
-	@Ignore
 	public void updateSongWithInvalidJsonReturns400() {
 		Entity songEntity = Entity.entity("Invalid json string.", MediaType.APPLICATION_JSON);
 		int id = 3; 				// id in url 3
@@ -135,7 +126,6 @@ public class SongWebServiceTest extends JerseyTest {
 	}
 	
 	@Test
-	@Ignore
 	public void updateSongWithValidXmlReturns204() {
 		Entity songEntity = Entity.entity("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><song><id>4</id><title>Update mit XML</title></song>", MediaType.APPLICATION_XML);
 		int id = 4; 				// id in url 4
@@ -145,7 +135,6 @@ public class SongWebServiceTest extends JerseyTest {
 	}
 	
 	@Test
-	@Ignore
 	public void updateSongWithInvalidXmlReturns400() {
 		Entity songEntity = Entity.entity("<?xml version=\"1.0\" encoding=\"UTF-8\" ?><songs>Invalid xml</songs>", MediaType.APPLICATION_XML);
 		int id = 3; 				// id in url 3
@@ -155,7 +144,6 @@ public class SongWebServiceTest extends JerseyTest {
 	}
 	
 	@Test
-	@Ignore
 	public void updateSongWithoutIdInUrlReturns405() {
 		// payload: id ist 3, title ist "Update Song...", alles andere ist null
 		Song song = new Song();
@@ -169,7 +157,6 @@ public class SongWebServiceTest extends JerseyTest {
 	}
 	
 	@Test
-	@Ignore
 	public void updateSongWithStringAsIdInUrlReturns404() {
 		// payload: id ist 3, title ist "Update Song...", alles andere ist null
 		Song song = new Song();
@@ -185,14 +172,12 @@ public class SongWebServiceTest extends JerseyTest {
 	
 
 	@Test
-	@Ignore
 	public void getSongWithExistingIdReturnsCorrectSong() {
 		Song response = target("/songs/2").request().header("Authorization", DebugToken.DEBUG_TOKEN).get(Song.class);
 		assertEquals(2, (int) response.getId());
 	}
 
 	@Test
-	@Ignore
 	public void getSongWithStringAsIdReturnsNotFound() {
 		Response response = target("/songs/notanumber").request().header("Authorization", DebugToken.DEBUG_TOKEN).get();
 		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
