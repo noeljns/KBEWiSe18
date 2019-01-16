@@ -94,7 +94,9 @@ public class DBSongListsDAO implements SongListsDAO {
 		EntityTransaction transaction = em.getTransaction();
 		try {
 			transaction.begin();
+			System.out.println("vor persist");
 			em.persist(songList);
+			System.out.println("nach persist");
 			transaction.commit();
 			return songList.getId();
 		}catch (Exception e) {

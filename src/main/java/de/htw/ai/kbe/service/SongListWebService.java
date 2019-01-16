@@ -151,36 +151,25 @@ public class SongListWebService {
 		}
 		
 		if(songList.getSongList() == null) {
-			
 			return Response.status(Response.Status.BAD_REQUEST).entity("there are no songs in this list").build();
 		}
 		
-		
-		// zuerst gucken ob die songs im payload tatsächlich existieren
+		// zuerst prüfen, ob die songs im payload tatsächlich existieren
 		Set<Song> songs = songList.getSongList();
 		// List<Integer> songIds = new ArrayList<Integer>();
 		
 		for (Song song : songs) {
 			if (!songDatabase.isIdInDatabase(song.getId())) {
 				return Response.status(Response.Status.BAD_REQUEST).build();
-			}
-			
-			// songIds.add(song.getId());
+			}	
 		}
 		
-		// Songs holen
-		//Set<Song> songLists = null;
-		// songLists.setSongList(songs);
-		
-		// nur mmuster
-		// songLists.setOwner();
-		
+		// TEST
 		System.out.println("id: " + songList.getId());
 		System.out.println("owner: " + songList.getOwner());
 		System.out.println("private: " + songList.isPrivate());
 		System.out.println("songs: " + songList.getSongList());
 		System.out.println("toString: " + songList.toString());
-
 
 		// datenbank aufrufen um songlist zu adden
 		Integer newId= database.addSongList(songList);
